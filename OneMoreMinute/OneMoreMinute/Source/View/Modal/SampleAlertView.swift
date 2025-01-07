@@ -79,7 +79,7 @@ extension AlertView {
         }
         
         titleLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(Layouts.paddingBig)
+            $0.top.equalToSuperview().inset(Layouts.paddingLarge)
             $0.leading.trailing.equalToSuperview().inset(Layouts.paddingSmall)
         }
         
