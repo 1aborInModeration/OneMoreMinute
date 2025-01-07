@@ -8,6 +8,7 @@
 import UIKit
 import CoreData
 
+/// WeekDays 엔티티의 데이터 파일
 struct WeekDaysDTO: EntityTransformAble {
     let mon: Bool
     let tue: Bool
@@ -17,6 +18,9 @@ struct WeekDaysDTO: EntityTransformAble {
     let sat: Bool
     let sun: Bool
     
+    /// WeekDays 엔티티 데이터 타입을 반환하는 메소드
+    /// - Parameter context: 엔티티 관리 Context
+    /// - Returns: WeekDays 엔티티 데이터 타입
     func toEntity(context: NSManagedObjectContext) -> WeekDays {
         let weekDays = WeekDays(context: context)
         weekDays.mon = self.mon
