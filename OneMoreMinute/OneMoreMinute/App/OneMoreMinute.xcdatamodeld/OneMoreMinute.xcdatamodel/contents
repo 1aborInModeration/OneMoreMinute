@@ -4,16 +4,16 @@
         <attribute name="isActive" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="note" optional="YES" attributeType="String"/>
         <attribute name="time" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <relationship name="weekDays" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="WeekDays" inverseName="alarm" inverseEntity="WeekDays"/>
+        <relationship name="weekDays" optional="YES" maxCount="1" deletionRule="Nullify" ordered="YES" destinationEntity="WeekDays" inverseName="alarm" inverseEntity="WeekDays"/>
     </entity>
     <entity name="WeekDays" representedClassName="WeekDays" syncable="YES" codeGenerationType="class">
-        <attribute name="fri" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="mon" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="sat" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="sun" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="thu" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="tue" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="wed" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="fri" optional="YES" attributeType="Boolean" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="mon" optional="YES" attributeType="Boolean" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="sat" optional="YES" attributeType="Boolean" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="sun" optional="YES" attributeType="Boolean" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="thu" optional="YES" attributeType="Boolean" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="tue" optional="YES" attributeType="Boolean" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="wed" optional="YES" attributeType="Boolean" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="alarm" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Alarm" inverseName="weekDays" inverseEntity="Alarm"/>
     </entity>
 </model>
