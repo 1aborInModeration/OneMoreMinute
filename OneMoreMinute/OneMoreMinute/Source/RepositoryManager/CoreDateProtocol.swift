@@ -14,9 +14,10 @@ protocol CoreDataManaged: AnyObject {
     
     var persistentContainer: NSPersistentContainer { get }
     
-    func create()
-    func fetch()
-    func delete()
+    func create(with model: Model)
+    func fetch() -> [Entity]
+    func delete(_ entity: Entity)
+    func save()
 }
 
 protocol EntityTransformAble {
