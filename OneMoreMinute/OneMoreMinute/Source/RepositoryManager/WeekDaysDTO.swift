@@ -33,4 +33,18 @@ struct WeekDaysDTO: EntityTransformAble {
         
         return weekDays
     }
+    
+    func someProperties() -> [Bool] {
+        let properties = [
+            self.mon,
+            self.tue,
+            self.wed,
+            self.thu,
+            self.fri,
+            self.sat,
+            self.sun
+        ]
+        
+        return properties
+    }
 }
