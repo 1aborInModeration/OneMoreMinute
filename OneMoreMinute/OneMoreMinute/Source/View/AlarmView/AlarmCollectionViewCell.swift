@@ -11,28 +11,25 @@ import Then
 
 final class AlarmCollectionViewCell: UICollectionViewCell {
     
-    static let id: String = "AlarmViewController"
-    
-    private var weekDaysData: [Bool] = []
-    
+    static let id: String = "AlarmCollectionViewCell"
+        
     private let timeLabel = UILabel().then {
-        $0.text = "07:30"
         $0.font = Fonts.headline2
         $0.textColor = UIColor.black
         $0.numberOfLines = 1
         $0.textAlignment = .left
     }
     
-    private lazy var weekDaysIcons = WeekDaysIcons(weekDays: self.weekDaysData)
+    private lazy var weekDaysIcons = WeekDaysIcons()
     
     private let note = UITextField().then {
-        $0.text = "아침 운동하기"
         $0.textColor = Colors.systemGray(.r500)
         $0.borderStyle = .none
         $0.layer.cornerRadius = 8
         $0.backgroundColor = Colors.systemGray(.r50)
         $0.leftView = UIView(frame: .init(x: 0, y: 0, width: 10, height: 10))
         $0.leftViewMode = .always
+        $0.isUserInteractionEnabled = false
     }
     
     private let editButton = UIButton().then {
@@ -77,8 +74,15 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
                               weekDays.sat,
                               weekDays.sun]
         
-        self.weekDaysData = weekdaysStatus
-        self.weekDaysIcons.layoutIfNeeded()
+        self.weekDaysIcons.insertData(weekdaysStatus)
+        
+        let time = convertDtTxtFormat(data.time ?? Date())
+        self.timeLabel.text = time
+        
+        changeButtonColor(data.isActive)
+        
+        self.note.text = data.note ?? ""
+        
     }
 }
 
@@ -119,7 +123,7 @@ private extension AlarmCollectionViewCell {
         }
         
         self.editButton.snp.makeConstraints { make in
-            make.top.equalTo(self.weekDaysIcons.snp.bottom).offset(10)
+            make.top.equalTo(self.weekDaysIcons.snp.bottom).offset(20)
             make.leading.equalTo(self.weekDaysIcons)
             make.width.height.equalTo(30)
         }
@@ -141,6 +145,36 @@ private extension AlarmCollectionViewCell {
             make.centerY.equalTo(self.alarmButton)
             make.leading.equalTo(self.alarmButton.snp.trailing).offset(10)
             make.width.height.equalTo(40)
+        }
+    }
+    
+    /// 시간을 나타내는 레이블 값의 포맷을 변경하는 메소드
+    /// - Parameter dtTxt: 서버에서 받아온 날짜 데이터
+    /// - Returns: 포맷이 변경된 텍스트
+    func convertDtTxtFormat(_ date: Date) -> String {
+//        let dateFormat = DateFormatter()
+//        dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//        dateFormat.locale = Locale(identifier: "en_EN")
+//
+//        let convertDate = dateFormat.string(from: date)
+        let myDateFormat = DateFormatter()
+        myDateFormat.dateFormat = "a hh:mm"
+        myDateFormat.locale = Locale(identifier: "ko_KR")
+        let dtTxt = myDateFormat.string(from: date)
+
+        return dtTxt
+    }
+    
+    func changeButtonColor(_ isSelected: Bool) {
+        switch isSelected {
+        case true:
+            self.alarmButton.backgroundColor = Colors.systemColor(.r50)
+            self.alarmButton.tintColor = Colors.systemColor(.r400)
+            self.alarmButton.isSelected = true
+        case false:
+            self.alarmButton.backgroundColor = Colors.systemLightGray
+            self.alarmButton.tintColor = Colors.systemDarkGray
+            self.alarmButton.isSelected = false
         }
     }
 }

@@ -7,14 +7,13 @@
 
 import UIKit
 import SnapKit
-import RxSwift
-import RxCocoa
 import Then
 
 final class AlarmView: UIView {
     
     private(set) lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout).then {
         $0.backgroundColor = .clear
+        $0.register(AlarmCollectionViewCell.self, forCellWithReuseIdentifier: AlarmCollectionViewCell.id)
     }
     
     private lazy var layout: UICollectionViewLayout = {
@@ -37,6 +36,7 @@ final class AlarmView: UIView {
         )
         
         let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 20
         
         let layout = UICollectionViewCompositionalLayout(section: section)
         
@@ -70,7 +70,7 @@ private extension AlarmView {
     
     func setupLayout() {
         self.collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.edges.equalToSuperview().inset(20)
         }
     }
 }

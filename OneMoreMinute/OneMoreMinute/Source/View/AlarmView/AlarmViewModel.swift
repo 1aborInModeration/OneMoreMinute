@@ -22,7 +22,7 @@ final class AlarmViewModel {
     
     private let disposeBag = DisposeBag()
     
-    private(set) var data = PublishRelay<[Alarm]>()
+    private(set) var data = BehaviorRelay(value: [Alarm]())
     
     init() {
         let data = self.coreDataManager.fetch()

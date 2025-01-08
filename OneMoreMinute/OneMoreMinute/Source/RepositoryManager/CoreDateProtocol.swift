@@ -18,7 +18,7 @@ protocol CoreDataManaged: AnyObject {
     func create(with model: Model)
     func fetch() -> [Entity]
     func delete(_ entity: Entity)
-    func save()
+    func save() throws
 }
 
 /// 엔티티DTO 파일의 기본 기능 추상화
