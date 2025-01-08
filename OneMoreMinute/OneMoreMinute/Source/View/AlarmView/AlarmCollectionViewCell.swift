@@ -13,6 +13,14 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
     
     static let id: String = "AlarmViewController"
     
+    private var weekDaysData = WeekDaysDTO(mon: false,
+                                           tue: false,
+                                           wed: false,
+                                           thu: false,
+                                           fri: false,
+                                           sat: false,
+                                           sun: false)
+    
     private let timeLabel = UILabel().then {
         $0.text = "07:30"
         $0.font = Fonts.headline2
@@ -21,7 +29,7 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         $0.textAlignment = .left
     }
     
-    private let weekDaysIcons = WeekDaysIcons(weekDays: ["월", "화", "수", "목", "금", "토", "일"])
+    private lazy var weekDaysIcons = WeekDaysIcons(weekDays: self.weekDaysData)
     
     private let note = UITextField().then {
         $0.text = "아침 운동하기"
@@ -64,6 +72,10 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         
         setupUI()
     }
+    
+    func configCell(_ data: AlarmDTO) {
+        self.weekDaysData = data.weekDays
+    }
 }
 
 private extension AlarmCollectionViewCell {
@@ -99,6 +111,7 @@ private extension AlarmCollectionViewCell {
         self.weekDaysIcons.snp.makeConstraints { make in
             make.top.equalTo(self.timeLabel.snp.bottom).offset(10)
             make.leading.equalTo(self.timeLabel)
+//            make.height.equalTo(30)
         }
         
         self.editButton.snp.makeConstraints { make in
