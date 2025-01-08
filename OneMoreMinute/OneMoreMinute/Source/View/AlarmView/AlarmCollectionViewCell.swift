@@ -12,12 +12,15 @@ import Then
 final class AlarmCollectionViewCell: UICollectionViewCell {
     
     static let id: String = "AlarmCollectionViewCell"
+    
+    private(set) var data: Alarm?
         
     private let timeLabel = UILabel().then {
         $0.font = Fonts.headline2
         $0.textColor = UIColor.black
         $0.numberOfLines = 1
         $0.textAlignment = .left
+        $0.backgroundColor = .clear
     }
     
     private lazy var weekDaysIcons = WeekDaysIcons()
@@ -38,14 +41,14 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         $0.tintColor = Colors.systemGray(.r500)
     }
     
-    private let alarmButton = UIButton().then {
+    private(set) var alarmButton = UIButton().then {
         $0.layer.cornerRadius = 20
         $0.setImage(UIImage(systemName: "bell"), for: .normal)
         $0.tintColor = Colors.systemColor(.r400)
         $0.backgroundColor = Colors.systemColor(.r50)
     }
     
-    private let deleteButton = UIButton().then {
+    private(set) var deleteButton = UIButton().then {
         $0.layer.cornerRadius = 20
         $0.setImage(UIImage(systemName: "trash"), for: .normal)
         $0.tintColor = UIColor(red: 248/256, green: 113/256, blue: 113/256, alpha: 1.0)
@@ -83,6 +86,7 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         
         self.note.text = data.note ?? ""
         
+        self.data = data
     }
 }
 
@@ -131,7 +135,7 @@ private extension AlarmCollectionViewCell {
         self.note.snp.makeConstraints { make in
             make.centerY.equalTo(self.editButton)
             make.leading.equalTo(self.editButton.snp.trailing).offset(10)
-            make.height.equalTo(30)
+            make.height.equalTo(40)
             make.width.equalTo(200)
         }
         
@@ -172,8 +176,8 @@ private extension AlarmCollectionViewCell {
             self.alarmButton.tintColor = Colors.systemColor(.r400)
             self.alarmButton.isSelected = true
         case false:
-            self.alarmButton.backgroundColor = Colors.systemLightGray
-            self.alarmButton.tintColor = Colors.systemDarkGray
+            self.alarmButton.backgroundColor = Colors.systemGray(.r50)
+            self.alarmButton.tintColor = Colors.systemGray(.r400)
             self.alarmButton.isSelected = false
         }
     }

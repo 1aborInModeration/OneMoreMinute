@@ -40,5 +40,6 @@ private extension AlarmViewController {
                 cell.configCell(element)
                 
             }.disposed(by: self.disposeBag)
+        
     }
 }
