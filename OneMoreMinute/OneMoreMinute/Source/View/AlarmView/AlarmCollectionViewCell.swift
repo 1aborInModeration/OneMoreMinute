@@ -32,13 +32,9 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         $0.backgroundColor = Colors.systemGray(.r50)
         $0.leftView = UIView(frame: .init(x: 0, y: 0, width: 10, height: 10))
         $0.leftViewMode = .always
+        $0.rightView = UIView(frame: .init(x: 0, y: 0, width: 10, height: 10))
+        $0.rightViewMode = .always
         $0.isUserInteractionEnabled = false
-    }
-    
-    private let editButton = UIButton().then {
-        $0.backgroundColor = .clear
-        $0.setImage(UIImage(systemName: "pencil"), for: .normal)
-        $0.tintColor = Colors.systemGray(.r500)
     }
     
     private(set) var alarmButton = UIButton().then {
@@ -105,11 +101,10 @@ private extension AlarmCollectionViewCell {
         self.layer.shadowOffset = .init(width: 0, height: 10)
         self.layer.shadowRadius = 15
         [self.timeLabel,
-         self.weekDaysIcons,
-         self.editButton,
          self.note,
          self.alarmButton,
-         self.deleteButton
+         self.deleteButton,
+         self.weekDaysIcons
         ].forEach { self.addSubview($0) }
     }
     
@@ -120,27 +115,15 @@ private extension AlarmCollectionViewCell {
             make.leading.equalToSuperview().offset(20)
         }
         
-        self.weekDaysIcons.snp.makeConstraints { make in
-            make.top.equalTo(self.timeLabel.snp.bottom).offset(10)
-            make.leading.equalTo(self.timeLabel)
-//            make.height.equalTo(30)
-        }
-        
-        self.editButton.snp.makeConstraints { make in
-            make.top.equalTo(self.weekDaysIcons.snp.bottom).offset(20)
-            make.leading.equalTo(self.weekDaysIcons)
-            make.width.height.equalTo(30)
-        }
-        
         self.note.snp.makeConstraints { make in
-            make.centerY.equalTo(self.editButton)
-            make.leading.equalTo(self.editButton.snp.trailing).offset(10)
+            make.top.equalTo(self.timeLabel.snp.bottom).offset(10)
+            make.leading.equalTo(self.timeLabel.snp.leading)
             make.height.equalTo(40)
-            make.width.equalTo(200)
+            make.width.equalTo(230)
         }
         
         self.alarmButton.snp.makeConstraints { make in
-            make.centerY.equalTo(self.weekDaysIcons)
+            make.centerY.equalTo(self.note)
             make.leading.equalTo(self.note.snp.trailing).offset(10)
             make.width.height.equalTo(40)
         }
@@ -149,6 +132,12 @@ private extension AlarmCollectionViewCell {
             make.centerY.equalTo(self.alarmButton)
             make.leading.equalTo(self.alarmButton.snp.trailing).offset(10)
             make.width.height.equalTo(40)
+        }
+        
+        self.weekDaysIcons.snp.makeConstraints { make in
+            make.top.equalTo(self.note.snp.bottom).offset(10)
+            make.leading.equalTo(self.timeLabel)
+//            make.height.equalTo(30)
         }
     }
     
