@@ -13,13 +13,7 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
     
     static let id: String = "AlarmViewController"
     
-    private var weekDaysData = WeekDaysDTO(mon: false,
-                                           tue: false,
-                                           wed: false,
-                                           thu: false,
-                                           fri: false,
-                                           sat: false,
-                                           sun: false)
+    private var weekDaysData: [Bool] = []
     
     private let timeLabel = UILabel().then {
         $0.text = "07:30"
@@ -73,8 +67,18 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         setupUI()
     }
     
-    func configCell(_ data: AlarmDTO) {
-        self.weekDaysData = data.weekDays
+    func configCell(_ data: Alarm) {
+        guard let weekDays = data.weekDays else { return }
+        let weekdaysStatus = [weekDays.mon,
+                              weekDays.tue,
+                              weekDays.wed,
+                              weekDays.thu,
+                              weekDays.fri,
+                              weekDays.sat,
+                              weekDays.sun]
+        
+        self.weekDaysData = weekdaysStatus
+        self.weekDaysIcons.layoutIfNeeded()
     }
 }
 
@@ -141,8 +145,3 @@ private extension AlarmCollectionViewCell {
     }
 }
 
-// Preview
-@available(iOS 17.0, *)
-#Preview {
-    AlarmCollectionViewCell()
-}

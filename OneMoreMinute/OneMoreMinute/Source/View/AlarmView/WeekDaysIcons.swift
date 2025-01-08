@@ -11,7 +11,7 @@ import Then
 
 final class WeekDaysIcons: UIView {
     
-    private var weekDays: WeekDaysDTO
+    private var weekDays: [Bool]
     private let stack = UIStackView().then {
         $0.axis = .horizontal
         $0.distribution = .fillEqually
@@ -20,7 +20,7 @@ final class WeekDaysIcons: UIView {
         $0.backgroundColor = .clear
     }
     
-    init(weekDays: WeekDaysDTO) {
+    init(weekDays: [Bool]) {
         self.weekDays = weekDays
         super.init(frame: .zero)
         
@@ -33,7 +33,7 @@ final class WeekDaysIcons: UIView {
     }
     
     private func setupIcons() {
-        self.weekDays.someProperties().enumerated().forEach { [weak self] index, data in
+        self.weekDays.enumerated().forEach { [weak self] index, data in
             guard data == true else { return }
             let label = UILabel()
             label.text = self?.iconTitle(index)
@@ -83,8 +83,3 @@ final class WeekDaysIcons: UIView {
     }
 }
 
-// Preview
-@available(iOS 17.0, *)
-#Preview {
-    WeekDaysIcons(weekDays: .init(mon: false, tue: true, wed: true, thu: false, fri: true, sat: false, sun: true))
-}
