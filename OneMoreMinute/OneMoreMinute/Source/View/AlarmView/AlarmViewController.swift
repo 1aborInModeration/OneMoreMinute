@@ -39,6 +39,43 @@ private extension AlarmViewController {
                 
                 cell.configCell(element)
                 
+                cell.alarmButtonTapped
+                    .map { IndexPath(row: row, section: 0) }
+                    .bind(to: self.viewModel.alarmButtonTapped)
+                    .disposed(by: self.disposeBag)
+                
+                cell.deleteButtonTapped
+                    .map { IndexPath(row: row, section: 0)}
+                    .bind(to: self.viewModel.deleteButtonTapped)
+                    .disposed(by: self.disposeBag)
+                
+            }.disposed(by: self.disposeBag)
+        
+        self.viewModel.alarmButtonTapped
+            .asSignal(onErrorSignalWith: .empty())
+            .withUnretained(self)
+            .emit { owner, indexPath in
+                
+                guard let cell = owner.alarmView.collectionView.cellForItem(at: indexPath) as? AlarmCollectionViewCell else { return }
+                cell.isAlarmOn.toggle()
+                
+            }.disposed(by: self.disposeBag)
+        
+        self.viewModel.deleteButtonTapped
+            .asSignal(onErrorSignalWith: .empty())
+            .withUnretained(self)
+            .emit { owner, indexPath in
+                
+                guard
+                    let cell = owner.alarmView.collectionView.cellForItem(at: indexPath) as? AlarmCollectionViewCell,
+                    let data = cell.data
+                else { return }
+                
+                AlarmDataManager.shared.delete(data)
+                
+                let alarmData = AlarmDataManager.shared.fetch()
+                owner.viewModel.data.accept(alarmData)
+                
             }.disposed(by: self.disposeBag)
         
     }

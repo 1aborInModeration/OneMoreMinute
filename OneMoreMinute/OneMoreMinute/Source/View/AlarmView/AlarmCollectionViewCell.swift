@@ -8,12 +8,25 @@
 import UIKit
 import SnapKit
 import Then
+import RxSwift
+import RxCocoa
 
 final class AlarmCollectionViewCell: UICollectionViewCell {
     
     static let id: String = "AlarmCollectionViewCell"
     
+    private let disposeBag = DisposeBag()
+    
+    private(set) var alarmButtonTapped = PublishRelay<Void>()
+    private(set) var deleteButtonTapped = PublishRelay<Void>()
+    
     private(set) var data: Alarm?
+    
+    var isAlarmOn: Bool = true {
+        didSet {
+            self.changeButtonColor()
+        }
+    }
         
     private let timeLabel = UILabel().then {
         $0.font = Fonts.headline2
@@ -78,7 +91,7 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         let time = convertDtTxtFormat(data.time ?? Date())
         self.timeLabel.text = time
         
-        changeButtonColor(data.isActive)
+        self.isAlarmOn = data.isActive
         
         self.note.text = data.note ?? ""
         
@@ -91,6 +104,7 @@ private extension AlarmCollectionViewCell {
     func setupUI() {
         configure()
         setupLayout()
+        bind()
     }
     
     func configure() {
@@ -141,6 +155,16 @@ private extension AlarmCollectionViewCell {
         }
     }
     
+    func bind() {
+        self.alarmButton.rx.tap
+            .bind(to: self.alarmButtonTapped)
+            .disposed(by: self.disposeBag)
+        
+        self.deleteButton.rx.tap
+            .bind(to: self.deleteButtonTapped)
+            .disposed(by: self.disposeBag)
+    }
+    
     /// 시간을 나타내는 레이블 값의 포맷을 변경하는 메소드
     /// - Parameter dtTxt: 서버에서 받아온 날짜 데이터
     /// - Returns: 포맷이 변경된 텍스트
@@ -153,8 +177,8 @@ private extension AlarmCollectionViewCell {
         return dtTxt
     }
     
-    func changeButtonColor(_ isSelected: Bool) {
-        switch isSelected {
+    func changeButtonColor() {
+        switch self.isAlarmOn {
         case true:
             self.alarmButton.backgroundColor = Colors.systemColor(.r50)
             self.alarmButton.tintColor = Colors.systemColor(.r400)

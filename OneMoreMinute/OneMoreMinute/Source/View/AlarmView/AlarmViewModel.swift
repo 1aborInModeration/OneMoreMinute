@@ -24,6 +24,9 @@ final class AlarmViewModel {
     
     private(set) var data = BehaviorRelay(value: [Alarm]())
     
+    private(set) var alarmButtonTapped = PublishRelay<IndexPath>()
+    private(set) var deleteButtonTapped = PublishRelay<IndexPath>()
+    
     init() {
         let data = self.coreDataManager.fetch()
         self.data.accept(data)
