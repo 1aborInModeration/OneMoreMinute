@@ -11,7 +11,7 @@ import Then
 
 final class WeekDaysIcons: UIView {
     
-    private var weekDays: [String] = []
+    private var weekDays: WeekDaysDTO
     private let stack = UIStackView().then {
         $0.axis = .horizontal
         $0.distribution = .fillEqually
@@ -20,7 +20,7 @@ final class WeekDaysIcons: UIView {
         $0.backgroundColor = .clear
     }
     
-    init(weekDays: [String]) {
+    init(weekDays: WeekDaysDTO) {
         self.weekDays = weekDays
         super.init(frame: .zero)
         
@@ -33,9 +33,10 @@ final class WeekDaysIcons: UIView {
     }
     
     private func setupIcons() {
-        self.weekDays.forEach { [weak self] in
+        self.weekDays.someProperties().enumerated().forEach { [weak self] index, data in
+            guard data == true else { return }
             let label = UILabel()
-            label.text = $0
+            label.text = self?.iconTitle(index)
             label.font = Fonts.title2
             label.textColor = Colors.systemColor(.r400)
             label.textAlignment = .center
@@ -59,10 +60,31 @@ final class WeekDaysIcons: UIView {
             make.edges.equalToSuperview()
         }
     }
+    
+    private func iconTitle(_ index: Int) -> String {
+        switch index {
+        case 0:
+            return "월"
+        case 1:
+            return "화"
+        case 2:
+            return "수"
+        case 3:
+            return "목"
+        case 4:
+            return "금"
+        case 5:
+            return "토"
+        case 6:
+            return "일"
+        default:
+            return ""
+        }
+    }
 }
 
 // Preview
 @available(iOS 17.0, *)
 #Preview {
-    WeekDaysIcons(weekDays: ["월", "화", "수", "목", "금"])
+    WeekDaysIcons(weekDays: .init(mon: false, tue: true, wed: true, thu: false, fri: true, sat: false, sun: true))
 }
