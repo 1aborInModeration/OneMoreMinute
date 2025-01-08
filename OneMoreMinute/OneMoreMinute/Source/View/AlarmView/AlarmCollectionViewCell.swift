@@ -156,11 +156,6 @@ private extension AlarmCollectionViewCell {
     /// - Parameter dtTxt: 서버에서 받아온 날짜 데이터
     /// - Returns: 포맷이 변경된 텍스트
     func convertDtTxtFormat(_ date: Date) -> String {
-//        let dateFormat = DateFormatter()
-//        dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
-//        dateFormat.locale = Locale(identifier: "en_EN")
-//
-//        let convertDate = dateFormat.string(from: date)
         let myDateFormat = DateFormatter()
         myDateFormat.dateFormat = "a hh:mm"
         myDateFormat.locale = Locale(identifier: "ko_KR")
