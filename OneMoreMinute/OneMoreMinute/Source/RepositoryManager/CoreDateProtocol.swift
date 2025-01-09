@@ -17,6 +17,8 @@ protocol CoreDataManaged: AnyObject {
     
     func create(with model: Model)
     func fetch() -> [Entity]
+    func update(_ id: NSManagedObjectID, updateData: Entity)
+    func search(_ id: NSManagedObjectID) -> Entity?
     func delete(_ entity: Entity)
     func save() throws
 }
