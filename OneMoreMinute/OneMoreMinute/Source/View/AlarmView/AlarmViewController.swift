@@ -59,6 +59,12 @@ private extension AlarmViewController {
                 guard let cell = owner.alarmView.collectionView.cellForItem(at: indexPath) as? AlarmCollectionViewCell else { return }
                 cell.isAlarmOn.toggle()
                 
+                guard
+                    let id = cell.data?.objectID,
+                    let data = cell.updateAlarmIsOn()
+                else { return }
+                AlarmDataManager.shared.update(id, updateData: data)
+                
             }.disposed(by: self.disposeBag)
         
         self.viewModel.deleteButtonTapped

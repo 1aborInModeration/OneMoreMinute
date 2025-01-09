@@ -97,6 +97,12 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         
         self.data = data
     }
+    
+    func updateAlarmIsOn() -> Alarm? {
+        self.data?.isActive = self.isAlarmOn
+        
+        return self.data
+    }
 }
 
 private extension AlarmCollectionViewCell {
