@@ -18,16 +18,36 @@ final class AlarmViewController: UIViewController {
     
     private let alarmView = AlarmView()
     
+    private let showModalButton = ShowModalButton()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view = self.alarmView
-        bind()
+        setupUI()
     }
     
 }
 
 private extension AlarmViewController {
+    
+    func setupUI() {
+        configure()
+        setupLayout()
+        bind()
+    }
+    
+    func configure() {
+        self.view = self.alarmView
+        self.view.addSubview(showModalButton)
+    }
+    
+    func setupLayout() {
+        self.showModalButton.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(20)
+            make.trailing.equalToSuperview().inset(20)
+            make.width.height.equalTo(50)
+        }
+    }
     
     func bind() {
         self.viewModel.data

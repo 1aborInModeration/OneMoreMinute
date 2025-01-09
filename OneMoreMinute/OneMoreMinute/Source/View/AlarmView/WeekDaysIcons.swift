@@ -11,7 +11,7 @@ import Then
 
 final class WeekDaysIcons: UIView {
     
-    private var weekDays: [Bool] = []
+    private var weekDays: [Bool]
     private let stack = UIStackView().then {
         $0.axis = .horizontal
         $0.distribution = .fillEqually
@@ -20,19 +20,16 @@ final class WeekDaysIcons: UIView {
         $0.backgroundColor = .clear
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(weekDays: [Bool]) {
+        self.weekDays = weekDays
+        super.init(frame: .zero)
         
+        setupIcons()
         setupLayout()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func insertData(_ data: [Bool]) {
-        self.weekDays = data
-        setupIcons()
     }
     
     private func setupIcons() {

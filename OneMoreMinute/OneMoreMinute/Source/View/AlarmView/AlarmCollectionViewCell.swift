@@ -36,7 +36,7 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         $0.backgroundColor = .clear
     }
     
-    private lazy var weekDaysIcons = WeekDaysIcons()
+    private var weekDaysIcons: WeekDaysIcons?
     
     private let note = UITextField().then {
         $0.textColor = Colors.systemGray(.r500)
@@ -76,6 +76,12 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         setupUI()
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        setupUI()
+    }
+    
     func configCell(_ data: Alarm) {
         guard let weekDays = data.weekDays else { return }
         let weekdaysStatus = [weekDays.mon,
@@ -86,7 +92,8 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
                               weekDays.sat,
                               weekDays.sun]
         
-        self.weekDaysIcons.insertData(weekdaysStatus)
+        self.weekDaysIcons = WeekDaysIcons(weekDays: weekdaysStatus)
+        setupWeekDaysIcon()
         
         let time = convertDtTxtFormat(data.time ?? Date())
         self.timeLabel.text = time
@@ -119,12 +126,11 @@ private extension AlarmCollectionViewCell {
         self.layer.shadowColor = Colors.systemDarkGray.cgColor
         self.layer.shadowOpacity = 0.25
         self.layer.shadowOffset = .init(width: 0, height: 10)
-        self.layer.shadowRadius = 15
+        self.layer.shadowRadius = 10
         [self.timeLabel,
          self.note,
          self.alarmButton,
          self.deleteButton,
-         self.weekDaysIcons
         ].forEach { self.addSubview($0) }
     }
     
@@ -139,7 +145,7 @@ private extension AlarmCollectionViewCell {
             make.top.equalTo(self.timeLabel.snp.bottom).offset(10)
             make.leading.equalTo(self.timeLabel.snp.leading)
             make.height.equalTo(40)
-            make.width.equalTo(230)
+            make.width.equalTo(240)
         }
         
         self.alarmButton.snp.makeConstraints { make in
@@ -153,8 +159,12 @@ private extension AlarmCollectionViewCell {
             make.leading.equalTo(self.alarmButton.snp.trailing).offset(10)
             make.width.height.equalTo(40)
         }
+    }
+    
+    func setupWeekDaysIcon() {
+        self.addSubview(self.weekDaysIcons!)
         
-        self.weekDaysIcons.snp.makeConstraints { make in
+        self.weekDaysIcons!.snp.makeConstraints { make in
             make.top.equalTo(self.note.snp.bottom).offset(10)
             make.leading.equalTo(self.timeLabel)
 //            make.height.equalTo(30)

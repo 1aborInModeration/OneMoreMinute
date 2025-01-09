@@ -26,7 +26,7 @@ final class AlarmView: UIView {
         item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
+            widthDimension: .fractionalWidth(0.95),
             heightDimension: .fractionalHeight(0.2)
         )
         
@@ -37,6 +37,7 @@ final class AlarmView: UIView {
         
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 20
+        section.contentInsets.leading = 20
         
         let layout = UICollectionViewCompositionalLayout(section: section)
         
@@ -70,7 +71,7 @@ private extension AlarmView {
     
     func setupLayout() {
         self.collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(20)
+            make.edges.equalToSuperview()
         }
     }
 }
