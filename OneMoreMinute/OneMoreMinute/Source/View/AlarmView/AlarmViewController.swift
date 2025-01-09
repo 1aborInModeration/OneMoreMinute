@@ -18,8 +18,10 @@ final class AlarmViewController: UIViewController {
     
     private let disposeBag = DisposeBag()
     
-    private let alarmView = AlarmView()
+    private let repository = AlarmDataManager.shared
     
+    private let alarmView = AlarmView()
+        
     private let showModalButton = ShowModalButton()
     
     private lazy var datasource = self.makeDataSource()
@@ -83,10 +85,11 @@ private extension AlarmViewController {
         bindData()
         bindAlarmOnButton()
         bindDeleteButton()
+        bindShowModalButton()
     }
     
     func bindData() {
-        self.viewModel.data
+        self.viewModel.dataRelay
             .asDriver(onErrorDriveWith: .empty())
             .drive(self.alarmView.collectionView.rx.items(dataSource: self.datasource))
             .disposed(by: self.disposeBag)
@@ -106,7 +109,7 @@ private extension AlarmViewController {
                     let data = cell.updateAlarmIsOn()
                 else { return }
                 
-                AlarmDataManager.shared.update(id, updateData: data)
+                owner.repository.update(id, updateData: data)
                 
             }.disposed(by: self.disposeBag)
     }
@@ -122,9 +125,22 @@ private extension AlarmViewController {
                     let data = cell.data
                 else { return }
                 
-                AlarmDataManager.shared.delete(data)
+                owner.repository.delete(data)
                 
                 owner.viewModel.dataFetch()
+                
+            }.disposed(by: self.disposeBag)
+    }
+    
+    func bindShowModalButton() {
+        self.showModalButton.rx.tap
+            .asSignal(onErrorSignalWith: .empty())
+            .withUnretained(self)
+            .emit { owner, _ in
+                
+                let modal = AlarmModalViewController(state: .crate)
+                modal.modalPresentationStyle = .overFullScreen
+                owner.present(modal, animated: true)
                 
             }.disposed(by: self.disposeBag)
     }

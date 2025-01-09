@@ -30,7 +30,7 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         
     private let timeLabel = UILabel().then {
         $0.font = Fonts.headline2
-        $0.textColor = UIColor.black
+        $0.textColor = UIColor.label
         $0.numberOfLines = 1
         $0.textAlignment = .left
         $0.backgroundColor = .clear

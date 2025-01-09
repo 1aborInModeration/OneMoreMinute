@@ -19,31 +19,28 @@ final class AlarmViewModel {
     }
     
     private let coreDataManager = AlarmDataManager.shared
-    
     private let disposeBag = DisposeBag()
     
-    private(set) var data = BehaviorRelay(value: [AlarmSectionModel]())
-    
+    private(set) var dataRelay = BehaviorRelay(value: [AlarmSectionModel]())
     private(set) var alarmButtonTapped = PublishRelay<IndexPath>()
     private(set) var deleteButtonTapped = PublishRelay<IndexPath>()
-    
+ 
     init() {
         dataFetch()
     }
     
     func dataFetch() {
-        let data = self.coreDataManager.fetch()
-        let items: [AlarmItem] = {
-            var alarmItems: [AlarmItem] = []
-            data.forEach {
-                let item = AlarmItem.init(data: $0)
-                alarmItems.append(item)
+        Observable.from([coreDataManager.fetch()])
+            .map { data in
+                data.map { AlarmItem(data: $0) }
             }
-            return alarmItems
-        }()
-        
-        let model = AlarmSectionModel.init(identity: "AlarmSectionModel", items: items)
-        self.data.accept([model])
+            .map { items -> [AlarmSectionModel] in
+                [AlarmSectionModel(identity: "AlarmSectionModel", items: items)]
+            }
+            .subscribe(onNext: { [weak self] models in
+                self?.dataRelay.accept(models)
+            })
+            .disposed(by: disposeBag)
     }
     
     func transform(input: Input) -> Output {
