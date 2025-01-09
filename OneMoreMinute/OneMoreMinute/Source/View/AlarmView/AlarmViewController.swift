@@ -9,8 +9,10 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import RxDataSources
 
 final class AlarmViewController: UIViewController {
+    typealias DataSource = RxCollectionViewSectionedAnimatedDataSource<AlarmSectionModel>
     
     private let viewModel = AlarmViewModel()
     
@@ -19,6 +21,8 @@ final class AlarmViewController: UIViewController {
     private let alarmView = AlarmView()
     
     private let showModalButton = ShowModalButton()
+    
+    private lazy var datasource = self.makeDataSource()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,28 +53,46 @@ private extension AlarmViewController {
         }
     }
     
+    func makeDataSource() -> DataSource {
+        return DataSource(configureCell: { [weak self] datasource, collectionView, indexPath, item in
+            guard
+                let self,
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: AlarmCollectionViewCell.id,
+                    for: indexPath
+                ) as? AlarmCollectionViewCell
+            else { return .init() }
+            
+            cell.configCell(item.data)
+            
+            cell.alarmButtonTapped
+                .map { indexPath }
+                .bind(to: self.viewModel.alarmButtonTapped)
+                .disposed(by: self.disposeBag)
+            
+            cell.deleteButtonTapped
+                .map { indexPath }
+                .bind(to: self.viewModel.deleteButtonTapped)
+                .disposed(by: self.disposeBag)
+            
+            return cell
+        })
+    }
+    
     func bind() {
+        bindData()
+        bindAlarmOnButton()
+        bindDeleteButton()
+    }
+    
+    func bindData() {
         self.viewModel.data
             .asDriver(onErrorDriveWith: .empty())
-            .drive(self.alarmView.collectionView.rx.items(
-                cellIdentifier: AlarmCollectionViewCell.id,
-                cellType: AlarmCollectionViewCell.self)
-            ) { (row, element, cell) in
-                
-                cell.configCell(element)
-                
-                cell.alarmButtonTapped
-                    .map { IndexPath(row: row, section: 0) }
-                    .bind(to: self.viewModel.alarmButtonTapped)
-                    .disposed(by: self.disposeBag)
-                
-                cell.deleteButtonTapped
-                    .map { IndexPath(row: row, section: 0)}
-                    .bind(to: self.viewModel.deleteButtonTapped)
-                    .disposed(by: self.disposeBag)
-                
-            }.disposed(by: self.disposeBag)
-        
+            .drive(self.alarmView.collectionView.rx.items(dataSource: self.datasource))
+            .disposed(by: self.disposeBag)
+    }
+    
+    func bindAlarmOnButton() {
         self.viewModel.alarmButtonTapped
             .asSignal(onErrorSignalWith: .empty())
             .withUnretained(self)
@@ -83,10 +105,13 @@ private extension AlarmViewController {
                     let id = cell.data?.objectID,
                     let data = cell.updateAlarmIsOn()
                 else { return }
+                
                 AlarmDataManager.shared.update(id, updateData: data)
                 
             }.disposed(by: self.disposeBag)
-        
+    }
+    
+    func bindDeleteButton() {
         self.viewModel.deleteButtonTapped
             .asSignal(onErrorSignalWith: .empty())
             .withUnretained(self)
@@ -99,10 +124,8 @@ private extension AlarmViewController {
                 
                 AlarmDataManager.shared.delete(data)
                 
-                let alarmData = AlarmDataManager.shared.fetch()
-                owner.viewModel.data.accept(alarmData)
+                owner.viewModel.dataFetch()
                 
             }.disposed(by: self.disposeBag)
-        
     }
 }

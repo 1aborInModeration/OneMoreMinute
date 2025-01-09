@@ -22,14 +22,28 @@ final class AlarmViewModel {
     
     private let disposeBag = DisposeBag()
     
-    private(set) var data = BehaviorRelay(value: [Alarm]())
+    private(set) var data = BehaviorRelay(value: [AlarmSectionModel]())
     
     private(set) var alarmButtonTapped = PublishRelay<IndexPath>()
     private(set) var deleteButtonTapped = PublishRelay<IndexPath>()
     
     init() {
+        dataFetch()
+    }
+    
+    func dataFetch() {
         let data = self.coreDataManager.fetch()
-        self.data.accept(data)
+        let items: [AlarmItem] = {
+            var alarmItems: [AlarmItem] = []
+            data.forEach {
+                let item = AlarmItem.init(data: $0)
+                alarmItems.append(item)
+            }
+            return alarmItems
+        }()
+        
+        let model = AlarmSectionModel.init(identity: "AlarmSectionModel", items: items)
+        self.data.accept([model])
     }
     
     func transform(input: Input) -> Output {
