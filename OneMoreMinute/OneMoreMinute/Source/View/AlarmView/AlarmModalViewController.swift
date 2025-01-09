@@ -19,10 +19,12 @@ enum AlarmModalState {
 final class AlarmModalViewController: UIViewController {
     
     private let modalView = AlarmModalView()
-        
+    
     private var state: AlarmModalState
     
     private let disposeBag = DisposeBag()
+    
+    private let repository = AlarmDataManager.shared
     
     init(state: AlarmModalState) {
         self.state = state
@@ -67,7 +69,7 @@ private extension AlarmModalViewController {
             .withUnretained(self)
             .emit { owner, _ in
                 
-                self.dismiss(animated: true)
+                owner.dismiss(animated: true)
                 
             }.disposed(by: self.disposeBag)
         
@@ -76,15 +78,36 @@ private extension AlarmModalViewController {
             .withUnretained(self)
             .emit { owner, _ in
                 
-                self.dismiss(animated: true)
+                owner.dismiss(animated: true)
+                
+            }.disposed(by: self.disposeBag)
+        
+        self.modalView.saveButton.rx.tap
+            .asSignal(onErrorSignalWith: .empty())
+            .withUnretained(self)
+            .emit { owner, _ in
+                
+                let data = owner.modalView.extractionData()
+                
+                owner.repository.create(with: .init(
+                    isActive: true,
+                    note: data.memo,
+                    time: data.date,
+                    weekDays: .init(mon: data.week[0],
+                                    tue: data.week[1],
+                                    wed: data.week[2],
+                                    thu: data.week[3],
+                                    fri: data.week[4],
+                                    sat: data.week[5],
+                                    sun: data.week[6]
+                                   )
+                    )
+                )
+                
+                owner.dismiss(animated: true)
                 
             }.disposed(by: self.disposeBag)
     }
     
 }
 
-
-//@available(iOS 17.0, *)
-//#Preview {
-//    AlarmModalViewController(state: .crate)
-//}

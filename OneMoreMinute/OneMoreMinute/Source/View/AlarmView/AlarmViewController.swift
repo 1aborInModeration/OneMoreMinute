@@ -32,6 +32,11 @@ final class AlarmViewController: UIViewController {
         setupUI()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.viewModel.dataFetch()
+    }
 }
 
 private extension AlarmViewController {
@@ -139,7 +144,7 @@ private extension AlarmViewController {
             .emit { owner, _ in
                 
                 let modal = AlarmModalViewController(state: .crate)
-                modal.modalPresentationStyle = .overFullScreen
+                modal.modalPresentationStyle = .fullScreen
                 owner.present(modal, animated: true)
                 
             }.disposed(by: self.disposeBag)

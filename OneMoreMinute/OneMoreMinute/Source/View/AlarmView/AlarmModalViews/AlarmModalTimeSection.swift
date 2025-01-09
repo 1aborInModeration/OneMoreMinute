@@ -13,7 +13,7 @@ final class AlarmModalTimeSection: UIView {
     
     private let title = AlarmModalSectionTitle(title: "시간 설정")
     
-    private let timeSet = UIDatePicker().then {
+    private(set) var timeSet = UIDatePicker().then {
         $0.preferredDatePickerStyle = .inline
         $0.datePickerMode = .time
         $0.minuteInterval = 1

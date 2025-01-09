@@ -73,6 +73,13 @@ final class AlarmModalView: UIView {
         
         setupUI()
     }
+    
+    func extractionData() -> (date: Date, memo: String?, week: [Bool]) {
+        let date = self.timeSection.timeSet.date
+        let memo = self.memoSection.memoSet.text
+        let week = self.weekSection.isSelecteds.value
+        return (date, memo, week)
+    }
 }
 
 private extension AlarmModalView {

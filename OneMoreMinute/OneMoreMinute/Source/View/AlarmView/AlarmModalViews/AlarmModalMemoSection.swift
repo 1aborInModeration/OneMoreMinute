@@ -13,7 +13,7 @@ final class AlarmModalMemoSection: UIView {
     
     private let title = AlarmModalSectionTitle(title: "메모")
     
-    private let memoSet = UITextField().then {
+    private(set) var memoSet = UITextField().then {
         $0.placeholder = "알람 메모를 입력하세요"
         $0.textColor = Colors.systemLightGray
         $0.font = Fonts.title2

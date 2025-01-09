@@ -13,7 +13,7 @@ import RxCocoa
 
 final class AlarmModalWeekSection: UIView {
     
-    private var isSelecteds = BehaviorRelay(value: [Bool]())
+    private(set) var isSelecteds = BehaviorRelay(value: [Bool]())
     private let disposeBag = DisposeBag()
     
     private let title = AlarmModalSectionTitle(title: "반복 요일")
@@ -89,6 +89,8 @@ final class AlarmModalWeekSection: UIView {
         super.init(coder: coder)
         
         setupUI()
+        let items = [Bool](repeating: false, count: 7)
+        self.isSelecteds.accept(items)
     }
     
 }
