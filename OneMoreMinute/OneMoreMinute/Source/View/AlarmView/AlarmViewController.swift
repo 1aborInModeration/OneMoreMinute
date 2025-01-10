@@ -130,9 +130,7 @@ private extension AlarmViewController {
                     let data = cell.data
                 else { return }
                 
-                owner.repository.delete(data)
-                
-                owner.viewModel.dataFetch()
+                owner.confirmDeleteAlert(delete: data)
                 
             }.disposed(by: self.disposeBag)
     }
@@ -143,10 +141,108 @@ private extension AlarmViewController {
             .withUnretained(self)
             .emit { owner, _ in
                 
-                let modal = AlarmModalViewController(state: .crate)
-                modal.modalPresentationStyle = .fullScreen
-                owner.present(modal, animated: true)
+                owner.showModal(.crate)
                 
             }.disposed(by: self.disposeBag)
     }
+    
+    func confirmDeleteAlert(delete data: Alarm) {
+        let alert = UIAlertController(title: "경고", message: "정말 알람을 삭제하시겠습니까?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { [weak self] _ in
+            self?.repository.delete(data)
+            self?.viewModel.dataFetch()
+        }))
+        self.present(alert, animated: true)
+    }
+    
+    func showModal(_ state: AlarmModalState) {
+        let modalVC = AlarmModalViewController(state: state)
+        
+        self.addChild(modalVC)
+        [modalVC.view, modalVC.modalView].forEach { self.view.addSubview($0) }
+        
+        modalVC.view.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        modalVC.modalView.snp.makeConstraints { make in
+            make.horizontalEdges.equalToSuperview().inset(20)
+            make.top.equalTo(self.view.snp.bottom).offset(20)
+            make.height.equalTo(530)
+        }
+        
+        self.view.layoutIfNeeded()
+        
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+            
+            modalVC.modalView.frame.origin.y = self.view.bounds.height / 2 - 265
+            self.view.layoutIfNeeded()
+            
+        }) { _ in
+            modalVC.didMove(toParent: self)
+        }
+        
+        self.modalViewBind(modalVC)
+    }
+    
+    func modalViewBind(_ vc: UIViewController) {
+        guard let modalVC = vc as? AlarmModalViewController else { return }
+        
+        modalVC.modalView.saveButton.rx.tap
+            .asSignal(onErrorSignalWith: .empty())
+            .withUnretained(self)
+            .emit { owner, _ in
+                
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear, animations: {
+                    
+                    modalVC.modalView.frame.origin.y = self.view.bounds.maxY + 20
+                    self.view.layoutIfNeeded()
+                    
+                }) { _ in
+                    modalVC.view.removeFromSuperview()
+                    modalVC.modalView.removeFromSuperview()
+                    modalVC.removeFromParent()
+                }
+                owner.viewModel.dataFetch()
+                
+            }.disposed(by: self.disposeBag)
+        
+        modalVC.modalView.closeButton.rx.tap
+            .asSignal(onErrorSignalWith: .empty())
+            .withUnretained(self)
+            .emit { owner, _ in
+                
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear, animations: {
+                    
+                    modalVC.modalView.frame.origin.y = self.view.bounds.maxY + 20
+                    self.view.layoutIfNeeded()
+                    
+                }) { _ in
+                    modalVC.view.removeFromSuperview()
+                    modalVC.modalView.removeFromSuperview()
+                    modalVC.removeFromParent()
+                }
+                
+            }.disposed(by: self.disposeBag)
+        
+        modalVC.modalView.cancleButton.rx.tap
+            .asSignal(onErrorSignalWith: .empty())
+            .withUnretained(self)
+            .emit { owner, _ in
+                
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear, animations: {
+                    
+                    modalVC.modalView.frame.origin.y = self.view.bounds.maxY + 20
+                    self.view.layoutIfNeeded()
+                    
+                }) { _ in
+                    modalVC.view.removeFromSuperview()
+                    modalVC.modalView.removeFromSuperview()
+                    modalVC.removeFromParent()
+                }
+                
+            }.disposed(by: self.disposeBag)
+    }
+
 }

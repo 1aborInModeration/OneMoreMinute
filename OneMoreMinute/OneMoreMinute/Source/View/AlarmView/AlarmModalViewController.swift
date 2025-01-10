@@ -18,7 +18,7 @@ enum AlarmModalState {
 
 final class AlarmModalViewController: UIViewController {
     
-    private let modalView = AlarmModalView()
+    private(set) var modalView = AlarmModalView()
     
     private var state: AlarmModalState
     
@@ -63,25 +63,7 @@ private extension AlarmModalViewController {
         }
     }
     
-    func bind() {
-        self.modalView.closeButton.rx.tap
-            .asSignal(onErrorSignalWith: .empty())
-            .withUnretained(self)
-            .emit { owner, _ in
-                
-                owner.dismiss(animated: true)
-                
-            }.disposed(by: self.disposeBag)
-        
-        self.modalView.cancleButton.rx.tap
-            .asSignal(onErrorSignalWith: .empty())
-            .withUnretained(self)
-            .emit { owner, _ in
-                
-                owner.dismiss(animated: true)
-                
-            }.disposed(by: self.disposeBag)
-        
+    func bind() {        
         self.modalView.saveButton.rx.tap
             .asSignal(onErrorSignalWith: .empty())
             .withUnretained(self)
@@ -103,9 +85,7 @@ private extension AlarmModalViewController {
                                    )
                     )
                 )
-                
-                owner.dismiss(animated: true)
-                
+                                
             }.disposed(by: self.disposeBag)
     }
     
