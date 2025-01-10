@@ -30,7 +30,7 @@ final class AlarmViewController: UIViewController {
     // 모달뷰가 열렸을 때 뒤를 가려줄 뷰
     private let backgroundView = UIView().then {
         $0.backgroundColor = .black.withAlphaComponent(0.3)
-        $0.isHidden = true
+        $0.alpha = 0
     }
     
     // MARK: - AlarmViewController LifeCycle
@@ -187,11 +187,6 @@ private extension AlarmViewController {
                     let data = cell.data
                 else { return }
                 
-                guard let topView = AppHelpers.getTopViewController() else { return }
-                topView.view.addSubview(owner.backgroundView)
-                owner.backgroundView.snp.makeConstraints { make in
-                    make.edges.equalToSuperview()
-                }
                 owner.showModal(.edit, data: data)
                 
             }.disposed(by: self.disposeBag)
@@ -206,11 +201,6 @@ private extension AlarmViewController {
             .withUnretained(self)
             .emit { owner, _ in
                 
-                guard let topView = AppHelpers.getTopViewController() else { return }
-                topView.view.addSubview(owner.backgroundView)
-                owner.backgroundView.snp.makeConstraints { make in
-                    make.edges.equalToSuperview()
-                }
                 owner.showModal(.create, data: nil)
                 
             }.disposed(by: self.disposeBag)
@@ -235,12 +225,27 @@ private extension AlarmViewController {
     func showModal(_ state: AlarmModalState, data: Alarm?) {
         let modalVC = AlarmModalViewController(state: state, data: data)
         
-        self.backgroundView.isHidden = false
+        UIView.animate(withDuration: 0.3, delay: 0, options: .transitionCrossDissolve) {
+            guard let topView = AppHelpers.getTopViewController() else { return }
+            topView.view.addSubview(self.backgroundView)
+            self.backgroundView.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+            self.backgroundView.alpha = 1
+        }
         
         modalVC.modalPresentationStyle = .overFullScreen
         self.present(modalVC, animated: true)
         
         self.modalViewBind(modalVC)
+    }
+    
+    func dismissBackgroundView() {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .transitionCrossDissolve) {
+            self.backgroundView.removeFromSuperview()
+            self.backgroundView.snp.removeConstraints()
+            self.backgroundView.alpha = 0
+        }
     }
     
     /// 모달뷰의 데이터 바인딩 메소드
@@ -254,10 +259,8 @@ private extension AlarmViewController {
             .emit { owner, tap in
                 guard tap else { return }
                 
-                owner.backgroundView.removeFromSuperview()
-                owner.backgroundView.snp.removeConstraints()
+                owner.dismissBackgroundView()
                 modalVC.dismiss(animated: true)
-                owner.backgroundView.isHidden = true
                 
             }.disposed(by: self.disposeBag)
         
@@ -266,10 +269,8 @@ private extension AlarmViewController {
             .withUnretained(self)
             .emit { owner, _ in
                 
-                owner.backgroundView.removeFromSuperview()
-                owner.backgroundView.snp.removeConstraints()
+                owner.dismissBackgroundView()
                 modalVC.dismiss(animated: true)
-                owner.backgroundView.isHidden = true
                 owner.viewModel.dataFetch()
                 
             }.disposed(by: self.disposeBag)
@@ -279,9 +280,7 @@ private extension AlarmViewController {
             .withUnretained(self)
             .emit { owner, _ in
                 
-                owner.backgroundView.removeFromSuperview()
-                owner.backgroundView.snp.removeConstraints()
-                owner.backgroundView.isHidden = true
+                owner.dismissBackgroundView()
                 modalVC.dismiss(animated: true)
                 
             }.disposed(by: self.disposeBag)
@@ -291,9 +290,7 @@ private extension AlarmViewController {
             .withUnretained(self)
             .emit { owner, _ in
                 
-                owner.backgroundView.removeFromSuperview()
-                owner.backgroundView.snp.removeConstraints()
-                owner.backgroundView.isHidden = true
+                owner.dismissBackgroundView()
                 modalVC.dismiss(animated: true)
                 
             }.disposed(by: self.disposeBag)

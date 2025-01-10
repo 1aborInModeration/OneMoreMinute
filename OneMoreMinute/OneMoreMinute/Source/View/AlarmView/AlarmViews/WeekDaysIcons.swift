@@ -67,11 +67,11 @@ private extension WeekDaysIcons {
             let label = UILabel()
             label.text = index.weekTitle
             label.font = Fonts.title2
-            label.textColor = Colors.systemColor(.r400)
+            label.textColor = UIColor.mainTitle
             label.textAlignment = .center
             label.numberOfLines = 1
             label.layer.cornerRadius = 15
-            label.backgroundColor = Colors.systemColor(.r50)
+            label.backgroundColor = UIColor.buttonBackground
             label.clipsToBounds = true
             
             label.snp.makeConstraints { make in

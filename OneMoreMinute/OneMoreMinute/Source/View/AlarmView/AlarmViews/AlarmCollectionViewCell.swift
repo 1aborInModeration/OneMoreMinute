@@ -43,10 +43,10 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
     private let weekDaysIcons = WeekDaysIcons()
     
     private let note = UITextField().then {
-        $0.textColor = Colors.systemGray(.r500)
+        $0.textColor = UIColor.textFieldFont
         $0.borderStyle = .none
         $0.layer.cornerRadius = 8
-        $0.backgroundColor = Colors.systemGray(.r50)
+        $0.backgroundColor = UIColor.textFieldBackground
         $0.leftView = UIView(frame: .init(x: 0, y: 0, width: 10, height: 10))
         $0.leftViewMode = .always
         $0.rightView = UIView(frame: .init(x: 0, y: 0, width: 10, height: 10))
@@ -57,14 +57,14 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
     private(set) var alarmButton = UIButton().then {
         $0.layer.cornerRadius = 20
         $0.setImage(UIImage(systemName: "bell"), for: .normal)
-        $0.tintColor = Colors.systemColor(.r400)
-        $0.backgroundColor = Colors.systemColor(.r50)
+        $0.tintColor = UIColor.mainTitle
+        $0.backgroundColor = UIColor.buttonBackground
     }
     
     private(set) var deleteButton = UIButton().then {
         $0.layer.cornerRadius = 20
         $0.setImage(UIImage(systemName: "trash"), for: .normal)
-        $0.tintColor = UIColor(red: 248/256, green: 113/256, blue: 113/256, alpha: 1.0)
+        $0.tintColor = UIColor.iconRed
         $0.backgroundColor = .clear
     }
     
@@ -139,12 +139,14 @@ private extension AlarmCollectionViewCell {
     }
     
     func configure() {
-        self.backgroundColor = Colors.appBackground
+        self.backgroundColor = UIColor.wrapperBackground
         self.layer.cornerRadius = 12
-        self.layer.shadowColor = Colors.systemDarkGray.cgColor
+        self.layer.shadowColor = UIColor.black.cgColor
         self.layer.shadowOpacity = 0.25
         self.layer.shadowOffset = .init(width: 0, height: 10)
         self.layer.shadowRadius = 10
+        self.layer.borderWidth = 1
+        self.layer.borderColor = UIColor.wrapperStroke.cgColor
         self.layer.shadowPath = .init(rect: self.bounds, transform: nil)
         [self.timeLabel,
          self.note,
@@ -227,12 +229,12 @@ private extension AlarmCollectionViewCell {
     func changeButtonColor() {
         switch self.isAlarmOn {
         case true:
-            self.alarmButton.backgroundColor = Colors.systemColor(.r50)
-            self.alarmButton.tintColor = Colors.systemColor(.r400)
+            self.alarmButton.backgroundColor = UIColor.buttonBackground
+            self.alarmButton.tintColor = UIColor.mainTitle
             self.alarmButton.isSelected = true
         case false:
-            self.alarmButton.backgroundColor = Colors.systemGray(.r50)
-            self.alarmButton.tintColor = Colors.systemGray(.r400)
+            self.alarmButton.backgroundColor = UIColor.grayButtonBackground
+            self.alarmButton.tintColor = UIColor.grayButtonLabel
             self.alarmButton.isSelected = false
         }
     }

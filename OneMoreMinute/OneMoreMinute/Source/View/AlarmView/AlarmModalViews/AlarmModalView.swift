@@ -18,7 +18,7 @@ final class AlarmModalView: UIView {
         $0.text = "새 알람 추가"
         $0.font = Fonts.title1Bold
         $0.numberOfLines = 1
-        $0.textColor = .label
+        $0.textColor = UIColor.mainTitle
         $0.textAlignment = .left
         $0.backgroundColor = .clear
     }
@@ -41,7 +41,7 @@ final class AlarmModalView: UIView {
         $0.setTitle("저장", for: .normal)
         $0.setTitleColor(UIColor.white, for: .normal)
         $0.titleLabel?.font = Fonts.title2Bold
-        $0.backgroundColor = Colors.systemColor(.r400)
+        $0.backgroundColor = UIColor.plusButtonBackground
         $0.layer.cornerRadius = 12
     }
     
@@ -115,10 +115,10 @@ private extension AlarmModalView {
     }
     
     func configure() {
-        self.backgroundColor = .white
+        self.backgroundColor = UIColor.wrapperBackground
         self.layer.cornerRadius = 24
         self.layer.borderWidth = 1
-        self.layer.borderColor = Colors.systemLightGray.cgColor
+        self.layer.borderColor = UIColor.wrapperStroke.cgColor
         [self.title,
          self.closeButton,
          self.timeSection,

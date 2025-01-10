@@ -19,10 +19,10 @@ final class AlarmModalTimeSection: UIView {
         $0.datePickerMode = .time
         $0.minuteInterval = 1
         $0.locale = Locale(identifier: "ko_KR")
-        $0.backgroundColor = .backgroundGray
+        $0.backgroundColor = UIColor.textFieldBackground
         $0.layer.cornerRadius = 12
         $0.layer.borderWidth = 1
-        $0.layer.borderColor = Colors.systemLightGray.cgColor
+        $0.layer.borderColor = UIColor.textFieldStroke.cgColor
         $0.clipsToBounds = true
     }
     

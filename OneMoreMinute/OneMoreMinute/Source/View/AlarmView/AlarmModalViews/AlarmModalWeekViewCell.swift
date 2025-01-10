@@ -16,10 +16,10 @@ final class AlarmModalWeekViewCell: UICollectionViewCell {
     
     private let icon = UILabel().then {
         $0.font = Fonts.title2
-        $0.textColor = Colors.systemLightGray
+        $0.textColor = UIColor.grayButtonLabel
         $0.numberOfLines = 1
         $0.textAlignment = .center
-        $0.backgroundColor = Colors.systemGray(.r50)
+        $0.backgroundColor = UIColor.grayButtonBackground
         $0.layer.cornerRadius = 8
         $0.clipsToBounds = true
     }
@@ -52,12 +52,12 @@ final class AlarmModalWeekViewCell: UICollectionViewCell {
         self.icon.text = index.weekTitle
         switch isSelected {
         case true:
-            self.icon.backgroundColor = Colors.systemColor(.r400)
+            self.icon.backgroundColor = UIColor.plusButtonBackground
             self.icon.textColor = .white
             
         case false:
-            self.icon.backgroundColor = Colors.systemGray(.r100)
-            self.icon.textColor = Colors.systemLightGray
+            self.icon.backgroundColor = UIColor.grayButtonBackground
+            self.icon.textColor = UIColor.grayButtonLabel
         }
     }
 }

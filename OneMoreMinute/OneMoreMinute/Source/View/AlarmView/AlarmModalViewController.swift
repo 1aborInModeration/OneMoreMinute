@@ -57,6 +57,8 @@ final class AlarmModalViewController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         
+        self.view.endEditing(true)
+        
         guard self.modalView != touches.first?.view else { return }
         
         backgroundTapped.accept(true)

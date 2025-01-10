@@ -16,14 +16,15 @@ final class AlarmModalMemoSection: UIView {
     
     private(set) var memoSet = UITextField().then {
         $0.placeholder = "알람 메모를 입력하세요"
-        $0.textColor = Colors.systemLightGray
+        $0.textColor = UIColor.textFieldFont
         $0.font = Fonts.title2
         $0.borderStyle = .none
         $0.leftView = UIView(frame: .init(x: 0, y: 0, width: 10, height: 10))
         $0.leftViewMode = .always
+        $0.backgroundColor = UIColor.textFieldBackground
         $0.layer.cornerRadius = 12
         $0.layer.borderWidth = 1
-        $0.layer.borderColor = Colors.systemLightGray.cgColor
+        $0.layer.borderColor = UIColor.textFieldStroke.cgColor
     }
     
     // MARK: - AlarmModalMemoSection Initializer

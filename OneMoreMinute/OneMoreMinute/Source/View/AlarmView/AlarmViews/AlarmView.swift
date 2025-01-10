@@ -14,6 +14,7 @@ final class AlarmView: UIView {
     
     private(set) lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout).then {
         $0.backgroundColor = .clear
+        $0.showsVerticalScrollIndicator = false
         $0.register(AlarmCollectionViewCell.self, forCellWithReuseIdentifier: AlarmCollectionViewCell.id)
     }
     
