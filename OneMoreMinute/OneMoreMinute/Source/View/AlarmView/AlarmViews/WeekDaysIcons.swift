@@ -84,7 +84,8 @@ private extension WeekDaysIcons {
         self.addSubview(self.stack)
         
         self.stack.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.verticalEdges.equalToSuperview()
+            make.leading.equalToSuperview()
         }
     }
 }

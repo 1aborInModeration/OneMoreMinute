@@ -85,7 +85,7 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        setupUI()
+        prepareForReuseData()
     }
     
     /// 셀을 설정하는 메소드
@@ -132,6 +132,12 @@ private extension AlarmCollectionViewCell {
         bind()
     }
     
+    func prepareForReuseData() {
+        self.weekdaysStatus.accept([])
+        self.timeLabel.text = ""
+        self.note.text = ""
+    }
+    
     func configure() {
         self.backgroundColor = Colors.appBackground
         self.layer.cornerRadius = 12
@@ -141,9 +147,9 @@ private extension AlarmCollectionViewCell {
         self.layer.shadowRadius = 10
         [self.timeLabel,
          self.note,
+         self.weekDaysIcons,
          self.alarmButton,
-         self.deleteButton,
-         self.weekDaysIcons
+         self.deleteButton
         ].forEach { self.addSubview($0) }
     }
     
@@ -161,6 +167,13 @@ private extension AlarmCollectionViewCell {
             make.width.equalTo(240)
         }
         
+        self.weekDaysIcons.snp.makeConstraints { make in
+            make.top.equalTo(self.note.snp.bottom).offset(10)
+            make.leading.equalTo(self.timeLabel)
+            make.trailing.equalToSuperview().inset(20)
+            make.height.equalTo(40)
+        }
+        
         self.alarmButton.snp.makeConstraints { make in
             make.centerY.equalTo(self.note)
             make.leading.equalTo(self.note.snp.trailing).offset(10)
@@ -171,11 +184,6 @@ private extension AlarmCollectionViewCell {
             make.centerY.equalTo(self.alarmButton)
             make.leading.equalTo(self.alarmButton.snp.trailing).offset(10)
             make.width.height.equalTo(40)
-        }
-        
-        self.weekDaysIcons.snp.makeConstraints { make in
-            make.top.equalTo(self.note.snp.bottom).offset(10)
-            make.leading.equalTo(self.timeLabel)
         }
     }
     

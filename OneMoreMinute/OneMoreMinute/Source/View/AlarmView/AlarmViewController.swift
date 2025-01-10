@@ -52,19 +52,14 @@ private extension AlarmViewController {
     
     func configure() {
         self.view = self.alarmView
-        [self.showModalButton,
-         self.backgroundView].forEach { self.view.addSubview($0) }
+        self.view.addSubview(self.showModalButton)
     }
     
     func setupLayout() {
         self.showModalButton.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().inset(120)
+            make.bottom.equalToSuperview().inset(20)
             make.trailing.equalToSuperview().inset(20)
             make.width.height.equalTo(50)
-        }
-        
-        self.backgroundView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
         }
     }
     
@@ -192,6 +187,11 @@ private extension AlarmViewController {
                     let data = cell.data
                 else { return }
                 
+                guard let topView = AppHelpers.getTopViewController() else { return }
+                topView.view.addSubview(owner.backgroundView)
+                owner.backgroundView.snp.makeConstraints { make in
+                    make.edges.equalToSuperview()
+                }
                 owner.showModal(.edit, data: data)
                 
             }.disposed(by: self.disposeBag)
@@ -206,6 +206,11 @@ private extension AlarmViewController {
             .withUnretained(self)
             .emit { owner, _ in
                 
+                guard let topView = AppHelpers.getTopViewController() else { return }
+                topView.view.addSubview(owner.backgroundView)
+                owner.backgroundView.snp.makeConstraints { make in
+                    make.edges.equalToSuperview()
+                }
                 owner.showModal(.create, data: nil)
                 
             }.disposed(by: self.disposeBag)
@@ -249,6 +254,8 @@ private extension AlarmViewController {
             .emit { owner, tap in
                 guard tap else { return }
                 
+                owner.backgroundView.removeFromSuperview()
+                owner.backgroundView.snp.removeConstraints()
                 modalVC.dismiss(animated: true)
                 owner.backgroundView.isHidden = true
                 
@@ -259,10 +266,10 @@ private extension AlarmViewController {
             .withUnretained(self)
             .emit { owner, _ in
                 
+                owner.backgroundView.removeFromSuperview()
+                owner.backgroundView.snp.removeConstraints()
                 modalVC.dismiss(animated: true)
-                
                 owner.backgroundView.isHidden = true
-                
                 owner.viewModel.dataFetch()
                 
             }.disposed(by: self.disposeBag)
@@ -272,6 +279,8 @@ private extension AlarmViewController {
             .withUnretained(self)
             .emit { owner, _ in
                 
+                owner.backgroundView.removeFromSuperview()
+                owner.backgroundView.snp.removeConstraints()
                 owner.backgroundView.isHidden = true
                 modalVC.dismiss(animated: true)
                 
@@ -282,6 +291,8 @@ private extension AlarmViewController {
             .withUnretained(self)
             .emit { owner, _ in
                 
+                owner.backgroundView.removeFromSuperview()
+                owner.backgroundView.snp.removeConstraints()
                 owner.backgroundView.isHidden = true
                 modalVC.dismiss(animated: true)
                 
