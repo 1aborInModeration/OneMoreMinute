@@ -10,6 +10,8 @@
 		71D0952B2D2D092B005FE9C0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 71D0952A2D2D092B005FE9C0 /* SnapKit */; };
 		71D0952E2D2D093A005FE9C0 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 71D0952D2D2D093A005FE9C0 /* Then */; };
 		71D095312D2D094A005FE9C0 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 71D095302D2D094A005FE9C0 /* RxCocoa */; };
+		AA612AA72D2F6C3A002B3247 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = AA612AA62D2F6C3A002B3247 /* Differentiator */; };
+		AA612AA92D2F6C3A002B3247 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = AA612AA82D2F6C3A002B3247 /* RxDataSources */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,8 +67,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA612AA72D2F6C3A002B3247 /* Differentiator in Frameworks */,
 				71D095312D2D094A005FE9C0 /* RxCocoa in Frameworks */,
 				71D0952B2D2D092B005FE9C0 /* SnapKit in Frameworks */,
+				AA612AA92D2F6C3A002B3247 /* RxDataSources in Frameworks */,
 				71D0952E2D2D093A005FE9C0 /* Then in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -138,6 +142,8 @@
 				71D0952A2D2D092B005FE9C0 /* SnapKit */,
 				71D0952D2D2D093A005FE9C0 /* Then */,
 				71D095302D2D094A005FE9C0 /* RxCocoa */,
+				AA612AA62D2F6C3A002B3247 /* Differentiator */,
+				AA612AA82D2F6C3A002B3247 /* RxDataSources */,
 			);
 			productName = OneMoreMinute;
 			productReference = 71D094CF2D2D051B005FE9C0 /* OneMoreMinute.app */;
@@ -175,6 +181,7 @@
 				71D095292D2D092B005FE9C0 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				71D0952C2D2D093A005FE9C0 /* XCRemoteSwiftPackageReference "Then" */,
 				71D0952F2D2D094A005FE9C0 /* XCRemoteSwiftPackageReference "RxSwift" */,
+				AA612AA52D2F6C3A002B3247 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 71D094D02D2D051B005FE9C0 /* Products */;
@@ -276,7 +283,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = NJT372RG3U;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = OneMoreMinute/App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -310,7 +317,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = NJT372RG3U;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = OneMoreMinute/App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -512,6 +519,14 @@
 				minimumVersion = 6.8.0;
 			};
 		};
+		AA612AA52D2F6C3A002B3247 /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -529,6 +544,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 71D0952F2D2D094A005FE9C0 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxCocoa;
+		};
+		AA612AA62D2F6C3A002B3247 /* Differentiator */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA612AA52D2F6C3A002B3247 /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = Differentiator;
+		};
+		AA612AA82D2F6C3A002B3247 /* RxDataSources */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA612AA52D2F6C3A002B3247 /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = RxDataSources;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
