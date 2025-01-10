@@ -7,10 +7,10 @@
 
 import Foundation
 
-enum WeekDaysString: Int {
+enum WeekDaysTitle: Int {
     case mon, tue, wed, thu, fri, sat, sun
     
-    var WeekDayString: String {
+    var title: String {
         switch self {
         case .mon:
             return "월"

@@ -15,7 +15,7 @@ import RxCocoa
 final class AlarmCollectionViewCell: UICollectionViewCell {
     
     // MARK: - AlarmCollectionViewCell Rx Properties
-    private let disposeBag = DisposeBag()
+    private var disposeBag = DisposeBag()
     private(set) var alarmButtonTapped = PublishRelay<Void>()
     private(set) var deleteButtonTapped = PublishRelay<Void>()
     private let weekdaysStatus = PublishRelay<[Bool]>()
@@ -84,8 +84,10 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
     // 셀 재사용 옵션
     override func prepareForReuse() {
         super.prepareForReuse()
-        
+    
+        self.disposeBag = DisposeBag()
         prepareForReuseData()
+        bind()
     }
     
     /// 셀을 설정하는 메소드

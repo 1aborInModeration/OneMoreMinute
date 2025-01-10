@@ -17,78 +17,92 @@ final class WeekDaysIcons: UIView {
     
     private let stack = UIStackView().then {
         $0.axis = .horizontal
-        $0.distribution = .fill
+        $0.distribution = .fillProportionally
         $0.spacing = 5
         $0.alignment = .leading
         $0.backgroundColor = .clear
+        $0.isHidden = true
     }
     
     // MARK: - WeekDaysIcons Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        setupIcons()
-        setupLayout()
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        
+        setupUI()
     }
     
     /// 아이콘을 다시 생성하는 메소드
     /// - Parameter data: 아이콘 생성을 위한 데이터
     func reloadIcons(data: [Bool]) {
-        UIView.animate(withDuration: 0.2) {
-            self.weekDays.removeAll()
-            self.avoidDuplication.removeAll()
-            self.stack.arrangedSubviews.forEach { [weak self] subView in
-                self?.stack.removeArrangedSubview(subView)
-            }
-        } completion: { _ in
-            self.weekDays = data
-            self.setupIcons()
+        self.stack.arrangedSubviews.forEach { subView in
+            self.stack.removeArrangedSubview(subView)
+            subView.removeFromSuperview()
         }
         
-        
+        self.weekDays = data
+        setupIcons()
     }
 }
 
 // MARK: - WeekDaysIcons UI Setting Method
 private extension WeekDaysIcons {
+    
+    func setupUI() {
+        configureSelf()
+        setupIcons()
+        setupLayout()
+    }
+    
+    func configureSelf() {
+        self.addSubview(self.stack)
+        self.backgroundColor = .clear
+    }
+    
+    /// 스택뷰에 요일 아이콘 레이블을 추가하는 메소드
     func setupIcons() {
-        guard self.weekDays.filter({ $0 == true }).count != 0 else {
-            self.stack.isHidden = true
-            return
+        guard !self.weekDays.allSatisfy({ $0 }) else { return }
+        avoidDuplication.removeAll()
+        
+        for (index, isActive) in self.weekDays.enumerated() where isActive {
+            guard let week = WeekDaysTitle(rawValue: index)?.title,
+                  !avoidDuplication.contains(week) else { continue }
+            
+            let label = createLabel(for: week)
+            self.stack.addArrangedSubview(label)
+            avoidDuplication.insert(week)
         }
         
-        self.weekDays.enumerated().forEach { [weak self] index, data in
-            guard let self, data == true else { return }
-            guard let week = WeekDaysString(rawValue: index)?.WeekDayString,
-                  !self.avoidDuplication.contains(week)
-            else { return }
-            let label = UILabel()
-            label.text = week
-            label.font = Fonts.title2
-            label.textColor = UIColor.mainTitle
-            label.textAlignment = .center
-            label.numberOfLines = 1
-            label.layer.cornerRadius = 15
-            label.backgroundColor = UIColor.buttonBackground
-            label.clipsToBounds = true
-            
-            label.snp.makeConstraints { make in
-                make.height.width.equalTo(30)
-            }
-            
-            self.stack.addArrangedSubview(label)
-            self.avoidDuplication.insert(week)
-        }
         self.stack.isHidden = false
     }
     
-    func setupLayout() {
-        self.addSubview(self.stack)
+    /// 레이블을 생성하는 메소드
+    /// - Parameter week: 레이블 타이틀
+    /// - Returns: 요일 아이콘 레이블
+    func createLabel(for week: String) -> UILabel {
+        let label = UILabel()
+        label.text = week
+        label.font = Fonts.title2
+        label.textColor = UIColor.mainTitle
+        label.textAlignment = .center
+        label.numberOfLines = 1
+        label.layer.cornerRadius = 15
+        label.backgroundColor = UIColor.buttonBackground
+        label.clipsToBounds = true
         
+        label.snp.makeConstraints { make in
+            make.height.width.equalTo(30)
+        }
+        
+        return label
+    }
+    
+    func setupLayout() {
         self.stack.snp.makeConstraints { make in
             make.verticalEdges.equalToSuperview()
             make.leading.equalToSuperview()
