@@ -22,6 +22,7 @@ final class MainTabBarController: UIViewController {
         DViewController()
     ]
     
+    private let gradientLayer = CAGradientLayer()
     private let currentTimeAndDate = CurrentTimeAndDateView()
     private let tabBar = MainTabBar()
     
@@ -33,12 +34,16 @@ final class MainTabBarController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        gradientLayer.frame = view.bounds
         view.layer.addSublayer(gradientLayer)
         configureHierarchy()
         setupFirstVC()
         bindTabBar()
         bindViewModel()
+    }
     
+    override func viewWillLayoutSubviews() {
+        configureGradientColor()
     }
 }
 
@@ -103,6 +108,29 @@ extension MainTabBarController {
                 self?.currentTimeAndDate.updateDateLabel(with: date)
             })
             .disposed(by: disposeBag)
+    }
+}
+
+// MARK: - Background Gradient Color Configuration
+
+extension MainTabBarController {
+    /// 라이트, 다크 모드 변경에 따라 gradient 색상 변경
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            configureGradientColor()
+        }
+    }
+    
+    /// 현재 뷰의 trait collection에 따라 색상 할당
+    private func configureGradientColor() {
+        let traitCollection = view.traitCollection
+        
+        gradientLayer.colors = [
+            UIColor.appBackgroundStart.resolvedColor(with: traitCollection).cgColor,
+            UIColor.appBackgroundEnd.resolvedColor(with: traitCollection).cgColor
+        ]
     }
 }
 
