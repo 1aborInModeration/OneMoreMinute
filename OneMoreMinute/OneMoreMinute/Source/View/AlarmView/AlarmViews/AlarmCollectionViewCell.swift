@@ -145,6 +145,7 @@ private extension AlarmCollectionViewCell {
         self.layer.shadowOpacity = 0.25
         self.layer.shadowOffset = .init(width: 0, height: 10)
         self.layer.shadowRadius = 10
+        self.layer.shadowPath = .init(rect: self.bounds, transform: nil)
         [self.timeLabel,
          self.note,
          self.weekDaysIcons,
@@ -171,7 +172,7 @@ private extension AlarmCollectionViewCell {
             make.top.equalTo(self.note.snp.bottom).offset(10)
             make.leading.equalTo(self.timeLabel)
             make.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(40)
+            make.height.equalTo(30)
         }
         
         self.alarmButton.snp.makeConstraints { make in

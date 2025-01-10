@@ -35,6 +35,7 @@ private extension ShowModalButton {
         self.layer.shadowOpacity = 0.25
         self.layer.shadowOffset = .init(width: 0, height: 10)
         self.layer.shadowRadius = 10
+        self.layer.shadowPath = .init(rect: self.bounds, transform: nil)
     }
     
 }

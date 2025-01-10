@@ -13,10 +13,11 @@ import Then
 final class WeekDaysIcons: UIView {
     
     private var weekDays: [Bool] = [] // 요일 UI를 추가하기 위한 데이터
+    private var avoidDuplication: Set<String> = []
     
     private let stack = UIStackView().then {
         $0.axis = .horizontal
-        $0.distribution = .fillEqually
+        $0.distribution = .fill
         $0.spacing = 5
         $0.alignment = .leading
         $0.backgroundColor = .clear
@@ -39,6 +40,7 @@ final class WeekDaysIcons: UIView {
     func reloadIcons(data: [Bool]) {
         UIView.animate(withDuration: 0.2) {
             self.weekDays.removeAll()
+            self.avoidDuplication.removeAll()
             self.stack.arrangedSubviews.forEach { [weak self] subView in
                 self?.stack.removeArrangedSubview(subView)
             }
@@ -60,7 +62,8 @@ private extension WeekDaysIcons {
         }
         
         self.weekDays.enumerated().forEach { [weak self] index, data in
-            guard data == true else { return }
+            guard let self, data == true else { return }
+            guard !self.avoidDuplication.contains(index.weekTitle) else { return }
             let label = UILabel()
             label.text = index.weekTitle
             label.font = Fonts.title2
@@ -75,9 +78,10 @@ private extension WeekDaysIcons {
                 make.height.width.equalTo(30)
             }
             
-            self?.stack.addArrangedSubview(label)
-            self?.stack.isHidden = false
+            self.stack.addArrangedSubview(label)
+            self.avoidDuplication.insert(index.weekTitle)
         }
+        self.stack.isHidden = false
     }
     
     func setupLayout() {
