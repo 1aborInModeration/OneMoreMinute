@@ -9,7 +9,9 @@ import UIKit
 import SnapKit
 
 class SearchCityView: UIView {
+    let searchBar = UISearchBar()
     
+
     init() {
         super.init(frame: .zero)
         
