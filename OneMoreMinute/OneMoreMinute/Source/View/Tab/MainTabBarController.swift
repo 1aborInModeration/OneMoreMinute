@@ -16,8 +16,8 @@ import RxSwift
 final class MainTabBarController: UIViewController {
     // 각 탭에 해당하는 자식 뷰 컨트롤러 리스트
     private let childVCList = [
-        AlarmViewController(),
-        BViewController(),
+        AViewController(),
+        WorldTimeViewController(),
         CViewController(),
         DViewController()
     ]

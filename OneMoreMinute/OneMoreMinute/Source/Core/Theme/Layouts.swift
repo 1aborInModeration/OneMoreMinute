@@ -19,7 +19,7 @@ struct Layouts {
     static let radius: CGFloat = 16
     /// UI 컴포넌트의 모서리 라운딩 사이즈 / small / 8
     static let radiusSmall: CGFloat = 8
-    /// UI 컴포넌트의 모서리 라운딩 사이즈 / large / 16
+    /// UI 컴포넌트의 모서리 라운딩 사이즈 / large / 24
     static let radiuslarge: CGFloat = 24
     
     /// UI 컴포넌트 간의 상하 거리 간격 조정용 사이즈 / 8
