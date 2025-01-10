@@ -106,12 +106,12 @@ final class AlarmModalWeekSection: UIView {
 private extension AlarmModalWeekSection {
     
     func setupUI() {
-        configure()
+        configureSelf()
         setupLayout()
         bind()
     }
     
-    func configure() {
+    func configureSelf() {
         self.backgroundColor = .clear
         [self.title,
          self.weeks].forEach { self.addSubview($0) }

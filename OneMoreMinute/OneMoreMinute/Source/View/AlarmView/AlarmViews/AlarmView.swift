@@ -64,11 +64,11 @@ final class AlarmView: UIView {
 private extension AlarmView {
     
     func setupUI() {
-        configure()
+        configureSelf()
         setupLayout()
     }
     
-    func configure() {
+    func configureSelf() {
         self.backgroundColor = .clear
         self.addSubview(self.collectionView)
     }

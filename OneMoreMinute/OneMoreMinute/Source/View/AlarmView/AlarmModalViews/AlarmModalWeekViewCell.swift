@@ -49,7 +49,7 @@ final class AlarmModalWeekViewCell: UICollectionViewCell {
     ///   - isSelected: 셀이 선택되었는지 확인
     ///   - index: 선택된 셀의 인덱스
     func configCell(_ isSelected: Bool, index: Int) {
-        self.icon.text = index.weekTitle
+        self.icon.text = WeekDaysString(rawValue: index)?.WeekDayString
         switch isSelected {
         case true:
             self.icon.backgroundColor = UIColor.plusButtonBackground
@@ -66,11 +66,11 @@ final class AlarmModalWeekViewCell: UICollectionViewCell {
 private extension AlarmModalWeekViewCell {
     
     func setupUI() {
-        configure()
+        configureSelf()
         setupLayout()
     }
     
-    func configure() {
+    func configureSelf() {
         self.backgroundColor = .clear
         self.addSubview(self.icon)
     }

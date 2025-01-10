@@ -63,9 +63,11 @@ private extension WeekDaysIcons {
         
         self.weekDays.enumerated().forEach { [weak self] index, data in
             guard let self, data == true else { return }
-            guard !self.avoidDuplication.contains(index.weekTitle) else { return }
+            guard let week = WeekDaysString(rawValue: index)?.WeekDayString,
+                  !self.avoidDuplication.contains(week)
+            else { return }
             let label = UILabel()
-            label.text = index.weekTitle
+            label.text = week
             label.font = Fonts.title2
             label.textColor = UIColor.mainTitle
             label.textAlignment = .center
@@ -79,7 +81,7 @@ private extension WeekDaysIcons {
             }
             
             self.stack.addArrangedSubview(label)
-            self.avoidDuplication.insert(index.weekTitle)
+            self.avoidDuplication.insert(week)
         }
         self.stack.isHidden = false
     }

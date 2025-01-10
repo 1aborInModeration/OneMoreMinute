@@ -21,7 +21,7 @@ final class AlarmViewController: UIViewController {
     
     private let disposeBag = DisposeBag()
     
-    private let repository = AlarmDataManager.shared
+    private let repositoryManager = AlarmDataManager.shared
     
     private let alarmView = AlarmView()
         
@@ -45,12 +45,12 @@ final class AlarmViewController: UIViewController {
 private extension AlarmViewController {
     
     func setupUI() {
-        configure()
+        configureSelf()
         setupLayout()
         bind()
     }
     
-    func configure() {
+    func configureSelf() {
         self.view = self.alarmView
         self.view.addSubview(self.showModalButton)
     }
@@ -149,7 +149,7 @@ private extension AlarmViewController {
                     let data = cell.updateAlarmIsOn()
                 else { return }
                 
-                owner.repository.update(id, updateData: data)
+                owner.repositoryManager.update(id, updateData: data)
                 
             }.disposed(by: self.disposeBag)
     }
@@ -212,7 +212,7 @@ private extension AlarmViewController {
         let alert = UIAlertController(title: "경고", message: "정말 알람을 삭제하시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { [weak self] _ in
-            self?.repository.delete(data)
+            self?.repositoryManager.delete(data)
             self?.viewModel.dataFetch()
         }))
         self.present(alert, animated: true)

@@ -127,7 +127,7 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
 private extension AlarmCollectionViewCell {
     
     func setupUI() {
-        configure()
+        configureSelf()
         setupLayout()
         bind()
     }
@@ -138,7 +138,7 @@ private extension AlarmCollectionViewCell {
         self.note.text = ""
     }
     
-    func configure() {
+    func configureSelf() {
         self.backgroundColor = UIColor.wrapperBackground
         self.layer.cornerRadius = 12
         self.layer.shadowColor = UIColor.black.cgColor

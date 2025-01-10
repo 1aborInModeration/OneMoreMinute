@@ -46,11 +46,11 @@ final class AlarmModalTimeSection: UIView {
 private extension AlarmModalTimeSection {
     
     func setupUI() {
-        configure()
+        configureSelf()
         setupLayout()
     }
     
-    func configure() {
+    func configureSelf() {
         self.backgroundColor = .clear
         [self.title,
          self.timeSet].forEach { self.addSubview($0) }

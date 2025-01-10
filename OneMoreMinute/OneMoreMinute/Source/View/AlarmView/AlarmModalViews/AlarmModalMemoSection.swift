@@ -46,11 +46,11 @@ final class AlarmModalMemoSection: UIView {
 private extension AlarmModalMemoSection {
     
     func setupUI() {
-        configure()
+        configureSelf()
         setupLayout()
     }
     
-    func configure() {
+    func configureSelf() {
         self.backgroundColor = .clear
         [self.title,
          self.memoSet].forEach { self.addSubview($0) }

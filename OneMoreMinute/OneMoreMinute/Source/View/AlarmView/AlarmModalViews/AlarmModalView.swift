@@ -45,8 +45,7 @@ final class AlarmModalView: UIView {
         $0.layer.cornerRadius = 12
     }
     
-    private lazy var buttonStack = UIStackView().then { [weak self] stack in
-        guard let self else { return }
+    private lazy var buttonStack = UIStackView().then { stack in
         stack.axis = .horizontal
         stack.distribution = .fillEqually
         stack.alignment = .fill
@@ -110,11 +109,11 @@ final class AlarmModalView: UIView {
 private extension AlarmModalView {
     
     func setupUI() {
-        configure()
+        configureSelf()
         setupLayout()
     }
     
-    func configure() {
+    func configureSelf() {
         self.backgroundColor = UIColor.wrapperBackground
         self.layer.cornerRadius = 24
         self.layer.borderWidth = 1
