@@ -55,7 +55,7 @@ final class WeekDaysIcons: UIView {
         self.weekDays.enumerated().forEach { [weak self] index, data in
             guard data == true else { return }
             let label = UILabel()
-            label.text = self?.iconTitle(index)
+            label.text = index.weekTitle
             label.font = Fonts.title2
             label.textColor = Colors.systemColor(.r400)
             label.textAlignment = .center
@@ -78,27 +78,6 @@ final class WeekDaysIcons: UIView {
         
         self.stack.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-        }
-    }
-    
-    private func iconTitle(_ index: Int) -> String {
-        switch index {
-        case 0:
-            return "월"
-        case 1:
-            return "화"
-        case 2:
-            return "수"
-        case 3:
-            return "목"
-        case 4:
-            return "금"
-        case 5:
-            return "토"
-        case 6:
-            return "일"
-        default:
-            return ""
         }
     }
 }

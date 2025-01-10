@@ -36,7 +36,7 @@ final class AlarmModalWeekViewCell: UICollectionViewCell {
     }
     
     func configCell(_ isSelected: Bool, index: Int) {
-        self.icon.text = iconTitle(index)
+        self.icon.text = index.weekTitle
         switch isSelected {
         case true:
             self.icon.backgroundColor = Colors.systemColor(.r400)
@@ -65,27 +65,6 @@ private extension AlarmModalWeekViewCell {
     func setupLayout() {
         self.icon.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-        }
-    }
-    
-    func iconTitle(_ index: Int) -> String {
-        switch index {
-        case 0:
-            return "월"
-        case 1:
-            return "화"
-        case 2:
-            return "수"
-        case 3:
-            return "목"
-        case 4:
-            return "금"
-        case 5:
-            return "토"
-        case 6:
-            return "일"
-        default:
-            return ""
         }
     }
 }
