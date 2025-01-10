@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
+/// 메인 화면에서 현재 시각과 날짜를 보여주는 뷰
 final class CurrentTimeAndDateView: UIView {
     private let timeLabel = UILabel().then {
         $0.font = UIFont.monospacedDigitSystemFont(ofSize: 30, weight: .bold)

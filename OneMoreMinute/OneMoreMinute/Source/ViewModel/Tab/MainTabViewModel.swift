@@ -8,8 +8,9 @@
 import Foundation
 import RxSwift
 import RxRelay
-import RxCocoa
 
+/// viewDidLoad 시 시간과 날짜를 방출하는 뷰모델
+/// MainTabBarController에서 사용
 final class MainTabViewModel: ViewModelType {
     struct Input {
         let viewDidLoad: Observable<Void>

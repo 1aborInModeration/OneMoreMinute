@@ -7,6 +7,7 @@
 
 import RxSwift
 
+/// 모든 뷰모델이 준수할 뷰모델 타입
 protocol ViewModelType {
     associatedtype Input
     associatedtype Output
