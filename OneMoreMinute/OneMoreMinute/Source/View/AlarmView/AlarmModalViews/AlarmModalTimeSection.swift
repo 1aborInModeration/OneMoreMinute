@@ -15,7 +15,7 @@ final class AlarmModalTimeSection: UIView {
     private let title = AlarmModalSectionTitle(title: "시간 설정")
     
     private(set) var timeSet = UIDatePicker().then {
-        $0.preferredDatePickerStyle = .compact
+        $0.preferredDatePickerStyle = .wheels
         $0.datePickerMode = .time
         $0.minuteInterval = 1
         $0.locale = Locale(identifier: "ko_KR")

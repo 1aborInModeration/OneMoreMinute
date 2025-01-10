@@ -58,7 +58,7 @@ private extension AlarmViewController {
     
     func setupLayout() {
         self.showModalButton.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().inset(20)
+            make.bottom.equalToSuperview().inset(120)
             make.trailing.equalToSuperview().inset(20)
             make.width.height.equalTo(50)
         }
@@ -243,6 +243,17 @@ private extension AlarmViewController {
     func modalViewBind(_ vc: UIViewController) {
         guard let modalVC = vc as? AlarmModalViewController else { return }
         
+        modalVC.backgroundTapped
+            .asSignal(onErrorSignalWith: .empty())
+            .withUnretained(self)
+            .emit { owner, tap in
+                guard tap else { return }
+                
+                modalVC.dismiss(animated: true)
+                owner.backgroundView.isHidden = true
+                
+            }.disposed(by: self.disposeBag)
+        
         modalVC.modalView.saveButton.rx.tap
             .asSignal(onErrorSignalWith: .empty())
             .withUnretained(self)
@@ -266,7 +277,7 @@ private extension AlarmViewController {
                 
             }.disposed(by: self.disposeBag)
         
-        modalVC.modalView.cancleButton.rx.tap
+        modalVC.modalView.cancelButton.rx.tap
             .asSignal(onErrorSignalWith: .empty())
             .withUnretained(self)
             .emit { owner, _ in

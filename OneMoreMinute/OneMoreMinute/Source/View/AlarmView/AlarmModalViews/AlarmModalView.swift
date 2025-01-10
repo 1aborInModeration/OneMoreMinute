@@ -29,7 +29,7 @@ final class AlarmModalView: UIView {
         $0.backgroundColor = .clear
     }
     
-    private(set) var cancleButton = UIButton().then {
+    private(set) var cancelButton = UIButton().then {
         $0.setTitle("취소", for: .normal)
         $0.setTitleColor(Colors.systemGray(.r800), for: .normal)
         $0.titleLabel?.font = Fonts.title2
@@ -52,7 +52,7 @@ final class AlarmModalView: UIView {
         stack.alignment = .fill
         stack.backgroundColor = .clear
         stack.spacing = 10
-        [self.cancleButton,
+        [self.cancelButton,
          self.saveButton
         ].forEach { view in
             stack.addArrangedSubview(view)

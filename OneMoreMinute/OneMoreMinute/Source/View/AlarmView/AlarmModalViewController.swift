@@ -25,6 +25,7 @@ enum AlarmModalState {
 final class AlarmModalViewController: UIViewController {
     
     private let disposeBag = DisposeBag()
+    private(set) var backgroundTapped = PublishRelay<Bool>()
     
     private let repository = AlarmDataManager.shared
     
@@ -51,6 +52,14 @@ final class AlarmModalViewController: UIViewController {
         super.viewDidLoad()
         
         setupUI()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        guard self.modalView != touches.first?.view else { return }
+        
+        backgroundTapped.accept(true)
     }
 }
 
