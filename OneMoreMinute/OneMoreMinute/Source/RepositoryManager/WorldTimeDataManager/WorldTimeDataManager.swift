@@ -24,7 +24,7 @@ final class WorldTimeDataManager: CoreDataManaged {
     /// - Parameter model: AlarmDTO
     ///
     /// ``EntityTransformAble``
-    /// ``AlarmDTO``
+    /// ``WorldTimeDTO``
     func create(with model: Model) {
         _ = model.toEntity(context: context)
         try? save()
