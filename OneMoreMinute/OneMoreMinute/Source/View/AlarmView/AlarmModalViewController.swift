@@ -52,7 +52,7 @@ private extension AlarmModalViewController {
     
     func configure() {
         self.view.addSubview(self.modalView)
-        self.view.backgroundColor = .black.withAlphaComponent(0.25)
+        self.view.backgroundColor = .clear
     }
     
     func setupLayout() {

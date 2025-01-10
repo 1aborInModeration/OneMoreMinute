@@ -90,7 +90,7 @@ private extension AlarmModalView {
     }
     
     func configure() {
-        self.backgroundColor = .backgroundGray
+        self.backgroundColor = .white
         self.layer.cornerRadius = 24
         self.layer.borderWidth = 1
         self.layer.borderColor = Colors.systemLightGray.cgColor

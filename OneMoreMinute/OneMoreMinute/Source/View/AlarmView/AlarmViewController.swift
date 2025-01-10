@@ -91,6 +91,7 @@ private extension AlarmViewController {
         bindAlarmOnButton()
         bindDeleteButton()
         bindShowModalButton()
+        bindCellSelect()
     }
     
     func bindData() {
@@ -135,6 +136,22 @@ private extension AlarmViewController {
             }.disposed(by: self.disposeBag)
     }
     
+    func bindCellSelect() {
+        self.alarmView.collectionView.rx.itemSelected
+            .asSignal(onErrorSignalWith: .empty())
+            .withUnretained(self)
+            .emit { owner, indexPath in
+                
+                guard
+                    let cell = owner.alarmView.collectionView.cellForItem(at: indexPath) as? AlarmCollectionViewCell,
+                    let data = cell.data
+                else { return }
+                
+                owner.showModal(.edit)
+                
+            }.disposed(by: self.disposeBag)
+    }
+    
     func bindShowModalButton() {
         self.showModalButton.rx.tap
             .asSignal(onErrorSignalWith: .empty())
@@ -159,29 +176,8 @@ private extension AlarmViewController {
     func showModal(_ state: AlarmModalState) {
         let modalVC = AlarmModalViewController(state: state)
         
-        self.addChild(modalVC)
-        [modalVC.view, modalVC.modalView].forEach { self.view.addSubview($0) }
-        
-        modalVC.view.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        modalVC.modalView.snp.makeConstraints { make in
-            make.horizontalEdges.equalToSuperview().inset(20)
-            make.top.equalTo(self.view.snp.bottom).offset(20)
-            make.height.equalTo(530)
-        }
-        
-        self.view.layoutIfNeeded()
-        
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
-            
-            modalVC.modalView.frame.origin.y = self.view.bounds.height / 2 - 265
-            self.view.layoutIfNeeded()
-            
-        }) { _ in
-            modalVC.didMove(toParent: self)
-        }
+        modalVC.modalPresentationStyle = .overFullScreen
+        self.present(modalVC, animated: true)
         
         self.modalViewBind(modalVC)
     }
@@ -194,16 +190,8 @@ private extension AlarmViewController {
             .withUnretained(self)
             .emit { owner, _ in
                 
-                UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear, animations: {
-                    
-                    modalVC.modalView.frame.origin.y = self.view.bounds.maxY + 20
-                    self.view.layoutIfNeeded()
-                    
-                }) { _ in
-                    modalVC.view.removeFromSuperview()
-                    modalVC.modalView.removeFromSuperview()
-                    modalVC.removeFromParent()
-                }
+                modalVC.dismiss(animated: true)
+                
                 owner.viewModel.dataFetch()
                 
             }.disposed(by: self.disposeBag)
@@ -213,16 +201,7 @@ private extension AlarmViewController {
             .withUnretained(self)
             .emit { owner, _ in
                 
-                UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear, animations: {
-                    
-                    modalVC.modalView.frame.origin.y = self.view.bounds.maxY + 20
-                    self.view.layoutIfNeeded()
-                    
-                }) { _ in
-                    modalVC.view.removeFromSuperview()
-                    modalVC.modalView.removeFromSuperview()
-                    modalVC.removeFromParent()
-                }
+                modalVC.dismiss(animated: true)
                 
             }.disposed(by: self.disposeBag)
         
@@ -231,16 +210,7 @@ private extension AlarmViewController {
             .withUnretained(self)
             .emit { owner, _ in
                 
-                UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear, animations: {
-                    
-                    modalVC.modalView.frame.origin.y = self.view.bounds.maxY + 20
-                    self.view.layoutIfNeeded()
-                    
-                }) { _ in
-                    modalVC.view.removeFromSuperview()
-                    modalVC.modalView.removeFromSuperview()
-                    modalVC.removeFromParent()
-                }
+                modalVC.dismiss(animated: true)
                 
             }.disposed(by: self.disposeBag)
     }
