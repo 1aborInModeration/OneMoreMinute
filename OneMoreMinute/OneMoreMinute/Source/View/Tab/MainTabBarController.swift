@@ -22,16 +22,28 @@ final class MainTabBarController: UIViewController {
         DViewController()
     ]
     
-    private var selectedIndex = 0
+    private let gradientLayer = CAGradientLayer()
+    private let currentTimeAndDate = CurrentTimeAndDateView()
     private let tabBar = MainTabBar()
     
+    private var selectedIndex = 0
+    private let viewModel = MainTabViewModel()
     private let disposeBag = DisposeBag()
+    
+    // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        gradientLayer.frame = view.bounds
+        view.layer.addSublayer(gradientLayer)
         configureHierarchy()
         setupFirstVC()
-        bind()
+        bindTabBar()
+        bindViewModel()
+    }
+    
+    override func viewWillLayoutSubviews() {
+        configureGradientColor()
     }
 }
 
@@ -40,8 +52,15 @@ final class MainTabBarController: UIViewController {
 extension MainTabBarController {
     private func configureHierarchy() {
         [
+            currentTimeAndDate,
             tabBar
         ].forEach { view.addSubview($0) }
+        
+        currentTimeAndDate.snp.makeConstraints { make in
+            make.horizontalEdges.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
+            make.height.equalTo(72)
+        }
         
         tabBar.snp.makeConstraints { make in
             make.horizontalEdges.equalToSuperview()
@@ -56,7 +75,7 @@ extension MainTabBarController {
     
     /// 탭바의 이벤트를 구독하고 처리
     /// 탭 선택 시 해당하는 뷰 컨트롤러로 전환
-    private func bind() {
+    private func bindTabBar() {
         tabBar.tappedIndexRelay
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] index in
@@ -67,6 +86,51 @@ extension MainTabBarController {
                 self.selectedIndex = index
             })
             .disposed(by: disposeBag)
+    }
+    
+    private func bindViewModel() {
+        let output = viewModel.transform(
+            input: .init(
+                viewDidLoad: Observable.just(Void())
+            )
+        )
+        
+        output.currentTime
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] time in
+                self?.currentTimeAndDate.updateTimeLabel(with: time)
+            })
+            .disposed(by: disposeBag)
+        
+        output.currentDate
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] date in
+                self?.currentTimeAndDate.updateDateLabel(with: date)
+            })
+            .disposed(by: disposeBag)
+    }
+}
+
+// MARK: - Background Gradient Color Configuration
+
+extension MainTabBarController {
+    /// 라이트, 다크 모드 변경에 따라 gradient 색상 변경
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            configureGradientColor()
+        }
+    }
+    
+    /// 현재 뷰의 trait collection에 따라 색상 할당
+    private func configureGradientColor() {
+        let traitCollection = view.traitCollection
+        
+        gradientLayer.colors = [
+            UIColor.appBackgroundStart.resolvedColor(with: traitCollection).cgColor,
+            UIColor.appBackgroundEnd.resolvedColor(with: traitCollection).cgColor
+        ]
     }
 }
 
@@ -84,7 +148,9 @@ extension MainTabBarController {
         addChild(vc)
         view.addSubview(vc.view)
         vc.view.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.equalTo(currentTimeAndDate.snp.bottom).offset(48)
+            make.bottom.equalTo(tabBar.snp.top)
+            make.horizontalEdges.equalToSuperview()
         }
         vc.didMove(toParent: self)
         view.bringSubviewToFront(tabBar)
@@ -109,56 +175,70 @@ extension MainTabBarController {
 
 /// 임시 뷰 컨트롤러 A - 카운터 기능을 가진 테스트용 뷰 컨트롤러
 final class AViewController: UIViewController {
-    var count = 0
-    
-    let label = UILabel().then {
-        $0.text = "0"
-    }
-    
-    lazy var button = UIButton().then {
-        $0.setTitle("Increase", for: .normal)
-        $0.addAction(UIAction { _ in
-            self.count += 1
-            self.label.text = "\(self.count)"
-        }, for: .touchUpInside)
+    private let label = UILabel().then {
+        $0.text = "A"
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .red
         [
             label,
-            button
         ].forEach { view.addSubview($0) }
         
         label.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
-        button.snp.makeConstraints { make in
-            make.top.equalTo(label.snp.bottom).offset(16)
-            make.centerX.equalToSuperview()
-        }
     }
 }
 
 final class BViewController: UIViewController {
+    private let label = UILabel().then {
+        $0.text = "B"
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .blue
+        [
+            label,
+        ].forEach { view.addSubview($0) }
+        
+        label.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
     }
 }
 
 final class CViewController: UIViewController {
+    private let label = UILabel().then {
+        $0.text = "C"
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .green
+        [
+            label,
+        ].forEach { view.addSubview($0) }
+        
+        label.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
     }
 }
 
 final class DViewController: UIViewController {
+    private let label = UILabel().then {
+        $0.text = "D"
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .yellow
+        [
+            label,
+        ].forEach { view.addSubview($0) }
+        
+        label.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
     }
 }
 

@@ -32,11 +32,20 @@ final class MainTabBar: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureHierarchy()
-        selectTab(at: 0)
+        selectFirstTab()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func selectFirstTab() {
+        guard let item = stackView.arrangedSubviews.first as? MainTabBarItem else {
+            AppLogger.error("탭 아이템 없음")
+            return
+        }
+        
+        item.selectWithoutAnimation()
     }
     
     /// 선택한 인덱스 탭 아이템만 selected 상태로 변경, 나머지는 deselected 상태로 변경
@@ -44,6 +53,7 @@ final class MainTabBar: UIView {
         // FIXME: 이전에 선택된 index 알고 있으면 전체 순환할 필요 없음
         for i in stackView.arrangedSubviews.indices {
             guard let item = stackView.arrangedSubviews[i] as? MainTabBarItem else {
+                AppLogger.error("탭 아이템 없음")
                 return
             }
             
