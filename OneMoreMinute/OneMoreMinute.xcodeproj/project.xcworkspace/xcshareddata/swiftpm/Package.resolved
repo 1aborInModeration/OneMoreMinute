@@ -1,10 +1,19 @@
 {
-  "originHash" : "3e30fa0de500a3daa2695e3fbe0986e632b2d47721b73a33e12578047757d300",
+  "originHash" : "045bcf8550d2827079cb9c9d48dc02ddb52df6b7001439b89c6a97d026cdee32",
   "pins" : [
+    {
+      "identity" : "inject",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/krzysztofzablocki/Inject.git",
+      "state" : {
+        "revision" : "728c56639ecb3df441d51d5bc6747329afabcfc9",
+        "version" : "1.5.2"
+      }
+    },
     {
       "identity" : "rxdatasources",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/RxSwiftCommunity/RxDataSources",
+      "location" : "https://github.com/RxSwiftCommunity/RxDataSources.git",
       "state" : {
         "revision" : "90c29b48b628479097fe775ed1966d75ac374518",
         "version" : "5.0.2"

@@ -62,4 +62,18 @@ struct AppHelpers {
         alert.addAction(confirmAction)
         topVC.present(alert, animated: true, completion: nil)
     }
+    
+    
+    /// Date 타입의 데이터를 월, 일, 요일의 문자열로 반환하는 메소드
+    ///
+    /// - Parameter date: 변환하고자 하는 날짜 데이터
+    /// - Returns: 문자열 타입의 결과물
+    static func formattedDateString(from date: Date) -> String {
+        let formatter = DateFormatter()
+        
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "MM월 dd일 EEEE"
+        
+        return formatter.string(from: date)
+    }
 }
