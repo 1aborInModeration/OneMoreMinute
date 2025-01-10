@@ -79,12 +79,12 @@ private extension AlarmViewController {
             
             cell.configCell(item.data)
             
-            cell.alarmButtonTapped
+            cell.alarmButton.rx.tap
                 .map { indexPath }
                 .bind(to: self.viewModel.alarmButtonTapped)
                 .disposed(by: self.disposeBag)
             
-            cell.deleteButtonTapped
+            cell.deleteButton.rx.tap
                 .map { indexPath }
                 .bind(to: self.viewModel.deleteButtonTapped)
                 .disposed(by: self.disposeBag)
@@ -126,6 +126,7 @@ private extension AlarmViewController {
                 data.enumerated().forEach { index, data in
                     let indexPath = IndexPath(item: index, section: 0)
                     guard let cell = self?.alarmView.collectionView.cellForItem(at: indexPath) as? AlarmCollectionViewCell else { return }
+                    
                     cell.configCell(data)
                 }
                 
@@ -137,11 +138,14 @@ private extension AlarmViewController {
     /// 코어데이터에 isActive 속성 업데이트
     func bindAlarmOnButton() {
         self.viewModel.alarmButtonTapped
+            .take(1)
             .asSignal(onErrorSignalWith: .empty())
             .withUnretained(self)
             .emit { owner, indexPath in
                 
-                guard let cell = owner.alarmView.collectionView.cellForItem(at: indexPath) as? AlarmCollectionViewCell else { return }
+                guard
+                    let cell = owner.alarmView.collectionView.cellForItem(at: indexPath) as? AlarmCollectionViewCell
+                else { return }
                 cell.isAlarmOn.toggle()
                 
                 guard

@@ -16,8 +16,6 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
     
     // MARK: - AlarmCollectionViewCell Rx Properties
     private var disposeBag = DisposeBag()
-    private(set) var alarmButtonTapped = PublishRelay<Void>()
-    private(set) var deleteButtonTapped = PublishRelay<Void>()
     private let weekdaysStatus = PublishRelay<[Bool]>()
     private(set) var data: Alarm?
     
@@ -29,7 +27,7 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
             self.changeButtonColor()
         }
     }
-
+        
     // MARK: - AlarmCollectionViewCell UI
     
     private let timeLabel = UILabel().then {
@@ -106,11 +104,8 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         
         let time = convertDtTxtFormat(data.time ?? Date())
         self.timeLabel.text = time
-        
         self.isAlarmOn = data.isActive
-        
         self.note.text = data.note ?? ""
-        
         self.data = data
         
         self.layoutIfNeeded()
@@ -155,7 +150,7 @@ private extension AlarmCollectionViewCell {
          self.weekDaysIcons,
          self.alarmButton,
          self.deleteButton
-        ].forEach { self.addSubview($0) }
+        ].forEach { self.contentView.addSubview($0) }
     }
     
     func setupLayout() {
@@ -194,16 +189,6 @@ private extension AlarmCollectionViewCell {
     
     /// 데이터 바인딩 메소드
     func bind() {
-        // 알람 설정 버튼 바인딩
-        self.alarmButton.rx.tap
-            .bind(to: self.alarmButtonTapped)
-            .disposed(by: self.disposeBag)
-        
-        // 삭제 버튼 바인딩
-        self.deleteButton.rx.tap
-            .bind(to: self.deleteButtonTapped)
-            .disposed(by: self.disposeBag)
-        
         // 반복 요일 설정 바인딩
         self.weekdaysStatus
             .asSignal(onErrorSignalWith: .empty())
