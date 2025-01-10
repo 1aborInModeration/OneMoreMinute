@@ -53,6 +53,14 @@ final class MainTabBarItem: UIControl {
     
     // MARK: - Public Mehtod
     
+    /// 런치 시 첫 탭바 아이템을 선택하는 메소드
+    /// layoutIfNeeded가 제외되어 오토레이아웃 충돌을 방지
+    func selectWithoutAnimation() {
+        backgroundView.backgroundColor = UIColor(resource: .tabBarSelectedBackground)
+        imageView.tintColor = UIColor(resource: .tabBarSelectedTint)
+        titleLabel.textColor = UIColor(resource: .tabBarSelectedTint)
+    }
+    
     /// 탭바 아이템이 선택되었을 때 호출되는 메서드
     ///
     /// 아이템의 텍스트 색상, 이미지 틴트 색상, 배경색을 선택된 상태로 변경합니다.
