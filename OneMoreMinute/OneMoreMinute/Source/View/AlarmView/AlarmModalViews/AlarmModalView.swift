@@ -61,7 +61,7 @@ final class AlarmModalView: UIView {
     private let weekSection = AlarmModalWeekSection()
     
     private let memoSection = AlarmModalMemoSection()
-    
+        
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -79,6 +79,22 @@ final class AlarmModalView: UIView {
         let memo = self.memoSection.memoSet.text
         let week = self.weekSection.isSelecteds.value
         return (date, memo, week)
+    }
+    
+    func enterData(_ data: Alarm) {
+        self.timeSection.timeSet.date = data.time ?? Date()
+        self.memoSection.memoSet.text = data.note
+        
+        guard let weekDays = data.weekDays else { return }
+        let weekData: [Bool] = [weekDays.mon,
+                                weekDays.tue,
+                                weekDays.wed,
+                                weekDays.thu,
+                                weekDays.fri,
+                                weekDays.sat,
+                                weekDays.sun
+        ]
+        self.weekSection.isSelecteds.accept(weekData)
     }
 }
 

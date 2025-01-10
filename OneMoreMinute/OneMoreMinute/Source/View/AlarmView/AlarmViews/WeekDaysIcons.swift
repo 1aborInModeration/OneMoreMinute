@@ -11,7 +11,8 @@ import Then
 
 final class WeekDaysIcons: UIView {
     
-    private var weekDays: [Bool]
+    private var weekDays: [Bool] = []
+    
     private let stack = UIStackView().then {
         $0.axis = .horizontal
         $0.distribution = .fillEqually
@@ -20,9 +21,8 @@ final class WeekDaysIcons: UIView {
         $0.backgroundColor = .clear
     }
     
-    init(weekDays: [Bool]) {
-        self.weekDays = weekDays
-        super.init(frame: .zero)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         
         setupIcons()
         setupLayout()
@@ -32,7 +32,26 @@ final class WeekDaysIcons: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func reloadIcons(data: [Bool]) {
+        UIView.animate(withDuration: 0.2) {
+            self.weekDays.removeAll()
+            self.stack.arrangedSubviews.forEach { [weak self] subView in
+                self?.stack.removeArrangedSubview(subView)
+            }
+        } completion: { _ in
+            self.weekDays = data
+            self.setupIcons()
+        }
+
+        
+    }
+    
     private func setupIcons() {
+        guard self.weekDays.filter({ $0 == true }).count != 0 else {
+            self.stack.isHidden = true
+            return
+        }
+        
         self.weekDays.enumerated().forEach { [weak self] index, data in
             guard data == true else { return }
             let label = UILabel()
@@ -50,6 +69,7 @@ final class WeekDaysIcons: UIView {
             }
             
             self?.stack.addArrangedSubview(label)
+            self?.stack.isHidden = false
         }
     }
     

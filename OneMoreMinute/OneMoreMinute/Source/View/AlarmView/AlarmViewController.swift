@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Then
 import RxSwift
 import RxCocoa
 import RxDataSources
@@ -24,18 +25,17 @@ final class AlarmViewController: UIViewController {
         
     private let showModalButton = ShowModalButton()
     
+    private let backgroundView = UIView().then {
+        $0.backgroundColor = .black.withAlphaComponent(0.3)
+        $0.isHidden = true
+    }
+    
     private lazy var datasource = self.makeDataSource()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupUI()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.viewModel.dataFetch()
     }
 }
 
@@ -49,7 +49,8 @@ private extension AlarmViewController {
     
     func configure() {
         self.view = self.alarmView
-        self.view.addSubview(showModalButton)
+        [self.showModalButton,
+         self.backgroundView].forEach { self.view.addSubview($0) }
     }
     
     func setupLayout() {
@@ -57,6 +58,10 @@ private extension AlarmViewController {
             make.bottom.equalToSuperview().inset(20)
             make.trailing.equalToSuperview().inset(20)
             make.width.height.equalTo(50)
+        }
+        
+        self.backgroundView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
     }
     
@@ -99,8 +104,28 @@ private extension AlarmViewController {
             .asDriver(onErrorDriveWith: .empty())
             .drive(self.alarmView.collectionView.rx.items(dataSource: self.datasource))
             .disposed(by: self.disposeBag)
+        
+        self.viewModel.dataRelay
+            .asDriver(onErrorDriveWith: .empty())
+            .compactMap { $0.first?.items }
+            .map { items -> [Alarm] in
+                var alarms: [Alarm] = []
+                items.forEach {
+                    alarms.append($0.data)
+                }
+                return alarms
+            }
+            .drive { [weak self] data in
+                
+                data.enumerated().forEach { index, data in
+                    let indexPath = IndexPath(item: index, section: 0)
+                    guard let cell = self?.alarmView.collectionView.cellForItem(at: indexPath) as? AlarmCollectionViewCell else { return }
+                    cell.configCell(data)
+                }
+                
+            }.disposed(by: self.disposeBag)
     }
-    
+
     func bindAlarmOnButton() {
         self.viewModel.alarmButtonTapped
             .asSignal(onErrorSignalWith: .empty())
@@ -147,7 +172,7 @@ private extension AlarmViewController {
                     let data = cell.data
                 else { return }
                 
-                owner.showModal(.edit)
+                owner.showModal(.edit, data: data)
                 
             }.disposed(by: self.disposeBag)
     }
@@ -158,7 +183,7 @@ private extension AlarmViewController {
             .withUnretained(self)
             .emit { owner, _ in
                 
-                owner.showModal(.crate)
+                owner.showModal(.crate, data: nil)
                 
             }.disposed(by: self.disposeBag)
     }
@@ -173,8 +198,10 @@ private extension AlarmViewController {
         self.present(alert, animated: true)
     }
     
-    func showModal(_ state: AlarmModalState) {
-        let modalVC = AlarmModalViewController(state: state)
+    func showModal(_ state: AlarmModalState, data: Alarm?) {
+        let modalVC = AlarmModalViewController(state: state, data: data)
+        
+        self.backgroundView.isHidden = false
         
         modalVC.modalPresentationStyle = .overFullScreen
         self.present(modalVC, animated: true)
@@ -192,6 +219,8 @@ private extension AlarmViewController {
                 
                 modalVC.dismiss(animated: true)
                 
+                owner.backgroundView.isHidden = true
+                
                 owner.viewModel.dataFetch()
                 
             }.disposed(by: self.disposeBag)
@@ -201,6 +230,7 @@ private extension AlarmViewController {
             .withUnretained(self)
             .emit { owner, _ in
                 
+                owner.backgroundView.isHidden = true
                 modalVC.dismiss(animated: true)
                 
             }.disposed(by: self.disposeBag)
@@ -210,6 +240,7 @@ private extension AlarmViewController {
             .withUnretained(self)
             .emit { owner, _ in
                 
+                owner.backgroundView.isHidden = true
                 modalVC.dismiss(animated: true)
                 
             }.disposed(by: self.disposeBag)

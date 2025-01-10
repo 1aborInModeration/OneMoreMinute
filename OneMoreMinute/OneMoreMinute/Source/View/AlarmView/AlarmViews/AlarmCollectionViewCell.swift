@@ -19,6 +19,7 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
     
     private(set) var alarmButtonTapped = PublishRelay<Void>()
     private(set) var deleteButtonTapped = PublishRelay<Void>()
+    private let weekdaysStatus = PublishRelay<[Bool]>()
     
     private(set) var data: Alarm?
     
@@ -36,7 +37,7 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         $0.backgroundColor = .clear
     }
     
-    private var weekDaysIcons: WeekDaysIcons?
+    private let weekDaysIcons = WeekDaysIcons()
     
     private let note = UITextField().then {
         $0.textColor = Colors.systemGray(.r500)
@@ -92,8 +93,7 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
                               weekDays.sat,
                               weekDays.sun]
         
-        self.weekDaysIcons = WeekDaysIcons(weekDays: weekdaysStatus)
-        setupWeekDaysIcon()
+        self.weekdaysStatus.accept(weekdaysStatus)
         
         let time = convertDtTxtFormat(data.time ?? Date())
         self.timeLabel.text = time
@@ -103,6 +103,8 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         self.note.text = data.note ?? ""
         
         self.data = data
+        
+        self.layoutIfNeeded()
     }
     
     func updateAlarmIsOn() -> Alarm? {
@@ -131,6 +133,7 @@ private extension AlarmCollectionViewCell {
          self.note,
          self.alarmButton,
          self.deleteButton,
+         self.weekDaysIcons
         ].forEach { self.addSubview($0) }
     }
     
@@ -159,15 +162,10 @@ private extension AlarmCollectionViewCell {
             make.leading.equalTo(self.alarmButton.snp.trailing).offset(10)
             make.width.height.equalTo(40)
         }
-    }
-    
-    func setupWeekDaysIcon() {
-        self.addSubview(self.weekDaysIcons!)
         
-        self.weekDaysIcons!.snp.makeConstraints { make in
+        self.weekDaysIcons.snp.makeConstraints { make in
             make.top.equalTo(self.note.snp.bottom).offset(10)
             make.leading.equalTo(self.timeLabel)
-//            make.height.equalTo(30)
         }
     }
     
@@ -179,6 +177,15 @@ private extension AlarmCollectionViewCell {
         self.deleteButton.rx.tap
             .bind(to: self.deleteButtonTapped)
             .disposed(by: self.disposeBag)
+        
+        self.weekdaysStatus
+            .asSignal(onErrorSignalWith: .empty())
+            .withUnretained(self)
+            .emit { owner, data in
+                
+                owner.weekDaysIcons.reloadIcons(data: data)
+                
+            }.disposed(by: self.disposeBag)
     }
     
     /// 시간을 나타내는 레이블 값의 포맷을 변경하는 메소드
