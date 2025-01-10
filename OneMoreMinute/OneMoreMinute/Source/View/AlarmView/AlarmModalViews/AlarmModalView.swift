@@ -33,7 +33,7 @@ final class AlarmModalView: UIView {
         $0.setTitle("취소", for: .normal)
         $0.setTitleColor(Colors.systemGray(.r800), for: .normal)
         $0.titleLabel?.font = Fonts.title2
-        $0.backgroundColor = Colors.systemGray(.r100)
+        $0.backgroundColor = UIColor.textFieldBackground
         $0.layer.cornerRadius = 12
     }
     
