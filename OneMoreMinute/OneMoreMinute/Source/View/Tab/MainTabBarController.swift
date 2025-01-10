@@ -149,7 +149,7 @@ extension MainTabBarController {
         view.addSubview(vc.view)
         vc.view.snp.makeConstraints { make in
             make.top.equalTo(currentTimeAndDate.snp.bottom).offset(48)
-            make.bottom.equalToSuperview()
+            make.bottom.equalTo(tabBar.snp.top)
             make.horizontalEdges.equalToSuperview()
         }
         vc.didMove(toParent: self)
