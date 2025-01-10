@@ -43,8 +43,7 @@ extension WorldTimeView {
     }
     
     func setupUIProperties() {
-        self.backgroundColor = .white
-        self.setupGradient()
+        
     }
     
     func setupLayouts() {

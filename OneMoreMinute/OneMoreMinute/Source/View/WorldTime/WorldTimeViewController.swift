@@ -41,10 +41,3 @@ extension WorldTimeViewController {
     }
 }
 
-
-// MARK: - Preview
-
-@available(iOS 17.0, *)
-#Preview {
-    WorldTimeViewController()
-}
