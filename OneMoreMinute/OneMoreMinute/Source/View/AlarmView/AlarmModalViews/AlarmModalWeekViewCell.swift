@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
+/// 모달뷰의 반복 요일 섹션 커스텀 셀
 final class AlarmModalWeekViewCell: UICollectionViewCell {
     
     static let id: String = "AlarmModalWeekViewCell"
@@ -23,6 +24,7 @@ final class AlarmModalWeekViewCell: UICollectionViewCell {
         $0.clipsToBounds = true
     }
     
+    // MARK: - AlarmModalWeekViewCell Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -35,6 +37,17 @@ final class AlarmModalWeekViewCell: UICollectionViewCell {
         setupUI()
     }
     
+    /// 셀 재사용 옵션
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        setupUI()
+    }
+    
+    /// 셀의 설정을 하는 메소드
+    /// - Parameters:
+    ///   - isSelected: 셀이 선택되었는지 확인
+    ///   - index: 선택된 셀의 인덱스
     func configCell(_ isSelected: Bool, index: Int) {
         self.icon.text = index.weekTitle
         switch isSelected {
@@ -47,16 +60,16 @@ final class AlarmModalWeekViewCell: UICollectionViewCell {
             self.icon.textColor = Colors.systemLightGray
         }
     }
-    
 }
 
+// MARK: - AlarmModalWeekViewCell UI Setting Method
 private extension AlarmModalWeekViewCell {
     
     func setupUI() {
         configure()
         setupLayout()
     }
-
+    
     func configure() {
         self.backgroundColor = .clear
         self.addSubview(self.icon)

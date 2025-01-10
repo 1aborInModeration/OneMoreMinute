@@ -11,24 +11,27 @@ import Then
 import RxSwift
 import RxCocoa
 
+/// 알람뷰의 커스텀 셀
 final class AlarmCollectionViewCell: UICollectionViewCell {
     
-    static let id: String = "AlarmCollectionViewCell"
-    
+    // MARK: - AlarmCollectionViewCell Rx Properties
     private let disposeBag = DisposeBag()
-    
     private(set) var alarmButtonTapped = PublishRelay<Void>()
     private(set) var deleteButtonTapped = PublishRelay<Void>()
     private let weekdaysStatus = PublishRelay<[Bool]>()
-    
     private(set) var data: Alarm?
     
+    static let id: String = "AlarmCollectionViewCell"
+    
+    // 현재 알람을 설정한 상태
     var isAlarmOn: Bool = true {
         didSet {
             self.changeButtonColor()
         }
     }
-        
+
+    // MARK: - AlarmCollectionViewCell UI
+    
     private let timeLabel = UILabel().then {
         $0.font = Fonts.headline2
         $0.textColor = UIColor.label
@@ -65,6 +68,7 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         $0.backgroundColor = .clear
     }
     
+    // MARK: - AlarmCollectionViewCell Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -77,12 +81,15 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         setupUI()
     }
     
+    // 셀 재사용 옵션
     override func prepareForReuse() {
         super.prepareForReuse()
         
         setupUI()
     }
     
+    /// 셀을 설정하는 메소드
+    /// - Parameter data: 셀 설정에 사용할 데이터
     func configCell(_ data: Alarm) {
         guard let weekDays = data.weekDays else { return }
         let weekdaysStatus = [weekDays.mon,
@@ -107,6 +114,8 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         self.layoutIfNeeded()
     }
     
+    /// 현재 알람의 설정 상태를 저장하고 반환하는 메소드
+    /// - Returns: 알람 설정 상태를 저장한 데이터
     func updateAlarmIsOn() -> Alarm? {
         self.data?.isActive = self.isAlarmOn
         
@@ -114,6 +123,7 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
     }
 }
 
+// MARK: - AlarmCollectionViewCell UI Setting Method
 private extension AlarmCollectionViewCell {
     
     func setupUI() {
@@ -169,15 +179,19 @@ private extension AlarmCollectionViewCell {
         }
     }
     
+    /// 데이터 바인딩 메소드
     func bind() {
+        // 알람 설정 버튼 바인딩
         self.alarmButton.rx.tap
             .bind(to: self.alarmButtonTapped)
             .disposed(by: self.disposeBag)
         
+        // 삭제 버튼 바인딩
         self.deleteButton.rx.tap
             .bind(to: self.deleteButtonTapped)
             .disposed(by: self.disposeBag)
         
+        // 반복 요일 설정 바인딩
         self.weekdaysStatus
             .asSignal(onErrorSignalWith: .empty())
             .withUnretained(self)
@@ -200,6 +214,7 @@ private extension AlarmCollectionViewCell {
         return dtTxt
     }
     
+    /// 알람 설정 상태에 따라 버튼의 색상을 변경하는 메소드
     func changeButtonColor() {
         switch self.isAlarmOn {
         case true:

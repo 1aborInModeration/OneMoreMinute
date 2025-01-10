@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// 모달뷰의 섹션 타이블의 커스텀 레이블 뷰
 final class AlarmModalSectionTitle: UILabel {
     
     init(title: String) {
@@ -18,6 +19,8 @@ final class AlarmModalSectionTitle: UILabel {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// 레이블을 세팅하는 메소드
+    /// - Parameter title: 레이블 텍스트
     private func setupLabel(title: String) {
         self.text = title
         self.font = Fonts.body

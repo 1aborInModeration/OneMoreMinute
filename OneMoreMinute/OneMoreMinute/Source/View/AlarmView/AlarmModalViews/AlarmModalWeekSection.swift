@@ -11,10 +11,15 @@ import Then
 import RxSwift
 import RxCocoa
 
+/// 모달뷰의 반복 요일을 설정하는 섹션 뷰
 final class AlarmModalWeekSection: UIView {
+    
+    // MARK: - Rx Properties
     
     private(set) var isSelecteds = BehaviorRelay(value: [Bool]())
     private let disposeBag = DisposeBag()
+    
+    // MARK: - AlarmModalWeekSection UI
     
     private let title = AlarmModalSectionTitle(title: "반복 요일")
     
@@ -77,6 +82,8 @@ final class AlarmModalWeekSection: UIView {
         return layout
     }()
     
+    // MARK: - AlarmModalWeekSection Initializer
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -95,6 +102,7 @@ final class AlarmModalWeekSection: UIView {
     
 }
 
+// MARK: - AlarmModalWeekSection UI Setting Method
 private extension AlarmModalWeekSection {
     
     func setupUI() {
@@ -122,7 +130,9 @@ private extension AlarmModalWeekSection {
         }
     }
     
+    /// 데이터 바인딩 메소드
     func bind() {
+        // 컬렉션뷰의 데이터소스 바인딩
         self.isSelecteds
             .asDriver(onErrorDriveWith: .empty())
             .drive(self.weeks.rx.items(
@@ -134,6 +144,7 @@ private extension AlarmModalWeekSection {
                 
             }.disposed(by: self.disposeBag)
         
+        // 셀 선택 액션 바인딩
         self.weeks.rx.itemSelected
             .asSignal(onErrorSignalWith: .empty())
             .withUnretained(self)

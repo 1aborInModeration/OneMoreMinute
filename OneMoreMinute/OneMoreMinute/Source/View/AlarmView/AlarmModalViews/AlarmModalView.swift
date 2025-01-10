@@ -9,7 +9,10 @@ import UIKit
 import SnapKit
 import Then
 
+/// 알람 탭의 모달 뷰
 final class AlarmModalView: UIView {
+    
+    // MARK: - AlarmModalView UI
     
     private let title = UILabel().then {
         $0.text = "새 알람 추가"
@@ -57,14 +60,15 @@ final class AlarmModalView: UIView {
     }
     
     private let timeSection = AlarmModalTimeSection()
-    
     private let weekSection = AlarmModalWeekSection()
-    
     private let memoSection = AlarmModalMemoSection()
         
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    // MARK: - AlarmModalView Initializer
+    
+    init(state: AlarmModalState) {
+        super.init(frame: .zero)
         
+        self.title.text = state == .create ? "새 알람 추가" : "알람 수정"
         setupUI()
     }
     
@@ -74,6 +78,8 @@ final class AlarmModalView: UIView {
         setupUI()
     }
     
+    /// 모달뷰의 데이터를 추출하는 메소드
+    /// - Returns: 설정된 시간, 메모, 반복 요일에 대한 데이터
     func extractionData() -> (date: Date, memo: String?, week: [Bool]) {
         let date = self.timeSection.timeSet.date
         let memo = self.memoSection.memoSet.text
@@ -81,6 +87,8 @@ final class AlarmModalView: UIView {
         return (date, memo, week)
     }
     
+    /// 모달뷰에 데이터를 입력하는 메소드
+    /// - Parameter data: 모달뷰에 입력할 데이터
     func enterData(_ data: Alarm) {
         self.timeSection.timeSet.date = data.time ?? Date()
         self.memoSection.memoSet.text = data.note
@@ -98,6 +106,7 @@ final class AlarmModalView: UIView {
     }
 }
 
+// MARK: - AlarmModalView UI Setting Method
 private extension AlarmModalView {
     
     func setupUI() {

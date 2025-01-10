@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
+/// 알람 설정 뷰
 final class AlarmView: UIView {
     
     private(set) lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout).then {
@@ -44,6 +45,7 @@ final class AlarmView: UIView {
         return layout
     }()
     
+    // MARK: - AlarmView Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -57,6 +59,7 @@ final class AlarmView: UIView {
     }
 }
 
+// MARK: - AlarmView UI Setting Method
 private extension AlarmView {
     
     func setupUI() {

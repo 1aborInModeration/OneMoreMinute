@@ -9,6 +9,7 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
+/// 컬렉션뷰 데이터소스의 아이템 정의
 struct AlarmItem: IdentifiableType, Hashable {
     typealias Identity = Int
     var identity: Identity {
@@ -18,6 +19,7 @@ struct AlarmItem: IdentifiableType, Hashable {
     let data: Alarm
 }
 
+/// 컬렉션뷰 데이터소스의 섹션 정의
 struct AlarmSectionModel: AnimatableSectionModelType {
     typealias Identity = String
     typealias Item = AlarmItem

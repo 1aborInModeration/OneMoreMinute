@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
+/// 모달뷰 메모 섹션 뷰
 final class AlarmModalMemoSection: UIView {
     
     private let title = AlarmModalSectionTitle(title: "메모")
@@ -25,6 +26,7 @@ final class AlarmModalMemoSection: UIView {
         $0.layer.borderColor = Colors.systemLightGray.cgColor
     }
     
+    // MARK: - AlarmModalMemoSection Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -39,6 +41,7 @@ final class AlarmModalMemoSection: UIView {
     
 }
 
+// MARK: - AlarmModalMemoSection UI Setting Method
 private extension AlarmModalMemoSection {
     
     func setupUI() {

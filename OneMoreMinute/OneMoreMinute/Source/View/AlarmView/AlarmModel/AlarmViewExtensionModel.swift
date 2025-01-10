@@ -7,6 +7,7 @@
 
 import Foundation
 
+// Int타입에 요일의 String 값을 반환하는 프로퍼티 추가
 extension Int {
     var weekTitle: String {
         switch self {

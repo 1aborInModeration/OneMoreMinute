@@ -12,8 +12,10 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
+/// 알람 뷰 컨트롤러
 final class AlarmViewController: UIViewController {
     typealias DataSource = RxCollectionViewSectionedAnimatedDataSource<AlarmSectionModel>
+    private lazy var datasource = self.makeDataSource()
     
     private let viewModel = AlarmViewModel()
     
@@ -25,13 +27,13 @@ final class AlarmViewController: UIViewController {
         
     private let showModalButton = ShowModalButton()
     
+    // 모달뷰가 열렸을 때 뒤를 가려줄 뷰
     private let backgroundView = UIView().then {
         $0.backgroundColor = .black.withAlphaComponent(0.3)
         $0.isHidden = true
     }
     
-    private lazy var datasource = self.makeDataSource()
-    
+    // MARK: - AlarmViewController LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -39,6 +41,7 @@ final class AlarmViewController: UIViewController {
     }
 }
 
+// MARK: - AlarmViewController UI Setting Method
 private extension AlarmViewController {
     
     func setupUI() {
@@ -65,6 +68,10 @@ private extension AlarmViewController {
         }
     }
     
+    /// 컬렉션뷰의 데이터소스를 만드는 메소드
+    /// - Returns: RxCollectionViewSectionedAnimatedDataSource
+    ///
+    /// ``AlarmSectionModel``
     func makeDataSource() -> DataSource {
         return DataSource(configureCell: { [weak self] datasource, collectionView, indexPath, item in
             guard
@@ -91,6 +98,7 @@ private extension AlarmViewController {
         })
     }
     
+    /// 모든 바인딩 메소드를 실행하는 메소드
     func bind() {
         bindData()
         bindAlarmOnButton()
@@ -99,12 +107,15 @@ private extension AlarmViewController {
         bindCellSelect()
     }
     
+    /// 컬렉션뷰의 데이터소스와 바인딩하는 메소드
     func bindData() {
+        // 데이터소스와 바인딩
         self.viewModel.dataRelay
             .asDriver(onErrorDriveWith: .empty())
             .drive(self.alarmView.collectionView.rx.items(dataSource: self.datasource))
             .disposed(by: self.disposeBag)
         
+        // 데이터소스에서 이벤트가 방출되었을 때 UI 업데이트
         self.viewModel.dataRelay
             .asDriver(onErrorDriveWith: .empty())
             .compactMap { $0.first?.items }
@@ -125,7 +136,10 @@ private extension AlarmViewController {
                 
             }.disposed(by: self.disposeBag)
     }
-
+    
+    /// 알람 버튼을 탭 이벤트 바인딩 메소드
+    ///
+    /// 코어데이터에 isActive 속성 업데이트
     func bindAlarmOnButton() {
         self.viewModel.alarmButtonTapped
             .asSignal(onErrorSignalWith: .empty())
@@ -145,6 +159,9 @@ private extension AlarmViewController {
             }.disposed(by: self.disposeBag)
     }
     
+    /// 삭제 버튼 탭 액션 바인딩 메소드
+    ///
+    /// 삭제 버튼을 선택시 Alert으로 경고 후 최종 삭제 결정
     func bindDeleteButton() {
         self.viewModel.deleteButtonTapped
             .asSignal(onErrorSignalWith: .empty())
@@ -161,6 +178,9 @@ private extension AlarmViewController {
             }.disposed(by: self.disposeBag)
     }
     
+    /// 셀 선택 액션 바인딩 메소드
+    ///
+    /// 셀 선택시 데이터 수정을 위한 모달 뷰 Present
     func bindCellSelect() {
         self.alarmView.collectionView.rx.itemSelected
             .asSignal(onErrorSignalWith: .empty())
@@ -177,17 +197,22 @@ private extension AlarmViewController {
             }.disposed(by: self.disposeBag)
     }
     
+    /// +버튼의 탭 액션 바인딩 메소드
+    ///
+    /// 새로운 알람을 추가하기 위한 모달 뷰 Present
     func bindShowModalButton() {
         self.showModalButton.rx.tap
             .asSignal(onErrorSignalWith: .empty())
             .withUnretained(self)
             .emit { owner, _ in
                 
-                owner.showModal(.crate, data: nil)
+                owner.showModal(.create, data: nil)
                 
             }.disposed(by: self.disposeBag)
     }
     
+    /// 삭제 확인 알럿을 Present하는 메소드
+    /// - Parameter data: 삭제할 데이터
     func confirmDeleteAlert(delete data: Alarm) {
         let alert = UIAlertController(title: "경고", message: "정말 알람을 삭제하시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
@@ -198,6 +223,10 @@ private extension AlarmViewController {
         self.present(alert, animated: true)
     }
     
+    /// 모달뷰를 Present하는 메소드
+    /// - Parameters:
+    ///   - state: 모달뷰의 state
+    ///   - data: 모달뷰에 넘길 데이터(edit일 때만)
     func showModal(_ state: AlarmModalState, data: Alarm?) {
         let modalVC = AlarmModalViewController(state: state, data: data)
         
@@ -209,6 +238,8 @@ private extension AlarmViewController {
         self.modalViewBind(modalVC)
     }
     
+    /// 모달뷰의 데이터 바인딩 메소드
+    /// - Parameter vc: 모달뷰 컨트롤러
     func modalViewBind(_ vc: UIViewController) {
         guard let modalVC = vc as? AlarmModalViewController else { return }
         

@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
+/// 모달뷰의 시간을 설정하는 섹션 뷰
 final class AlarmModalTimeSection: UIView {
     
     private let title = AlarmModalSectionTitle(title: "시간 설정")
@@ -25,6 +26,8 @@ final class AlarmModalTimeSection: UIView {
         $0.clipsToBounds = true
     }
     
+    // MARK: - AlarmModalTimeSection Initializer
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -39,6 +42,7 @@ final class AlarmModalTimeSection: UIView {
     
 }
 
+// MARK: - AlarmModalTimeSection UI Setting Method
 private extension AlarmModalTimeSection {
     
     func setupUI() {

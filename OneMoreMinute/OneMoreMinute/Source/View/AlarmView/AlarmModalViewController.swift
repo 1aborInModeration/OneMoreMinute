@@ -11,22 +11,29 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
+/// 알람뷰의 상태를 나타내는 enum
+///
+/// **create**: 새로 생성
+///
+/// **edit**: 수정
 enum AlarmModalState {
-    case crate
+    case create
     case edit
 }
 
+/// 알람뷰 모달 컨트롤러
 final class AlarmModalViewController: UIViewController {
-    
-    private(set) var modalView = AlarmModalView()
-    
-    private var state: AlarmModalState
     
     private let disposeBag = DisposeBag()
     
     private let repository = AlarmDataManager.shared
     
+    private var state: AlarmModalState
     private var data: Alarm?
+    
+    private(set) lazy var modalView = AlarmModalView(state: self.state)
+    
+    // MARK: - AlarmModalViewController Initializer
     
     init(state: AlarmModalState, data: Alarm?) {
         self.state = state
@@ -38,6 +45,8 @@ final class AlarmModalViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - AlarmModalViewController LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -45,6 +54,7 @@ final class AlarmModalViewController: UIViewController {
     }
 }
 
+// MARK: - AlarmModalViewController UI Setting Method
 private extension AlarmModalViewController {
     
     func setupUI() {
@@ -67,6 +77,9 @@ private extension AlarmModalViewController {
         }
     }
     
+    /// 모달뷰를 세팅하는 메소드
+    ///
+    /// 현재 뷰 컨트롤러의 상태가 edit이고 데이터가 있어야만 액션 실행
     func setupModalView() {
         guard
             self.state == .edit && self.data != nil,
@@ -75,9 +88,14 @@ private extension AlarmModalViewController {
         self.modalView.enterData(data)
     }
     
+    /// 데이터 바인딩 메소드
+    ///
+    /// 현재 뷰 컨트롤러의 state에 따라 바인딩 변경
     func bind() {
         switch self.state {
-        case .crate:
+        case .create:
+            // 현재 뷰 컨트롤러가 create인 경우
+            // 코어 데이터에 새로운 데이터 저장
             self.modalView.saveButton.rx.tap
                 .asSignal(onErrorSignalWith: .empty())
                 .withUnretained(self)
@@ -103,12 +121,14 @@ private extension AlarmModalViewController {
                 }.disposed(by: self.disposeBag)
             
         case .edit:
+            // 현재 뷰 컨트롤러가 edit인 경우
+            // 코어 데이터의 데이터 업데이트
             self.modalView.saveButton.rx.tap
                 .asSignal(onErrorSignalWith: .empty())
                 .withUnretained(self)
                 .emit { owner, _ in
                     
-                    guard var data = owner.data else { return }
+                    guard let data = owner.data else { return }
                     let cellData = owner.modalView.extractionData()
                     
                     data.isActive = true

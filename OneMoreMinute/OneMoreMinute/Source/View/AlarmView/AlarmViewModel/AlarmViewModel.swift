@@ -9,13 +9,21 @@ import Foundation
 import RxSwift
 import RxCocoa
 
+/// 알람 뷰의 뷰 모델
 final class AlarmViewModel {
+    // 추후 리팩토링으로 input, output 구현 예정
     struct Input {
         
     }
     
     struct Output {
         
+    }
+    
+    
+    func transform(input: Input) -> Output {
+        
+        return Output()
     }
     
     private let coreDataManager = AlarmDataManager.shared
@@ -25,10 +33,12 @@ final class AlarmViewModel {
     private(set) var alarmButtonTapped = PublishRelay<IndexPath>()
     private(set) var deleteButtonTapped = PublishRelay<IndexPath>()
  
+    // MARK: - AlarmViewModel Initializer
     init() {
         dataFetch()
     }
     
+    /// 코어 데이터의 데이터를 불러와 이벤트를 전달하는 메소드
     func dataFetch() {
         Observable.from([coreDataManager.fetch()])
             .map { data in
@@ -41,10 +51,5 @@ final class AlarmViewModel {
                 self?.dataRelay.accept(models)
             })
             .disposed(by: disposeBag)
-    }
-    
-    func transform(input: Input) -> Output {
-        
-        return Output()
     }
 }
