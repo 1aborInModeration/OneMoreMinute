@@ -12,7 +12,18 @@
 		71D095312D2D094A005FE9C0 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 71D095302D2D094A005FE9C0 /* RxCocoa */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		6050C5A12D300828002AA07B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 71D094C72D2D051B005FE9C0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 71D094CE2D2D051B005FE9C0;
+			remoteInfo = OneMoreMinute;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		6050C59D2D300828002AA07B /* OneMoreMinuteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OneMoreMinuteTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		71D094CF2D2D051B005FE9C0 /* OneMoreMinute.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneMoreMinute.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -27,6 +38,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		6050C59E2D300828002AA07B /* OneMoreMinuteTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = OneMoreMinuteTests;
+			sourceTree = "<group>";
+		};
 		71D094D12D2D051B005FE9C0 /* OneMoreMinute */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -38,6 +54,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		6050C59A2D300828002AA07B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		71D094CC2D2D051B005FE9C0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -55,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				71D094D12D2D051B005FE9C0 /* OneMoreMinute */,
+				6050C59E2D300828002AA07B /* OneMoreMinuteTests */,
 				71D094D02D2D051B005FE9C0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -63,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				71D094CF2D2D051B005FE9C0 /* OneMoreMinute.app */,
+				6050C59D2D300828002AA07B /* OneMoreMinuteTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -70,6 +95,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		6050C59C2D300828002AA07B /* OneMoreMinuteTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6050C5A32D300828002AA07B /* Build configuration list for PBXNativeTarget "OneMoreMinuteTests" */;
+			buildPhases = (
+				6050C5992D300828002AA07B /* Sources */,
+				6050C59A2D300828002AA07B /* Frameworks */,
+				6050C59B2D300828002AA07B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6050C5A22D300828002AA07B /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				6050C59E2D300828002AA07B /* OneMoreMinuteTests */,
+			);
+			name = OneMoreMinuteTests;
+			packageProductDependencies = (
+			);
+			productName = OneMoreMinuteTests;
+			productReference = 6050C59D2D300828002AA07B /* OneMoreMinuteTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		71D094CE2D2D051B005FE9C0 /* OneMoreMinute */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 71D094E52D2D051D005FE9C0 /* Build configuration list for PBXNativeTarget "OneMoreMinute" */;
@@ -102,9 +150,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1610;
+				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1610;
 				TargetAttributes = {
+					6050C59C2D300828002AA07B = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 71D094CE2D2D051B005FE9C0;
+					};
 					71D094CE2D2D051B005FE9C0 = {
 						CreatedOnToolsVersion = 16.1;
 					};
@@ -130,11 +182,19 @@
 			projectRoot = "";
 			targets = (
 				71D094CE2D2D051B005FE9C0 /* OneMoreMinute */,
+				6050C59C2D300828002AA07B /* OneMoreMinuteTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		6050C59B2D300828002AA07B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		71D094CD2D2D051B005FE9C0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -145,6 +205,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		6050C5992D300828002AA07B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		71D094CB2D2D051B005FE9C0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -154,7 +221,53 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		6050C5A22D300828002AA07B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 71D094CE2D2D051B005FE9C0 /* OneMoreMinute */;
+			targetProxy = 6050C5A12D300828002AA07B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		6050C5A42D300828002AA07B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MV89SHQKF4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ericKwon.OneMoreMinuteTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OneMoreMinute.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OneMoreMinute";
+			};
+			name = Debug;
+		};
+		6050C5A52D300828002AA07B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MV89SHQKF4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ericKwon.OneMoreMinuteTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OneMoreMinute.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OneMoreMinute";
+			};
+			name = Release;
+		};
 		71D094E62D2D051D005FE9C0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -345,6 +458,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		6050C5A32D300828002AA07B /* Build configuration list for PBXNativeTarget "OneMoreMinuteTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6050C5A42D300828002AA07B /* Debug */,
+				6050C5A52D300828002AA07B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		71D094CA2D2D051B005FE9C0 /* Build configuration list for PBXProject "OneMoreMinute" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
