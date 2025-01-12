@@ -27,7 +27,7 @@ final class StopwatchViewController: UIViewController {
     
     private let timeLabel = UILabel().then {
         $0.text = "00:00.00"
-        $0.font = UIFont.pretendard(ofSize: 48, weight: .semibold)
+        $0.font = UIFont.monospacedDigitSystemFont(ofSize: 48, weight: .semibold)
         $0.textAlignment = .center
         $0.textColor = UIColor(resource: .mainTitle)
     }

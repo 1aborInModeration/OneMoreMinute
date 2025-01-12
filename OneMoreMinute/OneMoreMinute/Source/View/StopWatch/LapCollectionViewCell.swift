@@ -16,13 +16,13 @@ class LapCollectionViewCell: UICollectionViewCell {
     
     // MARK: - UI Components
     private let lapLabel = UILabel().then {
-        $0.font = UIFont.pretendard(ofSize: 16, weight: .semibold)
+        $0.font = UIFont.monospacedDigitSystemFont(ofSize: 16, weight: .semibold)
         $0.textColor = UIColor(resource: .fontLabel)
         $0.textAlignment = .left
     }
     
     private let lapTimeLabel = UILabel().then {
-        $0.font = UIFont.pretendard(ofSize: 16, weight: .semibold)
+        $0.font = UIFont.monospacedDigitSystemFont(ofSize: 16, weight: .semibold)
         $0.textColor = UIColor(resource: .mainTitle)
         $0.textAlignment = .right
     }
