@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
-class LapCollectionViewCell: UICollectionViewCell {
+final class LapCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Identifier
     static let identifier = "LapCollectionViewCell"
@@ -66,5 +66,13 @@ class LapCollectionViewCell: UICollectionViewCell {
     func configure(with viewModel: LapViewModel) {
         lapLabel.text = viewModel.lapLabel
         lapTimeLabel.text = viewModel.lapTimeLabel
+        
+        if viewModel.isFastest {
+            lapLabel.textColor = .systemGreen
+        } else if viewModel.isSlowest {
+            lapLabel.textColor = .systemRed
+        } else {
+            lapLabel.textColor = UIColor(resource: .fontLabel)
+        }
     }
 }

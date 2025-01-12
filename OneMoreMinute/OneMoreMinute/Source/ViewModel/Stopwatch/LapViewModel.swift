@@ -9,9 +9,13 @@ import Foundation
 
 struct LapViewModel {
     private let model: LapModel
+    let isFastest: Bool
+    let isSlowest: Bool
 
-    init(model: LapModel) {
+    init(model: LapModel, isFastest: Bool = false, isSlowest: Bool = false) {
         self.model = model
+        self.isFastest = isFastest
+        self.isSlowest = isSlowest
     }
     
     var lapLabel: String {
