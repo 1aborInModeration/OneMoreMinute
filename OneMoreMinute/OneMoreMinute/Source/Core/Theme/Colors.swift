@@ -71,7 +71,7 @@ struct Colors {
     // MARK: - Basic Color
     
     /// 현재 앱의 백그라운드 색상으로 정한 컬러. 일반적으로 기본적인 흰/다크 색상.
-    static var appBackground: UIColor = .background
+    static var appBackground: UIColor = .backgroundLightGray
     
     /// 그냥 회색이 필요할 때 사용하는  그냥 Gray
     static var systemGray: UIColor = .black500

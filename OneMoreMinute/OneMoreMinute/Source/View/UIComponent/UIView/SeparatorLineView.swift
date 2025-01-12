@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 class SeparatorLineView: UIView {
-    init(height: CGFloat) {
+    init(height: CGFloat = 1.0) {
         super.init(frame: .zero)
         
         setupUIProperties()

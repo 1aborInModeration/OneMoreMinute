@@ -60,7 +60,7 @@ private extension AlarmViewController {
         self.showModalButton.snp.makeConstraints { make in
             make.bottom.equalToSuperview().inset(20)
             make.trailing.equalToSuperview().inset(20)
-            make.width.height.equalTo(50)
+            make.width.height.equalTo(Layouts.buttonHeight)
         }
         
         self.backgroundView.snp.makeConstraints { make in

@@ -15,6 +15,7 @@ class WorldTimeView: UIView {
     // MARK: - UIComponents & Properties
     
     let worldTimeCollectionView = VerticalCollectionView()
+    let plusButton = ShowModalButton()
     
     
     // MARK: - Life Cycles
@@ -38,7 +39,8 @@ class WorldTimeView: UIView {
 extension WorldTimeView {
     func setupSubViews() {
         [
-            worldTimeCollectionView
+            worldTimeCollectionView,
+            plusButton
         ].forEach { addSubview($0) }
     }
     
@@ -52,5 +54,18 @@ extension WorldTimeView {
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
         }
+
+        plusButton.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(Layouts.padding)
+            make.trailing.equalToSuperview().inset(Layouts.padding)
+            make.width.height.equalTo(Layouts.buttonHeight)
+        }
     }
+}
+
+
+// MARK: - Actions
+
+extension WorldTimeView {
+    
 }

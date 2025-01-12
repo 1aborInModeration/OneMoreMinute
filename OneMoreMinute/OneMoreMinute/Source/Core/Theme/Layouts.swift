@@ -8,12 +8,12 @@
 import UIKit
 
 struct Layouts {
-    /// 레이아웃에서 좌우 패딩(inset) 영역 지정용 / regular / 20
-    static let padding: CGFloat = 20
+    /// 레이아웃에서 좌우 패딩(inset) 영역 지정용 / regular / 24
+    static let padding: CGFloat = 24
     /// 레이아웃에서 좌우 패딩(inset) 영역 지정용 / small / 16
     static let paddingSmall: CGFloat = 16
-    /// 레이아웃에서 좌우 패딩(inset) 영역 지정용 / large / 24
-    static let paddingLarge: CGFloat = 24
+    /// 레이아웃에서 좌우 패딩(inset) 영역 지정용 / large / 32
+    static let paddingLarge: CGFloat = 32
     
     /// UI 컴포넌트의 모서리 라운딩 사이즈 / regular / 16
     static let radius: CGFloat = 16

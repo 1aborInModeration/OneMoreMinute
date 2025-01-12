@@ -65,7 +65,7 @@ extension AlertView {
     }
     
     func setupUIProperties() {
-        self.backgroundColor = .background
+        self.backgroundColor = .wrapperBackground
         self.layer.cornerRadius = Layouts.radius
         
         titleLabel.text = title
