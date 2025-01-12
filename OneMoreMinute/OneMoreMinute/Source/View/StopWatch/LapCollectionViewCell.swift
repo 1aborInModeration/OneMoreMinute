@@ -63,13 +63,8 @@ class LapCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Configure
-    func configure(with lap: String, time: String) {
-        lapLabel.text = lap
-        lapTimeLabel.text = time
+    func configure(with viewModel: LapViewModel) {
+        lapLabel.text = viewModel.lapLabel
+        lapTimeLabel.text = viewModel.lapTimeLabel
     }
-}
-
-@available(iOS 17.0, *)
-#Preview {
-    return StopwatchViewController()
 }
