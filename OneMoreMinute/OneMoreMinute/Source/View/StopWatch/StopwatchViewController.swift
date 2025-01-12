@@ -59,8 +59,6 @@ final class StopwatchViewController: UIViewController {
         return collectionView
     }()
     
-    private let gradientLayer = CAGradientLayer()
-    
     // MARK: - Properties
     private let viewModel = StopwatchViewModel()
     private let disposeBag = DisposeBag()
@@ -69,26 +67,19 @@ final class StopwatchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        configureGradient()
         setupBindings()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        gradientLayer.frame = view.bounds
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             updateContainerLayerColors()
-            configureGradient()
         }
     }
     
     // MARK: - UI Setup
     private func setupUI() {
-        view.layer.insertSublayer(gradientLayer, at: 0)
+        view.backgroundColor = .clear
         
         view.addSubview(containerView)
         containerView.addSubview(timeLabel)
@@ -97,7 +88,7 @@ final class StopwatchViewController: UIViewController {
         view.addSubview(collectionView)
         
         containerView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+            make.top.equalTo(view.safeAreaLayoutGuide)
             make.left.right.equalToSuperview().inset(40)
             make.height.equalTo(235)
         }
@@ -129,15 +120,6 @@ final class StopwatchViewController: UIViewController {
     private func updateContainerLayerColors() {
         containerView.layer.shadowColor = UIColor.black.cgColor
         containerView.layer.borderColor = UIColor(resource: .wrapperStroke).cgColor
-    }
-    
-    private func configureGradient() {
-        gradientLayer.colors = [
-            UIColor(resource: .appBackgroundStart).cgColor,
-            UIColor(resource: .appBackgroundEnd).cgColor
-        ]
-        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
-        gradientLayer.endPoint = CGPoint(x: 0.0, y: 1.0)
     }
     
     // MARK: - Rx Bindings
