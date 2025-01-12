@@ -135,7 +135,14 @@ final class StopwatchViewController: UIViewController {
             .disposed(by: disposeBag)
         
         // Bind laps
-        viewModel.lapsRelay
+        Observable.combineLatest(viewModel.lapsRelay, viewModel.currentLapRelay)
+            .map { laps, currentLap -> [LapViewModel] in
+                var combined = laps
+                if let currentLap = currentLap {
+                    combined.insert(currentLap, at: 0) // 임시 랩을 맨 앞에 추가
+                }
+                return combined
+            }
             .bind(to: collectionView.rx.items(cellIdentifier: LapCollectionViewCell.identifier, cellType: LapCollectionViewCell.self)) { _, viewModel, cell in
                 cell.configure(with: viewModel)
             }
