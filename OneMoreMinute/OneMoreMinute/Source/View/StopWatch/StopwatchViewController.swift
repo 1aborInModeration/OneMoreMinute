@@ -164,17 +164,29 @@ final class StopwatchViewController: UIViewController {
                     self.startTimer()
                 }
                 self.isRunning.accept(!running)
+                self.updateButtonStates()
             })
             .disposed(by: disposeBag)
         
-        // Reset button tap handling
+        // Reset button (or Lap button) tap handling
         resetButton.rx.tap
-            .subscribe(onNext: { [weak self] in
+            .withLatestFrom(isRunning)
+            .subscribe(onNext: { [weak self] running in
                 guard let self = self else { return }
-                self.stopTimer()
-                self.elapsedTime.accept(0)
-                self.laps.accept([])
-                self.isRunning.accept(false)
+                if running {
+                    // Add a new lap
+                    let lapTime = String(format: "%02d:%05.2f", Int(self.elapsedTime.value / 60), self.elapsedTime.value.truncatingRemainder(dividingBy: 60))
+                    var currentLaps = self.laps.value
+                    currentLaps.insert(("랩 \(currentLaps.count + 1)", lapTime), at: 0)
+                    self.laps.accept(currentLaps)
+                } else {
+                    // Reset timer
+                    self.stopTimer()
+                    self.elapsedTime.accept(0)
+                    self.laps.accept([])
+                    self.isRunning.accept(false)
+                }
+                self.updateButtonStates()
             })
             .disposed(by: disposeBag)
         
@@ -183,23 +195,9 @@ final class StopwatchViewController: UIViewController {
             .map { elapsedTime in
                 let minutes = Int(elapsedTime) / 60
                 let seconds = elapsedTime.truncatingRemainder(dividingBy: 60)
-                return String(format: "%02d:$05.2f", minutes, seconds)
+                return String(format: "%02d:%05.2f", minutes, seconds)
             }
             .bind(to: timeLabel.rx.text)
-            .disposed(by: disposeBag)
-        
-        // Lap handling (add current time to laps)
-        playButton.rx.tap
-            .withLatestFrom(isRunning)
-            .filter { $0 } // Only add lap when timer is running
-            .withLatestFrom(elapsedTime)
-            .subscribe(onNext: { [weak self] elapsedTime in
-                guard let self = self else { return }
-                let lapTime = String(format: "$02d:$05.2f", Int(elapsedTime / 60), elapsedTime.truncatingRemainder(dividingBy: 60))
-                var currentLaps = self.laps.value
-                currentLaps.insert(("랩 \(currentLaps.count + 1)", lapTime), at: 0)
-                self.laps.accept(currentLaps)
-            })
             .disposed(by: disposeBag)
         
         // Bind laps to collectionView using RxDataSources
@@ -207,6 +205,24 @@ final class StopwatchViewController: UIViewController {
             cell.configure(with: data.0, time: data.1)
         }
         .disposed(by: disposeBag)
+    }
+
+    private func updateButtonStates() {
+        if isRunning.value {
+            // Update to pause and lap buttons
+            playButton.setImage(UIImage(systemName: "pause"), for: .normal)
+            playButton.tintColor = UIColor(resource: .subTitle)
+            
+            resetButton.setImage(UIImage(systemName: "flag"), for: .normal)
+            resetButton.tintColor = UIColor(resource: .grayButtonLabel)
+        } else {
+            // Update to play and reset buttons
+            playButton.setImage(UIImage(systemName: "play"), for: .normal)
+            playButton.tintColor = UIColor(resource: .subTitle)
+            
+            resetButton.setImage(UIImage(systemName: "arrow.counterclockwise"), for: .normal)
+            resetButton.tintColor = UIColor(resource: .grayButtonLabel)
+        }
     }
     
     private func startTimer() {
