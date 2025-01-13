@@ -11,7 +11,7 @@ import CoreData
 /// WorldTime 엔티티의 데이터 파일
 struct WorldTimeDTO: EntityTransformAble {
     let cityName: String
-    let timeZoneld: String
+    let timeZoneId: String
     let createdAt: Date
     
     /// WorldTime 엔티티 데이터 타입을 반환하는 메소드
@@ -20,8 +20,8 @@ struct WorldTimeDTO: EntityTransformAble {
     func toEntity(context: NSManagedObjectContext) -> WorldTimeEntity {
         let wordTimeEntity = WorldTimeEntity(context: context)
         wordTimeEntity.cityName = self.cityName
-        wordTimeEntity.timeZoneld = self.timeZoneld
-        wordTimeEntity.createAt = self.createdAt
+        wordTimeEntity.timeZoneId = self.timeZoneId
+        wordTimeEntity.createdAt = self.createdAt
         
         return wordTimeEntity
     }
