@@ -24,6 +24,7 @@ final class AlarmViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let alarmToggleButtonTapped = PublishRelay<IndexPath>()
     private let deleteButtonTapped = PublishRelay<IndexPath>()
+    private let saveButtonTapped = PublishRelay<CGPoint>()
         
     // MARK: - AlarmViewController UI
     private let alarmView = AlarmView()
@@ -126,7 +127,8 @@ private extension AlarmViewController {
     func bindData() {
         let input = AlarmViewModel.Input(
             alarmToggleButtonTapped: self.alarmToggleButtonTapped,
-            deleteButtonTapped: self.deleteButtonTapped
+            deleteButtonTapped: self.deleteButtonTapped,
+            saveButtonTapped: self.saveButtonTapped
         )
         
         let output = self.viewModel.transform(input: input)
@@ -142,6 +144,31 @@ private extension AlarmViewController {
             .emit { owner, indexPath in
                 
                 owner.alarmView.collectionView.reloadItems(at: [indexPath])
+                owner.alarmView.collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+                
+            }.disposed(by: self.disposeBag)
+        
+        output.deleteIndex
+            .asSignal(onErrorSignalWith: .empty())
+            .withUnretained(self)
+            .emit { owner, indexPath in
+                
+                let indexPaths = owner.alarmView.collectionView.indexPathsForVisibleItems
+                if indexPaths.contains(indexPath) {
+                    owner.alarmView.collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
+                } else {
+                    guard let lastIndex = indexPaths.last else { return }
+                    owner.alarmView.collectionView.scrollToItem(at: lastIndex, at: .top, animated: true)
+                }
+                
+            }.disposed(by: self.disposeBag)
+        
+        output.scrollIndex
+            .asSignal(onErrorSignalWith: .empty())
+            .withUnretained(self)
+            .emit { owner, location in
+                
+                owner.alarmView.collectionView.setContentOffset(location, animated: true)
                 
             }.disposed(by: self.disposeBag)
     }
@@ -231,8 +258,22 @@ private extension AlarmViewController {
             .emit { owner, _ in
                 
                 owner.dismissBackgroundView()
+                
+                switch modalVC.state {
+                case .create:
+                    owner.viewModel.dataFetch()
+                    let contentSizeY = owner.alarmView.collectionView.contentSize.height
+                    let frameSize = owner.alarmView.collectionView.frame.height
+                    let maxY = contentSizeY - frameSize
+                    let location = CGPoint(x: 0, y: maxY)
+                    owner.alarmView.collectionView.setContentOffset(location, animated: true)
+                    
+                case .edit:
+                    let location = owner.alarmView.collectionView.contentOffset
+                    owner.saveButtonTapped.accept(location)
+                }
+                
                 modalVC.dismiss(animated: true)
-                owner.viewModel.dataFetch()
                 
             }.disposed(by: modalVC.disposeBag)
         

@@ -29,7 +29,7 @@ final class AlarmModalViewController: UIViewController {
     
     private let repositoryManager = AlarmDataManager.shared
     
-    private var state: AlarmModalState
+    private(set) var state: AlarmModalState
     private var data: Alarm?
     
     private(set) lazy var modalView = AlarmModalView(state: self.state)

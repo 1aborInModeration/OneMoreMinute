@@ -10,15 +10,18 @@ import RxSwift
 import RxCocoa
 
 /// 알람 뷰의 뷰 모델
-final class AlarmViewModel {
+final class AlarmViewModel: ViewModelType {
     struct Input {
         let alarmToggleButtonTapped: PublishRelay<IndexPath>
         let deleteButtonTapped: PublishRelay<IndexPath>
+        let saveButtonTapped: PublishRelay<CGPoint>
     }
     
     struct Output {
         let dataRelay: BehaviorRelay<[AlarmSectionModel]>
         let reloadIndex: PublishRelay<IndexPath>
+        let deleteIndex: PublishRelay<IndexPath>
+        let scrollIndex: PublishRelay<CGPoint>
     }
     
     /// 뷰 모델 데이터 바인딩 메소드
@@ -43,17 +46,30 @@ final class AlarmViewModel {
                 
             }.disposed(by: self.disposeBag)
         
+        input.saveButtonTapped
+            .asSignal(onErrorSignalWith: .empty())
+            .withUnretained(self)
+            .emit { owner, location in
+                
+                owner.keepScrollToItem(location)
+                
+            }.disposed(by: self.disposeBag)
+        
         return Output(
             dataRelay: self.dataRelay,
-            reloadIndex: self.reloadIndex
+            reloadIndex: self.reloadIndex,
+            deleteIndex: self.deleteIndex,
+            scrollIndex: self.scrollIndex
         )
     }
     
     private let repositoryManager = AlarmDataManager.shared
-    private let disposeBag = DisposeBag()
+    let disposeBag = DisposeBag()
     
     private let dataRelay = BehaviorRelay(value: [AlarmSectionModel]())
     private let reloadIndex = PublishRelay<IndexPath>()
+    private let deleteIndex = PublishRelay<IndexPath>()
+    private let scrollIndex = PublishRelay<CGPoint>()
  
     // MARK: - AlarmViewModel Initializer
     init() {
@@ -88,5 +104,15 @@ final class AlarmViewModel {
         repositoryManager.delete(data)
         
         self.dataFetch()
+        
+        self.deleteIndex.accept(indexPath)
+    }
+    
+    /// 아이템을 수정했을 때, 스크롤 위치를 유지하는 메소드
+    /// - Parameter location: 현재 스크롤 위치
+    private func keepScrollToItem(_ location: CGPoint) {
+        self.dataFetch()
+        
+        self.scrollIndex.accept(location)
     }
 }
