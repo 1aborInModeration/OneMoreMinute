@@ -28,6 +28,7 @@ final class AlarmModalMemoSection: UIView {
     }
     
     // MARK: - AlarmModalMemoSection Initializer
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -43,6 +44,7 @@ final class AlarmModalMemoSection: UIView {
 }
 
 // MARK: - AlarmModalMemoSection UI Setting Method
+
 private extension AlarmModalMemoSection {
     
     func setupUI() {

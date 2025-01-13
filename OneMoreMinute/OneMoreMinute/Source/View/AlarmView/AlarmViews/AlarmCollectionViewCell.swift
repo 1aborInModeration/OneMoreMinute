@@ -15,6 +15,7 @@ import RxCocoa
 final class AlarmCollectionViewCell: UICollectionViewCell {
     
     // MARK: - AlarmCollectionViewCell Rx Properties
+    
     private(set) var disposeBag = DisposeBag()
     private let weekdaysStatus = PublishRelay<[Bool]>()
     private(set) var data: Alarm?
@@ -60,6 +61,7 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - AlarmCollectionViewCell Initializer
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -106,6 +108,7 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
 }
 
 // MARK: - AlarmCollectionViewCell UI Setting Method
+
 private extension AlarmCollectionViewCell {
     
     func setupUI() {

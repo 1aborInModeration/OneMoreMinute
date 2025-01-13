@@ -72,6 +72,7 @@ final class AlarmViewModel: ViewModelType {
     private let scrollIndex = PublishRelay<CGPoint>()
  
     // MARK: - AlarmViewModel Initializer
+    
     init() {
         dataFetch()
     }

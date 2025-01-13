@@ -25,6 +25,7 @@ final class WeekDaysIcons: UIView {
     }
     
     // MARK: - WeekDaysIcons Initializer
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -51,6 +52,7 @@ final class WeekDaysIcons: UIView {
 }
 
 // MARK: - WeekDaysIcons UI Setting Method
+
 private extension WeekDaysIcons {
     
     func setupUI() {

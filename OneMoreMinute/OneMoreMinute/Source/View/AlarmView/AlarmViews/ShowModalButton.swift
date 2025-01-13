@@ -24,6 +24,7 @@ final class ShowModalButton: UIButton {
 }
 
 // MARK: - ShowModalButton UI Setting Method
+
 private extension ShowModalButton {
     
     func setupUI() {

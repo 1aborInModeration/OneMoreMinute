@@ -27,6 +27,7 @@ final class AlarmViewController: UIViewController {
     private let saveButtonTapped = PublishRelay<CGPoint>()
         
     // MARK: - AlarmViewController UI
+    
     private let alarmView = AlarmView()
         
     private let showModalButton = ShowModalButton()
@@ -38,6 +39,7 @@ final class AlarmViewController: UIViewController {
     }
     
     // MARK: - AlarmViewController LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -46,6 +48,7 @@ final class AlarmViewController: UIViewController {
 }
 
 // MARK: - AlarmViewController UI Setting Method
+
 private extension AlarmViewController {
     
     func setupUI() {

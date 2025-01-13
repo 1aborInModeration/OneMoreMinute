@@ -107,6 +107,7 @@ final class AlarmModalView: UIView {
 }
 
 // MARK: - AlarmModalView UI Setting Method
+
 private extension AlarmModalView {
     
     func setupUI() {
