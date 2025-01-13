@@ -262,11 +262,15 @@ private extension AlarmViewController {
                 switch modalVC.state {
                 case .create:
                     owner.viewModel.dataFetch()
+                    let currentOffset = owner.alarmView.collectionView.contentOffset.y
                     let contentSizeY = owner.alarmView.collectionView.contentSize.height
                     let frameSize = owner.alarmView.collectionView.frame.height
                     let maxY = contentSizeY - frameSize
-                    let location = CGPoint(x: 0, y: maxY)
-                    owner.alarmView.collectionView.setContentOffset(location, animated: true)
+                    
+                    if currentOffset < maxY {
+                        let location = CGPoint(x: 0, y: maxY)
+                        owner.alarmView.collectionView.setContentOffset(location, animated: true)
+                    }
                     
                 case .edit:
                     let location = owner.alarmView.collectionView.contentOffset
