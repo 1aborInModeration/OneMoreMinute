@@ -10,4 +10,5 @@ import Foundation
 struct CityTimeZone {
     let cityName: String
     let timeZone: TimeZone
+    let timeDifference: String
 }

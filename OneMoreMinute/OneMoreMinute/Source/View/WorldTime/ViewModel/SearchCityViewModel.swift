@@ -17,7 +17,7 @@ class SearchCityViewModel {
     private let disposeBag = DisposeBag()
     
     let cityListRelay = PublishRelay<[CityTimeZone]>()
-
+    private let worldTimeDataManager = WorldTimeDataManager.shared
 
     func searchCities(with query: String){
         let searchRequest = MKLocalSearch.Request()
@@ -33,64 +33,74 @@ class SearchCityViewModel {
             
             guard let response = response else { return }
             
-            let cityTimeZones = response.mapItems.compactMap { item -> CityTimeZone? in
+            let group = DispatchGroup()
+            var cityTimeZones: [CityTimeZone] = []
+            
+            response.mapItems.forEach { item in
                 guard let name = item.name,
-                      let coordinate = item.placemark.location?.coordinate else {
-                    return nil
-                }
+                      let coordinate = item.placemark.location?.coordinate else { return }
                 
-                print(item)
-                                
-                // 좌표를 기반으로 타임존 찾기
-                if let timeZone = self?.getTimeZone(from: coordinate) {
-                    print(timeZone)
-                    let timeDifference = self?.calculateTimeDifference(with: timeZone)
-                    return CityTimeZone(cityName: name, timeZone: timeZone, timeDifference: timeDifference!)
+                group.enter()
+                self?.getTimeZone(from: coordinate) { timeZone in
+                    if let timeZone = timeZone {
+                        let timeDifference = self?.calculateTimeDifference(with: timeZone) ?? "-"
+                        let cityTimeZone = CityTimeZone(cityName: name, timeZone: timeZone, timeDifference: timeDifference)
+                        cityTimeZones.append(cityTimeZone)
+                    }
+                    group.leave()
                 }
-                
-                return nil
             }
-                               
-            self?.cityListRelay.accept(cityTimeZones)
+            
+            group.notify(queue: .main) {
+                self?.cityListRelay.accept(cityTimeZones)
+            }
         }
     }
 
-    func saveCity(city: CityTimeZone) {
+    
+    func saveCity(cityTimeZone: CityTimeZone) {
+        guard worldTimeDataManager.searchByTzId(by: cityTimeZone.timeZone.identifier) == nil else {
+            print("\(cityTimeZone.timeZone.identifier)은 이미 존재합니다.")
+            return
+        }
         
+        let newCityDto = WorldTimeDTO(
+            cityName: cityTimeZone.cityName,
+            timeZoneId: cityTimeZone.timeZone.identifier,
+            createdAt: Date()
+        )
+        worldTimeDataManager.create(with: newCityDto)
     }
 }
 
 
+// MARK: - 내부 메소드
+
 extension SearchCityViewModel {
-    private func getTimeZone(from coordinate: CLLocationCoordinate2D) -> TimeZone? {
-        print("im in")
-        
+    private func getTimeZone(from coordinate: CLLocationCoordinate2D, completion: @escaping (TimeZone?) -> Void) {
         let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-        var timeZone: TimeZone?
         
-        let semaphore = DispatchSemaphore(value: 0)
         CLGeocoder().reverseGeocodeLocation(location) { placemarks, error in
-            if let placemark = placemarks?.first, let tz = placemark.timeZone {
-                timeZone = tz
+            if let placemark = placemarks?.first, let timeZone = placemark.timeZone {
+                completion(timeZone)
+            } else {
+                completion(nil)
             }
-            semaphore.signal()
         }
-        
-        semaphore.wait()
-        return timeZone
     }
     
     private func calculateTimeDifference(with timeZone: TimeZone) -> String {
         let currentTimeZone = TimeZone.current
         let differenceInSeconds = timeZone.secondsFromGMT() - currentTimeZone.secondsFromGMT()
         let differenceInHours = differenceInSeconds / 3600
+        let diffGMTText = currentTimeZone.localizedName(for: .shortStandard, locale: Locale.current) ?? ""
         
         if differenceInHours == 0 {
-            return "현지 시간과 동일"
+            return "(\(diffGMTText)) 현재 시간과 동일"
         } else if differenceInHours > 0 {
-            return "\(differenceInHours)시간 빠름"
+            return "(\(diffGMTText)) 현재 시간보다 \(differenceInHours)시간 빨라요."
         } else {
-            return "\(-differenceInHours)시간 느림"
+            return "(\(diffGMTText)) 현재 시간보다 \(-differenceInHours)시간 느려요."
         }
     }
 }

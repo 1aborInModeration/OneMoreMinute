@@ -38,6 +38,7 @@ class SearchCityModalViewController: UIViewController, ModalCloseDelegate {
         
         setupBackground()
         setupTargetView()
+        setupBindings()
     }
     
     /// 모달이 화면에 나타날 때 호출
@@ -68,7 +69,7 @@ extension SearchCityModalViewController {
         
         searchCityView.snp.makeConstraints {
             $0.center.equalToSuperview()
-            $0.height.greaterThanOrEqualTo(200)
+            $0.height.equalTo(500)
             $0.leading.trailing.equalToSuperview().inset(Layouts.paddingSmall)
         }
     }
@@ -80,14 +81,13 @@ extension SearchCityModalViewController {
 extension SearchCityModalViewController {
     func setupBindings() {
         searchCityView.searchBar.rx.text.orEmpty
-            .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
             .distinctUntilChanged()
             .filter {
-                return !$0.isEmpty
+                return $0.count > 1
             }
             .subscribe(
                 onNext: { [weak self] query in
-                    print("Asdfdfdfdfwwfwfw")
                     self?.searchCityViewModel.searchCities(with: query)
                 }
             )
@@ -104,8 +104,12 @@ extension SearchCityModalViewController {
         
         searchCityView.cityListCollectionView.rx
             .itemSelected
-            .subscribe(onNext: { indexPath in
-                print("aaaa")
+            .withLatestFrom(searchCityViewModel.cityListRelay) { (indexPath, cityList) in
+                cityList[indexPath.row]
+            }
+            .subscribe(onNext: { [weak self] cityTimeZone in
+                self?.searchCityViewModel.saveCity(cityTimeZone: cityTimeZone)
+                self?.closeModal()
             })
             .disposed(by: disposeBag)
     }

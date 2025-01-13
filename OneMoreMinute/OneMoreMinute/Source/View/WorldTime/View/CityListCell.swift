@@ -16,14 +16,11 @@ class CityListCell: UICollectionViewCell {
     
     let cityNameLabel = BodyLabel(isBold: true)
     let timeZoneLabel = BodyLabel()
-    
-    var cityTimeZone: CityTimeZone
-        
+
     
     // MARK: - Life Cycles
     
     override init(frame: CGRect) {
-        self.cityTimeZone = CityTimeZone(cityName: "", timeZone: TimeZone.current)
         super.init(frame: frame)
         
         setupSubViews()
@@ -44,11 +41,11 @@ extension CityListCell {
     func setupSubViews() {
         [
             cityNameLabel,
-            timeZoneLabel
+            timeZoneLabel,
         ].forEach { self.addSubview($0) }
     }
     
-    func setupUIProperties() {                
+    func setupUIProperties() {
         cityNameLabel.textColor = .fontLabel
         timeZoneLabel.textColor = .fontGray
     }
@@ -56,12 +53,12 @@ extension CityListCell {
     func setupLayouts() {
         cityNameLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(Layouts.itemSpacing4)
-            make.leading.trailing.equalToSuperview().inset(Layouts.padding)
+            make.leading.trailing.equalToSuperview()
         }
-
+        
         timeZoneLabel.snp.makeConstraints { make in
-            make.top.equalTo(cityNameLabel.snp.bottom).inset(Layouts.padding)
-            make.leading.trailing.equalToSuperview().inset(Layouts.padding)
+            make.top.equalTo(cityNameLabel.snp.bottom).offset(Layouts.itemSpacing1)
+            make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview().inset(Layouts.itemSpacing4)
         }
     }
@@ -72,33 +69,7 @@ extension CityListCell {
 
 extension CityListCell {
     func configure(with cityTimeZone: CityTimeZone) {
-        self.cityTimeZone = cityTimeZone
         self.cityNameLabel.text = cityTimeZone.cityName
-        
-        let localTimeZone = TimeZone.current
-        let cityTimeZone = cityTimeZone.timeZone
-
-        let timeDifference = cityTimeZone.secondsFromGMT() - localTimeZone.secondsFromGMT()
-        let hoursDifference = timeDifference / 3600
-        
-        let differenceString: String
-        if hoursDifference == 0 {
-            differenceString = "Same as local time"
-        } else if hoursDifference > 0 {
-            differenceString = "+\(hoursDifference) hours"
-        } else {
-            differenceString = "\(hoursDifference) hours"
-        }
-        
-        self.timeZoneLabel.text = differenceString
-    }
-}
-
-
-// MARK: - Actions
-
-extension CityListCell {
-    func tabPlusButton() {
-        
+        self.timeZoneLabel.text = cityTimeZone.timeDifference
     }
 }

@@ -52,6 +52,15 @@ extension WorldTimeViewController {
                 }
             })
             .disposed(by: disposeBag)
+        
+        worldTimeViewModel.worldTimesRelay
+            .bind(to: worldTimeView.worldTimeCollectionView.rx.items(
+                cellIdentifier: WorldTimeCell.id,
+                cellType: WorldTimeCell.self
+            )) { row, worldTime, cell in
+                cell.configure(worldTime: worldTime)
+            }
+            .disposed(by: disposeBag)
     }
 }
 

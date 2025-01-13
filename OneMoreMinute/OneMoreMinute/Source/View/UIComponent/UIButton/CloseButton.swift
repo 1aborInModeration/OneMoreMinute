@@ -13,6 +13,7 @@ class CloseButton: UIButton {
         super.init(frame: .zero)
         
         setupUIProperties()
+        setupLayouts()
     }
     
     required init?(coder: NSCoder) {
