@@ -1,8 +1,6 @@
 import UIKit
 import SnapKit
 import Then
-import RxSwift
-import RxCocoa
 
 final class TimeModalViewController: UIViewController {
     
