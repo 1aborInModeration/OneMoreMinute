@@ -1,4 +1,7 @@
 # 📱 OneMoreMinute
+![image](https://github.com/user-attachments/assets/3befc632-93f3-4bbb-a4f5-7f1345d2bdb6)
+
+알람, 세계시간, 스톱워치, 타이머 기능을 제공하는 iOS 앱 프로젝트
 
 ## 📚 Tech Stacks
 <div>
