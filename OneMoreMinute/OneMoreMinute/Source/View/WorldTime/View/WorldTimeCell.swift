@@ -20,7 +20,8 @@ class WorldTimeCell: UICollectionViewCell {
     let deleteButton = CellGestureButton(type: .delete)
     
     private var isDeleteButtonVisible = false
-        
+    private var timer: Timer?
+    private var timeZone: TimeZone?
     
     // MARK: - Life Cycles
     
@@ -30,11 +31,19 @@ class WorldTimeCell: UICollectionViewCell {
         setupSubViews()
         setupUIProperties()
         setupLayouts()
-        setupGestureRecognizers()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        timer?.invalidate()  // 기존 타이머를 정리합니다.
+    }
+    
+    deinit {
+        timer?.invalidate()
     }
 }
 
@@ -109,56 +118,54 @@ extension WorldTimeCell {
         self.cityNameLabel.text = worldTime.cityName
         self.dateLabel.text = worldTime.currentDate
         self.cityTimeLabel.text = worldTime.currentTime
+        
+        startClock()
     }
 }
 
+// MARK: - Timer Setup
+
+extension WorldTimeCell {
+    private func startClock() {
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            self?.updateClock()
+        }
+    }
+
+    private func updateClock() {
+        guard let timeZone = timeZone else { return }
+
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.timeZone = timeZone
+        formatter.dateFormat = "HH:mm"
+
+        let currentTime = formatter.string(from: Date())
+        cityTimeLabel.text = currentTime
+    }
+}
 
 
 // MARK: - Gesture Recognizers
 
 extension WorldTimeCell {
-
-    private func setupGestureRecognizers() {
-        let swipeGesture = UIPanGestureRecognizer(target: self, action: #selector(handleSwipeGesture(_:)))
-        self.addGestureRecognizer(swipeGesture)
-    }
+    /// 컨텐츠 에어리어가 터치되었을 때마다 삭제 버튼 토글
+    func contentsAreaTapped() {
+        isDeleteButtonVisible = !isDeleteButtonVisible
+        deleteButton.isHidden = !isDeleteButtonVisible
         
-    @objc private func handleSwipeGesture(_ gesture: UIPanGestureRecognizer) {
-        let translation = gesture.translation(in: contentView)
-        
-        if gesture.state == .changed {
-            if translation.x < -(Layouts.buttonHeight + Layouts.itemSpacing1) && !isDeleteButtonVisible {
-                showDeleteButton()
-            } else if translation.x > (Layouts.buttonHeight + Layouts.itemSpacing1) && isDeleteButtonVisible {
-                hideDeleteButton()
-            }
-        }
-    }
-    
-    private func showDeleteButton() {
-        isDeleteButtonVisible = true
-        deleteButton.isHidden = false
-        UIView.animate(withDuration: 0.3) {
-//            self.cityTimeLabel.transform = CGAffineTransform(translationX: -70, y: 0)
-            
-            self.contentWrapperView.snp.makeConstraints { make in
+        self.contentWrapperView.snp.makeConstraints { make in
+            if isDeleteButtonVisible {
                 make.trailing.equalToSuperview().inset(Layouts.buttonHeight + Layouts.itemSpacing1)
+            } else {
+                make.trailing.equalToSuperview()
             }
         }
     }
-    
-    private func hideDeleteButton() {
-        isDeleteButtonVisible = false
-        UIView.animate(withDuration: 0.3) {
-            self.cityNameLabel.transform = .identity
-        } completion: { _ in
-            self.deleteButton.isHidden = true
-        }
-    }
+
     
     // MARK: - Button Action
     func deleteButtonTapped() {
         print("삭제 버튼 클릭!")
-        // 여기에 삭제 로직을 추가하세요.
     }
 }

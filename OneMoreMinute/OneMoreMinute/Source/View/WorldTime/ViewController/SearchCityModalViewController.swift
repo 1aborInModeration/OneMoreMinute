@@ -15,6 +15,7 @@ import RxCocoa
 class SearchCityModalViewController: UIViewController, ModalCloseDelegate {
     // MARK: - Properties
 
+    var dismissCompletion: (() -> Void)?
     let searchCityView = SearchCityView()
     let searchCityViewModel = SearchCityViewModel()
     
@@ -51,6 +52,9 @@ class SearchCityModalViewController: UIViewController, ModalCloseDelegate {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
+        if isBeingDismissed {
+            dismissCompletion?()
+        }
     }
 }
 

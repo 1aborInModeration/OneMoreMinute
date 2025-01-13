@@ -43,12 +43,17 @@ extension WorldTimeViewController {
     func setupBindings() {
         worldTimeView.plusButton.rx
             .tap
-            .subscribe(onNext: {
+            .subscribe(onNext: { [weak self] in
                 if let topVC = AppHelpers.getTopViewController() {
                     let searchModalVC = Inject.ViewControllerHost(SearchCityModalViewController())
                     searchModalVC.modalPresentationStyle = .overFullScreen
                     searchModalVC.modalTransitionStyle = .crossDissolve
-                    topVC.present(searchModalVC, animated: true)
+                    topVC.present(searchModalVC, animated: true) {
+                        searchModalVC.dismissCompletion = { [weak self] in
+                            print("modal dismissed")
+                            self?.testPrint()
+                        }
+                    }
                 }
             })
             .disposed(by: disposeBag)
@@ -61,6 +66,19 @@ extension WorldTimeViewController {
                 cell.configure(worldTime: worldTime)
             }
             .disposed(by: disposeBag)
+        
+//        worldTimeView.worldTimeCollectionView.rx
+//            .itemSelected
+//            .subscribe(onNext: { [weak self] indexPath in
+//                if let cell = self?.worldTimeView.worldTimeCollectionView.cellForItem(at: indexPath) as? WorldTimeCell {
+//                    cell.contentsAreaTapped()
+//                }
+//            })
+//            .disposed(by: disposeBag)
+    }
+    
+    func testPrint() {
+        print("disappear")
     }
 }
 
