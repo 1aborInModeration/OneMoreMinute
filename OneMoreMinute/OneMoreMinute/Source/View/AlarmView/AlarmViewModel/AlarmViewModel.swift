@@ -63,7 +63,7 @@ final class AlarmViewModel: ViewModelType {
         )
     }
     
-    private let repositoryManager = AlarmDataManager.shared
+    private let alarmDataManager = AlarmDataManager.shared
     let disposeBag = DisposeBag()
     
     private let dataRelay = BehaviorRelay(value: [AlarmSectionModel]())
@@ -79,7 +79,7 @@ final class AlarmViewModel: ViewModelType {
     
     /// 코어 데이터의 데이터를 불러와 이벤트를 전달하는 메소드
     func dataFetch() {
-        let data = repositoryManager.fetch()
+        let data = alarmDataManager.fetch()
         let items = data.map { AlarmItem(data: $0) }
         let models = [AlarmSectionModel(items: items)]
         self.dataRelay.accept(models)
@@ -92,7 +92,7 @@ final class AlarmViewModel: ViewModelType {
         let id = data.objectID
         data.isActive.toggle()
         
-        repositoryManager.update(id, updateData: data)
+        alarmDataManager.update(id, updateData: data)
         
         self.reloadIndex.accept(indexPath)
     }
@@ -102,7 +102,7 @@ final class AlarmViewModel: ViewModelType {
     private func deleteAlarm(_ indexPath: IndexPath) {
         let data = self.dataRelay.value[indexPath.section].items[indexPath.item].data
         
-        repositoryManager.delete(data)
+        alarmDataManager.delete(data)
         
         self.dataFetch()
         

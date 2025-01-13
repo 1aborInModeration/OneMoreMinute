@@ -27,7 +27,7 @@ final class AlarmModalViewController: UIViewController {
     private(set) var disposeBag = DisposeBag()
     private(set) var backgroundTapped = PublishRelay<Bool>()
     
-    private let repositoryManager = AlarmDataManager.shared
+    private let alarmDataManager = AlarmDataManager.shared
     
     private(set) var state: AlarmModalState
     private var data: Alarm?
@@ -115,7 +115,7 @@ private extension AlarmModalViewController {
                 case .create:
                     let data = owner.modalView.extractionData()
                     
-                    owner.repositoryManager.create(with: .init(
+                    owner.alarmDataManager.create(with: .init(
                         isActive: true,
                         note: data.memo,
                         time: data.date,
@@ -147,7 +147,7 @@ private extension AlarmModalViewController {
                     data.weekDays?.sat = cellData.week[5]
                     data.weekDays?.sun = cellData.week[6]
                     
-                    owner.repositoryManager.update(data.objectID, updateData: data)
+                    owner.alarmDataManager.update(data.objectID, updateData: data)
                 }
                 
             }.disposed(by: self.disposeBag)
