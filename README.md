@@ -1,4 +1,7 @@
 # 📱 OneMoreMinute
+![image](https://github.com/user-attachments/assets/3befc632-93f3-4bbb-a4f5-7f1345d2bdb6)
+
+알람, 세계시간, 스톱워치, 타이머 기능을 제공하는 iOS 앱 프로젝트
 
 ## 📚 Tech Stacks
 <div>
@@ -38,11 +41,11 @@
 ## 👥 The Team
 | Name     | GitHub   | Roles    | Main Developments |
 |:--------:| -------- | -------- | ----------------- |
-| 권승용 | [@ericKwon95](https://github.com/ericKwon95) |  |  |
-| 김형석 | [@NeoSelf1](https://github.com/NeoSelf1) | | |
-| 임성수 | [@seongto](https://github.com/seongto) | | |
-| 장상경 | [@Crois0509](https://github.com/Crois0509) | | |
-| 황도일 | [@DoyleHWorks](https://github.com/DoyleHWorks) |  |  |
+| 권승용 | [@ericKwon95](https://github.com/ericKwon95) | ARC Optimization Reviewer | Main, Tab |
+| 김형석 | [@NeoSelf1](https://github.com/NeoSelf1) | RxSwift Flow Manager | Timer |
+| 임성수 | [@seongto](https://github.com/seongto) | Theme and Common UI Components Manager | World Time |
+| 장상경 | [@Crois0509](https://github.com/Crois0509) | CoreData Manager | Alarm |
+| 황도일 | [@DoyleHWorks](https://github.com/DoyleHWorks) | MVVM Architecture Designer | Stopwatch |
 
 ## ⏰ Project Scope
 - **시작일**: 2025/01/07 (화)

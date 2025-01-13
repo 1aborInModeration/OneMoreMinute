@@ -18,8 +18,8 @@ final class MainTabBarController: UIViewController {
     private let childVCList = [
         AlarmViewController(),
         WorldTimeViewController(),
-        CViewController(),
-        DViewController()
+        StopwatchViewController(),
+        TimerViewController()
     ]
     
     private let gradientLayer = CAGradientLayer()
