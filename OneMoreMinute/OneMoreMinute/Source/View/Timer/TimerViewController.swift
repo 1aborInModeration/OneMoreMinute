@@ -6,7 +6,6 @@ import Then
 
 final class TimerViewController: UIViewController {
     
-    
     // MARK: - RxSwift Properties
     
     /// RxSwift의 메모리 관리를 위한 DisposeBag
@@ -19,7 +18,6 @@ final class TimerViewController: UIViewController {
     private let selectedTime = BehaviorRelay<TimeInterval>(value: 300)
     /// 타이머 동작을 제어하는 Disposable 객체
     private var timerDisposable: Disposable?
-    
     
     // MARK: - UI Components
     
@@ -59,7 +57,7 @@ final class TimerViewController: UIViewController {
         $0.layer.cornerRadius = 28
         $0.clipsToBounds = true
     }
-    
+
     /// 타이머 리셋 버튼
     private let resetButton = UIButton(type: .system).then {
         $0.setImage(UIImage(systemName: "arrow.counterclockwise"), for: .normal)
@@ -71,8 +69,8 @@ final class TimerViewController: UIViewController {
     /// 배경 그라데이션 레이어
     private let gradientLayer = CAGradientLayer()
     
-    
     // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -85,8 +83,9 @@ final class TimerViewController: UIViewController {
         super.viewDidLayoutSubviews() /// UIViewController 상속하였기에, override
         gradientLayer.frame = view.bounds
     }
-    
+
     // MARK: - UI Setup
+
     private func setupUI() {
         [timeLabel, timeSettingButton, playButton, resetButton,resetButton].forEach { containerView.addSubview($0) }
         
@@ -227,7 +226,7 @@ final class TimerViewController: UIViewController {
     }
     
     /// 시간 선택 모달 표시 메소드
-   /// - Note: 현재 선택된 시간을 기반으로 모달을 표시하고, 확인/취소 버튼에 대한 이벤트를 처리
+    /// - Note: 현재 선택된 시간을 기반으로 모달을 표시하고, 확인/취소 버튼에 대한 이벤트를 처리
     func showTimePickerModal() {
         // 현재 설정된 초딘위 시간을 분 단위로 변환
         let currentMinutes = Int(selectedTime.value / 60)

@@ -74,7 +74,6 @@ final class TimeModalViewController: UIViewController {
     }
 }
 
-
 // MARK: - UI Setup
 
 private extension TimeModalViewController {
@@ -128,7 +127,6 @@ private extension TimeModalViewController {
         pickerView.selectRow(initialMinutes, inComponent: 0, animated: false)
     }
 }
-
 
 // MARK: - UIPickerViewDelegate, UIPickerViewDataSource
 
