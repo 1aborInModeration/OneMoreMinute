@@ -20,6 +20,9 @@ final class AlarmViewController: UIViewController {
     private let viewModel = AlarmViewModel()
     
     private let disposeBag = DisposeBag()
+    
+    private let alarmToggleButtonTapped = PublishRelay<IndexPath>()
+    private let deleteButtonTapped = PublishRelay<IndexPath>()
         
     private let alarmView = AlarmView()
         
@@ -67,7 +70,7 @@ private extension AlarmViewController {
         let alert = UIAlertController(title: "경고", message: "정말 알람을 삭제하시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { [weak self] _ in
-            self?.viewModel.deleteButtonTapped(indexPath)
+            self?.deleteButtonTapped.accept(indexPath)
         }))
         self.present(alert, animated: true)
     }
@@ -93,7 +96,7 @@ private extension AlarmViewController {
                 .asDriver(onErrorDriveWith: .empty())
                 .drive {
                     
-                    self.viewModel.alarmOnButtonTapped($0)
+                    self.alarmToggleButtonTapped.accept($0)
                     
                 }.disposed(by: cell.disposeBag)
             
@@ -119,11 +122,26 @@ private extension AlarmViewController {
     
     /// 컬렉션뷰의 데이터소스와 바인딩하는 메소드
     func bindData() {
-        // 데이터소스와 바인딩
-        self.viewModel.dataRelay
+        let input = AlarmViewModel.Input(
+            alarmToggleButtonTapped: self.alarmToggleButtonTapped,
+            deleteButtonTapped: self.deleteButtonTapped
+        )
+        
+        let output = self.viewModel.transform(input: input)
+        
+        output.dataRelay
             .asDriver(onErrorDriveWith: .empty())
             .drive(self.alarmView.collectionView.rx.items(dataSource: self.datasource))
             .disposed(by: self.disposeBag)
+        
+        output.reloadIndex
+            .asSignal(onErrorSignalWith: .empty())
+            .withUnretained(self)
+            .emit { owner, indexPath in
+                
+                owner.alarmView.collectionView.reloadItems(at: [indexPath])
+                
+            }.disposed(by: self.disposeBag)
     }
     
     /// 셀 선택 액션 바인딩 메소드
@@ -203,7 +221,7 @@ private extension AlarmViewController {
                 owner.dismissBackgroundView()
                 modalVC.dismiss(animated: true)
                 
-            }.disposed(by: self.disposeBag)
+            }.disposed(by: modalVC.disposeBag)
         
         modalVC.modalView.saveButton.rx.tap
             .asSignal(onErrorSignalWith: .empty())
@@ -214,7 +232,7 @@ private extension AlarmViewController {
                 modalVC.dismiss(animated: true)
                 owner.viewModel.dataFetch()
                 
-            }.disposed(by: self.disposeBag)
+            }.disposed(by: modalVC.disposeBag)
         
         modalVC.modalView.closeButton.rx.tap
             .asSignal(onErrorSignalWith: .empty())
@@ -224,7 +242,7 @@ private extension AlarmViewController {
                 owner.dismissBackgroundView()
                 modalVC.dismiss(animated: true)
                 
-            }.disposed(by: self.disposeBag)
+            }.disposed(by: modalVC.disposeBag)
         
         modalVC.modalView.cancelButton.rx.tap
             .asSignal(onErrorSignalWith: .empty())
@@ -234,7 +252,7 @@ private extension AlarmViewController {
                 owner.dismissBackgroundView()
                 modalVC.dismiss(animated: true)
                 
-            }.disposed(by: self.disposeBag)
+            }.disposed(by: modalVC.disposeBag)
     }
 
 }

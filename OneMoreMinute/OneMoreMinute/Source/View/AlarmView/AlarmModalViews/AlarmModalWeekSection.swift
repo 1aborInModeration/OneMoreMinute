@@ -121,6 +121,7 @@ private extension AlarmModalWeekSection {
         self.title.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.equalToSuperview()
+            make.height.equalTo(15)
         }
         
         self.weeks.snp.makeConstraints { make in

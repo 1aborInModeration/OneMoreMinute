@@ -24,7 +24,7 @@ enum AlarmModalState {
 /// 알람뷰 모달 컨트롤러
 final class AlarmModalViewController: UIViewController {
     
-    private let disposeBag = DisposeBag()
+    private(set) var disposeBag = DisposeBag()
     private(set) var backgroundTapped = PublishRelay<Bool>()
     
     private let repositoryManager = AlarmDataManager.shared

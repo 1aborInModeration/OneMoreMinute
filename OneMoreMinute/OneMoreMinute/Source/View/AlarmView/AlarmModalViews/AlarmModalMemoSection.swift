@@ -60,6 +60,7 @@ private extension AlarmModalMemoSection {
         self.title.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.equalToSuperview()
+            make.height.equalTo(15)
         }
         
         self.memoSet.snp.makeConstraints { make in
