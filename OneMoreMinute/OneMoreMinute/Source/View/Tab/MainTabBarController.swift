@@ -19,7 +19,7 @@ final class MainTabBarController: UIViewController {
         AViewController(),
         WorldTimeViewController(),
         StopwatchViewController(),
-        DViewController()
+        TimerViewController()
     ]
     
     private let gradientLayer = CAGradientLayer()
