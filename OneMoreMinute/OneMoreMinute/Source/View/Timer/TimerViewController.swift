@@ -242,7 +242,7 @@ final class TimerViewController: UIViewController {
                 guard let self = self else { return }
                 dismiss(animated: true)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: modalVC.disposeBag)
         
         /// 확인 버튼 탭 이벤트에 대한 바인딩
         /// - Note: 선택된 시간을 초 단위로 변환하여 타이머에 적용
@@ -257,7 +257,9 @@ final class TimerViewController: UIViewController {
                 
                 dismiss(animated: true)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: modalVC.disposeBag)
+        /// self.disposeBag를 전달할 경우, ModalView가 dismiss 되어도 구독(subscription)은 TimerViewController의 disposeBag에 의해 계속 유지되며, 모달을 개폐할때마다 구독이 계속 쌓이게 됩니다.
+        /// 따라서, ModalView가 dismiss될 때 자신의 disposeBag과 함께 모든 구독이 해제되게끔 modalVS에서 disposeBag를 생성해준 후, 직접 인자로 전달해 메모리 누수를 방지할 수 있습니다.
     }
 }
 

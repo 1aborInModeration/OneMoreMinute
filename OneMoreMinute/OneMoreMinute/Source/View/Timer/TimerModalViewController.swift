@@ -1,8 +1,10 @@
 import UIKit
 import SnapKit
 import Then
+import RxSwift
 
 final class TimeModalViewController: UIViewController {
+    let disposeBag = DisposeBag()
     
     private var initialMinutes: Int
     
