@@ -26,12 +26,10 @@ final class AlarmViewModel {
         return Output()
     }
     
-    private let coreDataManager = AlarmDataManager.shared
+    private let repositoryManager = AlarmDataManager.shared
     private let disposeBag = DisposeBag()
     
     private(set) var dataRelay = BehaviorRelay(value: [AlarmSectionModel]())
-    private(set) var alarmButtonTapped = PublishRelay<IndexPath>()
-    private(set) var deleteButtonTapped = PublishRelay<IndexPath>()
  
     // MARK: - AlarmViewModel Initializer
     init() {
@@ -40,16 +38,32 @@ final class AlarmViewModel {
     
     /// 코어 데이터의 데이터를 불러와 이벤트를 전달하는 메소드
     func dataFetch() {
-        Observable.from([coreDataManager.fetch()])
+        Observable.from([repositoryManager.fetch()])
             .map { data in
                 data.map { AlarmItem(data: $0) }
             }
             .map { items -> [AlarmSectionModel] in
-                [AlarmSectionModel(identity: "AlarmSectionModel", items: items)]
+                [AlarmSectionModel(items: items)]
             }
             .subscribe(onNext: { [weak self] models in
                 self?.dataRelay.accept(models)
             })
             .disposed(by: disposeBag)
+    }
+    
+    func alarmOnButtonTapped(_ indexPath: IndexPath) {
+        let data = self.dataRelay.value[indexPath.section].items[indexPath.item].data
+        let id = data.objectID
+        data.isActive.toggle()
+        
+        repositoryManager.update(id, updateData: data)
+        dataFetch()
+    }
+    
+    func deleteButtonTapped(_ indexPath: IndexPath) {
+        let data = self.dataRelay.value[indexPath.section].items[indexPath.item].data
+        
+        repositoryManager.delete(data)
+        dataFetch()
     }
 }

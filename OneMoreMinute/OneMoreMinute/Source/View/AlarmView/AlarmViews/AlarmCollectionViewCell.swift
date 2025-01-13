@@ -15,18 +15,11 @@ import RxCocoa
 final class AlarmCollectionViewCell: UICollectionViewCell {
     
     // MARK: - AlarmCollectionViewCell Rx Properties
-    private var disposeBag = DisposeBag()
+    private(set) var disposeBag = DisposeBag()
     private let weekdaysStatus = PublishRelay<[Bool]>()
     private(set) var data: Alarm?
     
     static let id: String = "AlarmCollectionViewCell"
-    
-    // 현재 알람을 설정한 상태
-    var isAlarmOn: Bool = true {
-        didSet {
-            self.changeButtonColor()
-        }
-    }
         
     // MARK: - AlarmCollectionViewCell UI
     
@@ -104,19 +97,11 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         
         let time = convertDtTxtFormat(data.time ?? Date())
         self.timeLabel.text = time
-        self.isAlarmOn = data.isActive
+        self.changeButtonColor(data.isActive)
         self.note.text = data.note ?? ""
         self.data = data
         
         self.layoutIfNeeded()
-    }
-    
-    /// 현재 알람의 설정 상태를 저장하고 반환하는 메소드
-    /// - Returns: 알람 설정 상태를 저장한 데이터
-    func updateAlarmIsOn() -> Alarm? {
-        self.data?.isActive = self.isAlarmOn
-        
-        return self.data
     }
 }
 
@@ -142,9 +127,9 @@ private extension AlarmCollectionViewCell {
         self.layer.shadowOpacity = 0.25
         self.layer.shadowOffset = .init(width: 0, height: 10)
         self.layer.shadowRadius = 10
+        self.layer.shadowPath = .init(rect: self.bounds, transform: nil)
         self.layer.borderWidth = 1
         self.layer.borderColor = UIColor.wrapperStroke.cgColor
-        self.layer.shadowPath = .init(rect: self.bounds, transform: nil)
         [self.timeLabel,
          self.note,
          self.weekDaysIcons,
@@ -213,8 +198,8 @@ private extension AlarmCollectionViewCell {
     }
     
     /// 알람 설정 상태에 따라 버튼의 색상을 변경하는 메소드
-    func changeButtonColor() {
-        switch self.isAlarmOn {
+    func changeButtonColor(_ isSelected: Bool) {
+        switch isSelected {
         case true:
             self.alarmButton.backgroundColor = UIColor.buttonBackground
             self.alarmButton.tintColor = UIColor.mainTitle
