@@ -7,26 +7,25 @@
 
 import Foundation
 
-// Int타입에 요일의 String 값을 반환하는 프로퍼티 추가
-extension Int {
-    var weekTitle: String {
+enum WeekDaysTitle: Int {
+    case mon, tue, wed, thu, fri, sat, sun
+    
+    var title: String {
         switch self {
-        case 0:
+        case .mon:
             return "월"
-        case 1:
+        case .tue:
             return "화"
-        case 2:
+        case .wed:
             return "수"
-        case 3:
+        case .thu:
             return "목"
-        case 4:
+        case .fri:
             return "금"
-        case 5:
+        case .sat:
             return "토"
-        case 6:
+        case .sun:
             return "일"
-        default:
-            return ""
         }
     }
 }

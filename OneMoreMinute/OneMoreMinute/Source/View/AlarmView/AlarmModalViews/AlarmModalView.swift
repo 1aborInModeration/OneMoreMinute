@@ -18,7 +18,7 @@ final class AlarmModalView: UIView {
         $0.text = "새 알람 추가"
         $0.font = Fonts.title1Bold
         $0.numberOfLines = 1
-        $0.textColor = .label
+        $0.textColor = UIColor.mainTitle
         $0.textAlignment = .left
         $0.backgroundColor = .clear
     }
@@ -29,11 +29,11 @@ final class AlarmModalView: UIView {
         $0.backgroundColor = .clear
     }
     
-    private(set) var cancleButton = UIButton().then {
+    private(set) var cancelButton = UIButton().then {
         $0.setTitle("취소", for: .normal)
         $0.setTitleColor(Colors.systemGray(.r800), for: .normal)
         $0.titleLabel?.font = Fonts.title2
-        $0.backgroundColor = Colors.systemGray(.r100)
+        $0.backgroundColor = UIColor.textFieldBackground
         $0.layer.cornerRadius = 12
     }
     
@@ -41,18 +41,17 @@ final class AlarmModalView: UIView {
         $0.setTitle("저장", for: .normal)
         $0.setTitleColor(UIColor.white, for: .normal)
         $0.titleLabel?.font = Fonts.title2Bold
-        $0.backgroundColor = Colors.systemColor(.r400)
+        $0.backgroundColor = UIColor.plusButtonBackground
         $0.layer.cornerRadius = 12
     }
     
-    private lazy var buttonStack = UIStackView().then { [weak self] stack in
-        guard let self else { return }
+    private lazy var buttonStack = UIStackView().then { stack in
         stack.axis = .horizontal
         stack.distribution = .fillEqually
         stack.alignment = .fill
         stack.backgroundColor = .clear
         stack.spacing = 10
-        [self.cancleButton,
+        [self.cancelButton,
          self.saveButton
         ].forEach { view in
             stack.addArrangedSubview(view)
@@ -102,23 +101,25 @@ final class AlarmModalView: UIView {
                                 weekDays.sat,
                                 weekDays.sun
         ]
+        
         self.weekSection.isSelecteds.accept(weekData)
     }
 }
 
 // MARK: - AlarmModalView UI Setting Method
+
 private extension AlarmModalView {
     
     func setupUI() {
-        configure()
+        configureSelf()
         setupLayout()
     }
     
-    func configure() {
-        self.backgroundColor = .white
+    func configureSelf() {
+        self.backgroundColor = UIColor.wrapperBackground
         self.layer.cornerRadius = 24
         self.layer.borderWidth = 1
-        self.layer.borderColor = Colors.systemLightGray.cgColor
+        self.layer.borderColor = UIColor.wrapperStroke.cgColor
         [self.title,
          self.closeButton,
          self.timeSection,
