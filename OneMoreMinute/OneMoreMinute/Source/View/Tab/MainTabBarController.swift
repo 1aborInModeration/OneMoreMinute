@@ -18,7 +18,7 @@ final class MainTabBarController: UIViewController {
     private let childVCList = [
         AViewController(),
         WorldTimeViewController(),
-        CViewController(),
+        StopwatchViewController(),
         DViewController()
     ]
     
