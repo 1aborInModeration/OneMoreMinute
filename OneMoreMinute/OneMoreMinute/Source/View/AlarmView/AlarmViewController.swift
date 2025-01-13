@@ -19,11 +19,13 @@ final class AlarmViewController: UIViewController {
     
     private let viewModel = AlarmViewModel()
     
-    private let disposeBag = DisposeBag()
+    // MARK: - AlarmViewController Rx Properties
     
+    private let disposeBag = DisposeBag()
     private let alarmToggleButtonTapped = PublishRelay<IndexPath>()
     private let deleteButtonTapped = PublishRelay<IndexPath>()
         
+    // MARK: - AlarmViewController UI
     private let alarmView = AlarmView()
         
     private let showModalButton = ShowModalButton()

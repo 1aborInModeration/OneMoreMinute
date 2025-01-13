@@ -101,6 +101,7 @@ final class AlarmModalView: UIView {
                                 weekDays.sat,
                                 weekDays.sun
         ]
+        
         self.weekSection.isSelecteds.accept(weekData)
     }
 }

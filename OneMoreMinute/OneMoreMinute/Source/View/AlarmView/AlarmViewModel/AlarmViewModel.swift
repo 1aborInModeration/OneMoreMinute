@@ -11,7 +11,6 @@ import RxCocoa
 
 /// 알람 뷰의 뷰 모델
 final class AlarmViewModel {
-    // 추후 리팩토링으로 input, output 구현 예정
     struct Input {
         let alarmToggleButtonTapped: PublishRelay<IndexPath>
         let deleteButtonTapped: PublishRelay<IndexPath>
@@ -20,10 +19,11 @@ final class AlarmViewModel {
     struct Output {
         let dataRelay: BehaviorRelay<[AlarmSectionModel]>
         let reloadIndex: PublishRelay<IndexPath>
-        let deleteIndex: PublishRelay<IndexPath>
     }
     
-    
+    /// 뷰 모델 데이터 바인딩 메소드
+    /// - Parameter input: 알람 토글 버튼 이벤트, 삭제 버튼 이벤트
+    /// - Returns: 컬렉션뷰 데이터소스 데이터, reload cell indexPath
     func transform(input: Input) -> Output {
         input.alarmToggleButtonTapped
             .asSignal(onErrorSignalWith: .empty())
@@ -45,8 +45,7 @@ final class AlarmViewModel {
         
         return Output(
             dataRelay: self.dataRelay,
-            reloadIndex: self.reloadIndex,
-            deleteIndex: self.deleteIndex
+            reloadIndex: self.reloadIndex
         )
     }
     
@@ -55,7 +54,6 @@ final class AlarmViewModel {
     
     private let dataRelay = BehaviorRelay(value: [AlarmSectionModel]())
     private let reloadIndex = PublishRelay<IndexPath>()
-    private let deleteIndex = PublishRelay<IndexPath>()
  
     // MARK: - AlarmViewModel Initializer
     init() {
@@ -70,6 +68,8 @@ final class AlarmViewModel {
         self.dataRelay.accept(models)
     }
     
+    /// 알람 버튼의 상태를 변경하고 저장하는 메소드
+    /// - Parameter indexPath: 알람 상태가 변경된 셀의 indexPath
     private func toggleAlarmState(_ indexPath: IndexPath) {
         let data = self.dataRelay.value[indexPath.section].items[indexPath.item].data
         let id = data.objectID
@@ -80,6 +80,8 @@ final class AlarmViewModel {
         self.reloadIndex.accept(indexPath)
     }
     
+    /// 알람을 삭제하는 메소드
+    /// - Parameter indexPath: 삭제할 셀의 indexPath
     private func deleteAlarm(_ indexPath: IndexPath) {
         let data = self.dataRelay.value[indexPath.section].items[indexPath.item].data
         
