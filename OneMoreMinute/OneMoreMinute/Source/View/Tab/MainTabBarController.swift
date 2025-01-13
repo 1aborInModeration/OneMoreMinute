@@ -175,52 +175,49 @@ extension MainTabBarController {
 
 /// 임시 뷰 컨트롤러 A - 카운터 기능을 가진 테스트용 뷰 컨트롤러
 final class AViewController: UIViewController {
-    private let label = UILabel().then {
-        $0.text = "A"
+    private let alarmManager = AlarmManager()
+    private lazy var playButton = UIButton().then {
+        $0.setTitle("play", for: .normal)
+        $0.addAction(
+            UIAction { _ in
+                do {
+                    try self.alarmManager.playAlarm(sound: .morning, numberOfLoops: 0)
+                } catch {
+                    print(error)
+                }
+            },
+            for: .touchUpInside
+        )
+    }
+    
+    private lazy var stopButton = UIButton().then {
+        $0.setTitle("stop", for: .normal)
+        $0.addAction(
+            UIAction { _ in
+                do {
+                    try self.alarmManager.stopAlarm()
+                } catch {
+                    print(error)
+                }
+            },
+            for: .touchUpInside
+        )
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         [
-            label,
+            playButton,
+            stopButton
         ].forEach { view.addSubview($0) }
         
-        label.snp.makeConstraints { make in
+        playButton.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
-    }
-}
-
-final class BViewController: UIViewController {
-    private let label = UILabel().then {
-        $0.text = "B"
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        [
-            label,
-        ].forEach { view.addSubview($0) }
         
-        label.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-        }
-    }
-}
-
-final class CViewController: UIViewController {
-    private let label = UILabel().then {
-        $0.text = "C"
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        [
-            label,
-        ].forEach { view.addSubview($0) }
-        
-        label.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+        stopButton.snp.makeConstraints { make in
+            make.top.equalTo(playButton.snp.bottom).offset(16)
+            make.centerX.equalToSuperview()
         }
     }
 }
