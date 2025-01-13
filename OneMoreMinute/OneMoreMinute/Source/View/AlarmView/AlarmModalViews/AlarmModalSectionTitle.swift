@@ -15,6 +15,7 @@ final class AlarmModalSectionTitle: UILabel {
         
         setupLabel(title: title)
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -25,8 +26,9 @@ final class AlarmModalSectionTitle: UILabel {
         self.text = title
         self.font = Fonts.body
         self.numberOfLines = 1
-        self.textColor = Colors.systemLightGray
+        self.textColor = UIColor.fontGray
         self.backgroundColor = .clear
         self.textAlignment = .left
     }
+    
 }

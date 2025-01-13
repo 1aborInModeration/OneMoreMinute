@@ -24,11 +24,12 @@ enum AlarmModalState {
 /// 알람뷰 모달 컨트롤러
 final class AlarmModalViewController: UIViewController {
     
-    private let disposeBag = DisposeBag()
+    private(set) var disposeBag = DisposeBag()
+    private(set) var backgroundTapped = PublishRelay<Bool>()
     
-    private let repository = AlarmDataManager.shared
+    private let alarmDataManager = AlarmDataManager.shared
     
-    private var state: AlarmModalState
+    private(set) var state: AlarmModalState
     private var data: Alarm?
     
     private(set) lazy var modalView = AlarmModalView(state: self.state)
@@ -52,19 +53,30 @@ final class AlarmModalViewController: UIViewController {
         
         setupUI()
     }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        self.view.endEditing(true)
+        
+        guard self.modalView != touches.first?.view else { return }
+        
+        backgroundTapped.accept(true)
+    }
 }
 
 // MARK: - AlarmModalViewController UI Setting Method
+
 private extension AlarmModalViewController {
     
     func setupUI() {
-        configure()
+        configureSelf()
         setupLayout()
         setupModalView()
         bind()
     }
     
-    func configure() {
+    func configureSelf() {
         self.view.addSubview(self.modalView)
         self.view.backgroundColor = .clear
     }
@@ -92,18 +104,18 @@ private extension AlarmModalViewController {
     ///
     /// 현재 뷰 컨트롤러의 state에 따라 바인딩 변경
     func bind() {
-        switch self.state {
-        case .create:
-            // 현재 뷰 컨트롤러가 create인 경우
-            // 코어 데이터에 새로운 데이터 저장
-            self.modalView.saveButton.rx.tap
-                .asSignal(onErrorSignalWith: .empty())
-                .withUnretained(self)
-                .emit { owner, _ in
-                    
+        self.modalView.saveButton.rx.tap
+            .asSignal(onErrorSignalWith: .empty())
+            .withUnretained(self)
+            .emit { owner, _ in
+                
+                switch owner.state {
+                // 현재 뷰 컨트롤러가 create인 경우
+                // 코어 데이터에 새로운 데이터 저장
+                case .create:
                     let data = owner.modalView.extractionData()
                     
-                    owner.repository.create(with: .init(
+                    owner.alarmDataManager.create(with: .init(
                         isActive: true,
                         note: data.memo,
                         time: data.date,
@@ -117,17 +129,10 @@ private extension AlarmModalViewController {
                                        )
                         )
                     )
-                                    
-                }.disposed(by: self.disposeBag)
-            
-        case .edit:
-            // 현재 뷰 컨트롤러가 edit인 경우
-            // 코어 데이터의 데이터 업데이트
-            self.modalView.saveButton.rx.tap
-                .asSignal(onErrorSignalWith: .empty())
-                .withUnretained(self)
-                .emit { owner, _ in
                     
+                // 현재 뷰 컨트롤러가 edit인 경우
+                // 코어 데이터에 데이터 업데이트
+                case .edit:
                     guard let data = owner.data else { return }
                     let cellData = owner.modalView.extractionData()
                     
@@ -142,10 +147,11 @@ private extension AlarmModalViewController {
                     data.weekDays?.sat = cellData.week[5]
                     data.weekDays?.sun = cellData.week[6]
                     
-                    owner.repository.update(data.objectID, updateData: data)
-                    
-                }.disposed(by: self.disposeBag)
-        }
+                    owner.alarmDataManager.update(data.objectID, updateData: data)
+                }
+                
+            }.disposed(by: self.disposeBag)
+        
         
     }
     

@@ -15,14 +15,14 @@ final class AlarmModalTimeSection: UIView {
     private let title = AlarmModalSectionTitle(title: "시간 설정")
     
     private(set) var timeSet = UIDatePicker().then {
-        $0.preferredDatePickerStyle = .compact
+        $0.preferredDatePickerStyle = .wheels
         $0.datePickerMode = .time
         $0.minuteInterval = 1
         $0.locale = Locale(identifier: "ko_KR")
-        $0.backgroundColor = .backgroundGray
+        $0.backgroundColor = UIColor.textFieldBackground
         $0.layer.cornerRadius = 12
         $0.layer.borderWidth = 1
-        $0.layer.borderColor = Colors.systemLightGray.cgColor
+        $0.layer.borderColor = UIColor.textFieldStroke.cgColor
         $0.clipsToBounds = true
     }
     
@@ -43,14 +43,15 @@ final class AlarmModalTimeSection: UIView {
 }
 
 // MARK: - AlarmModalTimeSection UI Setting Method
+
 private extension AlarmModalTimeSection {
     
     func setupUI() {
-        configure()
+        configureSelf()
         setupLayout()
     }
     
-    func configure() {
+    func configureSelf() {
         self.backgroundColor = .clear
         [self.title,
          self.timeSet].forEach { self.addSubview($0) }
@@ -60,6 +61,7 @@ private extension AlarmModalTimeSection {
         self.title.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.equalToSuperview()
+            make.height.equalTo(15)
         }
         
         self.timeSet.snp.makeConstraints { make in

@@ -103,15 +103,16 @@ final class AlarmModalWeekSection: UIView {
 }
 
 // MARK: - AlarmModalWeekSection UI Setting Method
+
 private extension AlarmModalWeekSection {
     
     func setupUI() {
-        configure()
+        configureSelf()
         setupLayout()
         bind()
     }
     
-    func configure() {
+    func configureSelf() {
         self.backgroundColor = .clear
         [self.title,
          self.weeks].forEach { self.addSubview($0) }
@@ -121,6 +122,7 @@ private extension AlarmModalWeekSection {
         self.title.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.equalToSuperview()
+            make.height.equalTo(15)
         }
         
         self.weeks.snp.makeConstraints { make in

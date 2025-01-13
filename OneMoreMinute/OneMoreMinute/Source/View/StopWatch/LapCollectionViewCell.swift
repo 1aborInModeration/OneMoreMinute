@@ -9,20 +9,20 @@ import UIKit
 import SnapKit
 import Then
 
-class LapCollectionViewCell: UICollectionViewCell {
+final class LapCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Identifier
     static let identifier = "LapCollectionViewCell"
     
     // MARK: - UI Components
     private let lapLabel = UILabel().then {
-        $0.font = UIFont.pretendard(ofSize: 16, weight: .semibold)
+        $0.font = UIFont.monospacedDigitSystemFont(ofSize: 16, weight: .semibold)
         $0.textColor = UIColor(resource: .fontLabel)
         $0.textAlignment = .left
     }
     
     private let lapTimeLabel = UILabel().then {
-        $0.font = UIFont.pretendard(ofSize: 16, weight: .semibold)
+        $0.font = UIFont.monospacedDigitSystemFont(ofSize: 16, weight: .semibold)
         $0.textColor = UIColor(resource: .mainTitle)
         $0.textAlignment = .right
     }
@@ -63,13 +63,16 @@ class LapCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Configure
-    func configure(with lap: String, time: String) {
-        lapLabel.text = lap
-        lapTimeLabel.text = time
+    func configure(with viewModel: LapViewModel) {
+        lapLabel.text = viewModel.lapLabel
+        lapTimeLabel.text = viewModel.lapTimeLabel
+        
+        if viewModel.isFastest {
+            lapLabel.textColor = .systemGreen
+        } else if viewModel.isSlowest {
+            lapLabel.textColor = .systemRed
+        } else {
+            lapLabel.textColor = UIColor(resource: .fontLabel)
+        }
     }
-}
-
-@available(iOS 17.0, *)
-#Preview {
-    return StopwatchViewController()
 }

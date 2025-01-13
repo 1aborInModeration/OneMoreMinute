@@ -4,7 +4,7 @@
 //
 //  Created by t0000-m0112 on 2025-01-07.
 //
-    
+
 import UIKit
 import RxSwift
 import RxCocoa
@@ -27,7 +27,7 @@ final class StopwatchViewController: UIViewController {
     
     private let timeLabel = UILabel().then {
         $0.text = "00:00.00"
-        $0.font = UIFont.pretendard(ofSize: 48, weight: .semibold)
+        $0.font = UIFont.monospacedDigitSystemFont(ofSize: 48, weight: .semibold)
         $0.textAlignment = .center
         $0.textColor = UIColor(resource: .mainTitle)
     }
@@ -51,7 +51,7 @@ final class StopwatchViewController: UIViewController {
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 10 // 셀 간 간격
+        layout.minimumLineSpacing = 10
         layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 80, height: 50)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(LapCollectionViewCell.self, forCellWithReuseIdentifier: LapCollectionViewCell.identifier)
@@ -59,44 +59,27 @@ final class StopwatchViewController: UIViewController {
         return collectionView
     }()
     
-    private let gradientLayer = CAGradientLayer()
-    
-    // MARK: - RxSwift Properties
+    // MARK: - Properties
+    private let viewModel = StopwatchViewModel()
     private let disposeBag = DisposeBag()
-    private let isRunning = BehaviorRelay<Bool>(value: false)
-    private let elapsedTime = BehaviorRelay<TimeInterval>(value: 0)
-    private let laps = BehaviorRelay<[(String, String)]>(value: [])
-    
-    private var timerDisposable: Disposable?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        configureGradient()
         setupBindings()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        gradientLayer.frame = view.bounds
-    }
-    
-    // MARK: - Handle Trait Collection Changes
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        
-        // 다크 모드 및 기타 환경 변화 감지
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            updateContainerLayerColors() // 색상 업데이트
-            configureGradient() // 그라디언트 업데이트
+            updateContainerLayerColors()
         }
     }
-
+    
     // MARK: - UI Setup
     private func setupUI() {
-        view.layer.insertSublayer(gradientLayer, at: 0)
-//        view.backgroundColor = UIColor(resource: .appBackgroundEnd)
+        view.backgroundColor = .clear
         
         view.addSubview(containerView)
         containerView.addSubview(timeLabel)
@@ -105,7 +88,7 @@ final class StopwatchViewController: UIViewController {
         view.addSubview(collectionView)
         
         containerView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+            make.top.equalTo(view.safeAreaLayoutGuide)
             make.left.right.equalToSuperview().inset(40)
             make.height.equalTo(235)
         }
@@ -134,96 +117,66 @@ final class StopwatchViewController: UIViewController {
         }
     }
     
-    // MARK: - Layer Colors Update
     private func updateContainerLayerColors() {
-        // 다크 모드와 라이트 모드에 따라 색상을 다시 설정
-        containerView.layer.shadowColor = UIColor.black.cgColor // 다크 모드에선 그대로 사용
+        containerView.layer.shadowColor = UIColor.black.cgColor
         containerView.layer.borderColor = UIColor(resource: .wrapperStroke).cgColor
     }
     
-    // MARK: - Gradient Configuration
-    private func configureGradient() {
-        gradientLayer.colors = [
-            UIColor(resource: .appBackgroundStart).cgColor,
-            UIColor(resource: .appBackgroundEnd).cgColor
-        ]
-        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
-        gradientLayer.endPoint = CGPoint(x: 0.0, y: 1.0)
-    }
-    
-    // MARK: - RxSwift Bindings
+    // MARK: - Rx Bindings
     private func setupBindings() {
-        // Play button tap handling
-        playButton.rx.tap
-            .withLatestFrom(isRunning)
-            .subscribe(onNext: { [weak self] running in
-                guard let self = self else { return }
-                if running {
-                    self.stopTimer()
-                } else {
-                    self.startTimer()
-                }
-                self.isRunning.accept(!running)
-            })
-            .disposed(by: disposeBag)
-        
-        // Reset button tap handling
-        resetButton.rx.tap
-            .subscribe(onNext: { [weak self] in
-                guard let self = self else { return }
-                self.stopTimer()
-                self.elapsedTime.accept(0)
-                self.laps.accept([])
-                self.isRunning.accept(false)
-            })
-            .disposed(by: disposeBag)
-        
-        // Update timeLabel with elapsed time
-        elapsedTime
+        // Bind elapsed time
+        viewModel.elapsedTimeRelay
             .map { elapsedTime in
                 let minutes = Int(elapsedTime) / 60
                 let seconds = elapsedTime.truncatingRemainder(dividingBy: 60)
-                return String(format: "%02d:$05.2f", minutes, seconds)
+                return String(format: "%02d:%05.2f", minutes, seconds)
             }
             .bind(to: timeLabel.rx.text)
             .disposed(by: disposeBag)
         
-        // Lap handling (add current time to laps)
+        // Bind laps
+        Observable.combineLatest(viewModel.lapsRelay, viewModel.currentLapRelay)
+            .map { laps, currentLap -> [LapViewModel] in
+                var combined = laps
+                if let currentLap = currentLap {
+                    combined.insert(currentLap, at: 0) // 임시 랩을 맨 앞에 추가
+                }
+                return combined
+            }
+            .bind(to: collectionView.rx.items(cellIdentifier: LapCollectionViewCell.identifier, cellType: LapCollectionViewCell.self)) { _, viewModel, cell in
+                cell.configure(with: viewModel)
+            }
+            .disposed(by: disposeBag)
+        
+        // Play button tap
         playButton.rx.tap
-            .withLatestFrom(isRunning)
-            .filter { $0 } // Only add lap when timer is running
-            .withLatestFrom(elapsedTime)
-            .subscribe(onNext: { [weak self] elapsedTime in
-                guard let self = self else { return }
-                let lapTime = String(format: "$02d:$05.2f", Int(elapsedTime / 60), elapsedTime.truncatingRemainder(dividingBy: 60))
-                var currentLaps = self.laps.value
-                currentLaps.insert(("랩 \(currentLaps.count + 1)", lapTime), at: 0)
-                self.laps.accept(currentLaps)
+            .subscribe(onNext: { [weak self] in
+                self?.viewModel.toggleTimer()
             })
             .disposed(by: disposeBag)
         
-        // Bind laps to collectionView using RxDataSources
-        laps.bind(to: collectionView.rx.items(cellIdentifier: LapCollectionViewCell.identifier, cellType: LapCollectionViewCell.self)) { _, data, cell in
-            cell.configure(with: data.0, time: data.1)
-        }
-        .disposed(by: disposeBag)
-    }
-    
-    private func startTimer() {
-        timerDisposable = Observable<Int>.interval(.milliseconds(10), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.elapsedTime.accept(self.elapsedTime.value + 0.01)
+        // Reset button tap
+        resetButton.rx.tap
+            .subscribe(onNext: { [weak self] in
+                self?.viewModel.resetOrAddLap()
             })
+            .disposed(by: disposeBag)
+        
+        // Update button states
+        viewModel.isRunningRelay
+            .subscribe(onNext: { [weak self] isRunning in
+                self?.updateButtonStates(isRunning: isRunning)
+            })
+            .disposed(by: disposeBag)
     }
     
-    private func stopTimer() {
-        timerDisposable?.dispose()
-        timerDisposable = nil
+    private func updateButtonStates(isRunning: Bool) {
+        if isRunning {
+            playButton.setImage(UIImage(systemName: "pause"), for: .normal)
+            resetButton.setImage(UIImage(systemName: "flag"), for: .normal)
+        } else {
+            playButton.setImage(UIImage(systemName: "play"), for: .normal)
+            resetButton.setImage(UIImage(systemName: "arrow.counterclockwise"), for: .normal)
+        }
     }
-}
-
-@available(iOS 17.0, *)
-#Preview {
-    return StopwatchViewController()
 }

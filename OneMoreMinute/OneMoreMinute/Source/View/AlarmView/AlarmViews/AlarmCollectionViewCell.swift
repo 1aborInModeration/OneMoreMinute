@@ -15,21 +15,13 @@ import RxCocoa
 final class AlarmCollectionViewCell: UICollectionViewCell {
     
     // MARK: - AlarmCollectionViewCell Rx Properties
-    private let disposeBag = DisposeBag()
-    private(set) var alarmButtonTapped = PublishRelay<Void>()
-    private(set) var deleteButtonTapped = PublishRelay<Void>()
+    
+    private(set) var disposeBag = DisposeBag()
     private let weekdaysStatus = PublishRelay<[Bool]>()
     private(set) var data: Alarm?
     
     static let id: String = "AlarmCollectionViewCell"
-    
-    // 현재 알람을 설정한 상태
-    var isAlarmOn: Bool = true {
-        didSet {
-            self.changeButtonColor()
-        }
-    }
-
+        
     // MARK: - AlarmCollectionViewCell UI
     
     private let timeLabel = UILabel().then {
@@ -43,10 +35,10 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
     private let weekDaysIcons = WeekDaysIcons()
     
     private let note = UITextField().then {
-        $0.textColor = Colors.systemGray(.r500)
+        $0.textColor = UIColor.textFieldFont
         $0.borderStyle = .none
         $0.layer.cornerRadius = 8
-        $0.backgroundColor = Colors.systemGray(.r50)
+        $0.backgroundColor = UIColor.textFieldBackground
         $0.leftView = UIView(frame: .init(x: 0, y: 0, width: 10, height: 10))
         $0.leftViewMode = .always
         $0.rightView = UIView(frame: .init(x: 0, y: 0, width: 10, height: 10))
@@ -57,18 +49,19 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
     private(set) var alarmButton = UIButton().then {
         $0.layer.cornerRadius = 20
         $0.setImage(UIImage(systemName: "bell"), for: .normal)
-        $0.tintColor = Colors.systemColor(.r400)
-        $0.backgroundColor = Colors.systemColor(.r50)
+        $0.tintColor = UIColor.mainTitle
+        $0.backgroundColor = UIColor.buttonBackground
     }
     
     private(set) var deleteButton = UIButton().then {
         $0.layer.cornerRadius = 20
         $0.setImage(UIImage(systemName: "trash"), for: .normal)
-        $0.tintColor = UIColor(red: 248/256, green: 113/256, blue: 113/256, alpha: 1.0)
+        $0.tintColor = UIColor.iconRed
         $0.backgroundColor = .clear
     }
     
     // MARK: - AlarmCollectionViewCell Initializer
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -84,8 +77,10 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
     // 셀 재사용 옵션
     override func prepareForReuse() {
         super.prepareForReuse()
-        
-        setupUI()
+    
+        self.disposeBag = DisposeBag()
+        prepareForReuseData()
+        bind()
     }
     
     /// 셀을 설정하는 메소드
@@ -104,47 +99,46 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         
         let time = convertDtTxtFormat(data.time ?? Date())
         self.timeLabel.text = time
-        
-        self.isAlarmOn = data.isActive
-        
+        self.changeButtonColor(data.isActive)
         self.note.text = data.note ?? ""
-        
         self.data = data
         
         self.layoutIfNeeded()
     }
-    
-    /// 현재 알람의 설정 상태를 저장하고 반환하는 메소드
-    /// - Returns: 알람 설정 상태를 저장한 데이터
-    func updateAlarmIsOn() -> Alarm? {
-        self.data?.isActive = self.isAlarmOn
-        
-        return self.data
-    }
 }
 
 // MARK: - AlarmCollectionViewCell UI Setting Method
+
 private extension AlarmCollectionViewCell {
     
     func setupUI() {
-        configure()
+        configureSelf()
         setupLayout()
         bind()
     }
     
-    func configure() {
-        self.backgroundColor = Colors.appBackground
+    func prepareForReuseData() {
+        self.weekdaysStatus.accept([])
+        self.timeLabel.text = ""
+        self.note.text = ""
+    }
+    
+    func configureSelf() {
+        self.backgroundColor = UIColor.wrapperBackground
         self.layer.cornerRadius = 12
-        self.layer.shadowColor = Colors.systemDarkGray.cgColor
+        self.layer.shadowColor = UIColor.black.cgColor
         self.layer.shadowOpacity = 0.25
         self.layer.shadowOffset = .init(width: 0, height: 10)
         self.layer.shadowRadius = 10
+        self.layer.shadowPath = .init(rect: self.bounds, transform: nil)
+        self.layer.borderWidth = 1
+        self.layer.borderColor = UIColor.wrapperStroke.cgColor
         [self.timeLabel,
          self.note,
+         self.weekDaysIcons,
          self.alarmButton,
-         self.deleteButton,
-         self.weekDaysIcons
-        ].forEach { self.addSubview($0) }
+         self.deleteButton
+        ].forEach { self.contentView.addSubview($0) }
     }
     
     func setupLayout() {
@@ -161,6 +155,13 @@ private extension AlarmCollectionViewCell {
             make.width.equalTo(240)
         }
         
+        self.weekDaysIcons.snp.makeConstraints { make in
+            make.top.equalTo(self.note.snp.bottom).offset(10)
+            make.leading.equalTo(self.timeLabel)
+            make.trailing.equalToSuperview().inset(20)
+            make.height.equalTo(30)
+        }
+        
         self.alarmButton.snp.makeConstraints { make in
             make.centerY.equalTo(self.note)
             make.leading.equalTo(self.note.snp.trailing).offset(10)
@@ -172,25 +173,10 @@ private extension AlarmCollectionViewCell {
             make.leading.equalTo(self.alarmButton.snp.trailing).offset(10)
             make.width.height.equalTo(40)
         }
-        
-        self.weekDaysIcons.snp.makeConstraints { make in
-            make.top.equalTo(self.note.snp.bottom).offset(10)
-            make.leading.equalTo(self.timeLabel)
-        }
     }
     
     /// 데이터 바인딩 메소드
     func bind() {
-        // 알람 설정 버튼 바인딩
-        self.alarmButton.rx.tap
-            .bind(to: self.alarmButtonTapped)
-            .disposed(by: self.disposeBag)
-        
-        // 삭제 버튼 바인딩
-        self.deleteButton.rx.tap
-            .bind(to: self.deleteButtonTapped)
-            .disposed(by: self.disposeBag)
-        
         // 반복 요일 설정 바인딩
         self.weekdaysStatus
             .asSignal(onErrorSignalWith: .empty())
@@ -215,15 +201,15 @@ private extension AlarmCollectionViewCell {
     }
     
     /// 알람 설정 상태에 따라 버튼의 색상을 변경하는 메소드
-    func changeButtonColor() {
-        switch self.isAlarmOn {
+    func changeButtonColor(_ isSelected: Bool) {
+        switch isSelected {
         case true:
-            self.alarmButton.backgroundColor = Colors.systemColor(.r50)
-            self.alarmButton.tintColor = Colors.systemColor(.r400)
+            self.alarmButton.backgroundColor = UIColor.buttonBackground
+            self.alarmButton.tintColor = UIColor.mainTitle
             self.alarmButton.isSelected = true
         case false:
-            self.alarmButton.backgroundColor = Colors.systemGray(.r50)
-            self.alarmButton.tintColor = Colors.systemGray(.r400)
+            self.alarmButton.backgroundColor = UIColor.grayButtonBackground
+            self.alarmButton.tintColor = UIColor.grayButtonLabel
             self.alarmButton.isSelected = false
         }
     }
