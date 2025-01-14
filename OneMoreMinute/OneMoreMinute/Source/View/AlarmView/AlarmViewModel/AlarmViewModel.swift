@@ -150,8 +150,8 @@ final class AlarmViewModel: ViewModelType {
         for (isEnabled, suffix, weekday) in weekDayMapping where isEnabled {
             AlarmNotificationManager.shared.setRegularNotification(
                 identifier: uuidString + suffix,
-                title: "알림",
-                body: "알림입니다",
+                title: time.getTimeString(),
+                body: data.note ?? "",
                 weekday: weekday,
                 hour: .init(rawValue: hour),
                 minute: .init(rawValue: minute)!
@@ -162,8 +162,8 @@ final class AlarmViewModel: ViewModelType {
         if isWeekDayNil {
             AlarmNotificationManager.shared.setRegularNotification(
                 identifier: uuidString,
-                title: "알림",
-                body: "알림입니다",
+                title: time.getTimeString(),
+                body: data.note ?? "",
                 hour: .init(rawValue: hour),
                 minute: .init(rawValue: minute)!
             )

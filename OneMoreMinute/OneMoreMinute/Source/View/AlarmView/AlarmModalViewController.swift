@@ -216,8 +216,8 @@ private extension AlarmModalViewController {
         for (isEnabled, suffix, weekday) in weekDayMapping where isEnabled {
             AlarmNotificationManager.shared.setRegularNotification(
                 identifier: uuidString + suffix,
-                title: "알림",
-                body: "알림입니다",
+                title: data.time.getTimeString(),
+                body: data.note ?? "",
                 weekday: weekday,
                 hour: .init(rawValue: hour),
                 minute: .init(rawValue: minute)!
@@ -228,8 +228,8 @@ private extension AlarmModalViewController {
         if isWeekDayNil {
             AlarmNotificationManager.shared.setRegularNotification(
                 identifier: uuidString,
-                title: "알림",
-                body: "알림입니다",
+                title: data.time.getTimeString(),
+                body: data.note ?? "",
                 hour: .init(rawValue: hour),
                 minute: .init(rawValue: minute)!
             )
@@ -262,8 +262,8 @@ private extension AlarmModalViewController {
         for (isEnabled, suffix, weekday) in weekDayMapping where isEnabled {
             AlarmNotificationManager.shared.setRegularNotification(
                 identifier: uuidString + suffix,
-                title: "알림",
-                body: "알림입니다",
+                title: data.time?.getTimeString() ?? "00:00",
+                body: data.note ?? "",
                 weekday: weekday,
                 hour: .init(rawValue: hour),
                 minute: .init(rawValue: minute)!
@@ -274,8 +274,8 @@ private extension AlarmModalViewController {
         if isWeekDayNil {
             AlarmNotificationManager.shared.setRegularNotification(
                 identifier: uuidString,
-                title: "알림",
-                body: "알림입니다",
+                title: data.time?.getTimeString() ?? "00:00",
+                body: data.note ?? "",
                 hour: .init(rawValue: hour),
                 minute: .init(rawValue: minute)!
             )
