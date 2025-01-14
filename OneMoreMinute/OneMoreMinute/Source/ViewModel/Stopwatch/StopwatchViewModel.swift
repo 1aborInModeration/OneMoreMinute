@@ -27,7 +27,9 @@ protocol StopwatchViewModelProtocol {
 }
 
 final class StopwatchViewModel: StopwatchViewModelProtocol {
+    
     // MARK: - Properties
+    
     private let lapsKey = "storedLaps"
     private let disposeBag = DisposeBag()
     private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
@@ -45,6 +47,7 @@ final class StopwatchViewModel: StopwatchViewModelProtocol {
     private var lastLapTime: TimeInterval = 0
     
     // MARK: - Initializer
+    
     init() {
         restoreState()
         if model.isRunning {
@@ -53,6 +56,7 @@ final class StopwatchViewModel: StopwatchViewModelProtocol {
     }
     
     // MARK: - Private Methods
+    
     private func updateCurrentLap() {
         let lapNumber = model.laps.count + 1
         let lapTime = model.elapsedTime - lastLapTime
@@ -76,26 +80,6 @@ final class StopwatchViewModel: StopwatchViewModelProtocol {
             )
         }
         lapsRelay.accept(lapViewModels)
-    }
-    
-    func toggleTimer() {
-        if model.isRunning {
-            stopTimer()
-            isRunningRelay.accept(false)
-        } else {
-            startTimer()
-            isRunningRelay.accept(true)
-        }
-        model.isRunning.toggle()
-        isRunningRelay.accept(model.isRunning)
-    }
-    
-    func resetOrAddLap() {
-        if model.isRunning {
-            addLap()
-        } else {
-            reset()
-        }
     }
     
     private func addLap() {
@@ -122,6 +106,28 @@ final class StopwatchViewModel: StopwatchViewModelProtocol {
         saveLaps()
     }
     
+    func toggleTimer() {
+        if model.isRunning {
+            stopTimer()
+            isRunningRelay.accept(false)
+        } else {
+            startTimer()
+            isRunningRelay.accept(true)
+        }
+        model.isRunning.toggle()
+        isRunningRelay.accept(model.isRunning)
+    }
+    
+    func resetOrAddLap() {
+        if model.isRunning {
+            addLap()
+        } else {
+            reset()
+        }
+    }
+    
+    // MARK: - Public Methods
+    
     func saveLaps() {
         let encoder = JSONEncoder()
         do {
@@ -145,6 +151,7 @@ final class StopwatchViewModel: StopwatchViewModelProtocol {
     }
     
     // MARK: - Timer Logic
+    
     func startTimer() {
         stopTimer()
         timerDisposable = Observable<Int>
@@ -164,6 +171,7 @@ final class StopwatchViewModel: StopwatchViewModelProtocol {
     }
     
     // MARK: - State Management
+    
     func saveState() {
         let timestamp = Date().timeIntervalSince1970
         UserDefaults.standard.set(model.elapsedTime, forKey: "elapsedTime")
@@ -196,6 +204,7 @@ final class StopwatchViewModel: StopwatchViewModelProtocol {
     }
     
     // MARK: - Background Task Handling
+    
     func startBackgroundTask() {
         backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "StopwatchBackgroundTask") {
             UIApplication.shared.endBackgroundTask(self.backgroundTask)

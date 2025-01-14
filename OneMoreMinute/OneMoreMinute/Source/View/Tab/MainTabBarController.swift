@@ -16,6 +16,7 @@ import RxSwift
 final class MainTabBarController: UIViewController {
     
     // MARK: - Properties
+    
     private let stopwatchViewModel: StopwatchViewModelProtocol
     private let childVCList: [UIViewController]
     
@@ -28,6 +29,7 @@ final class MainTabBarController: UIViewController {
     private let disposeBag = DisposeBag()
     
     // MARK: - Initializer
+    
     init(stopwatchViewModel: StopwatchViewModelProtocol) {
         self.stopwatchViewModel = stopwatchViewModel
         

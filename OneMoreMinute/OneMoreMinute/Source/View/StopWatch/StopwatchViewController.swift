@@ -14,6 +14,7 @@ import Then
 final class StopwatchViewController: UIViewController {
     
     // MARK: - UI Components
+    
     private let containerView = UIView().then {
         $0.backgroundColor = UIColor(resource: .wrapperBackground)
         $0.layer.cornerRadius = 12
@@ -60,11 +61,13 @@ final class StopwatchViewController: UIViewController {
     }()
     
     // MARK: - Properties
+    
 //    private let viewModel = StopwatchViewModel()
     var viewModel: StopwatchViewModelProtocol
     private let disposeBag = DisposeBag()
     
     // MARK: - Initializer
+    
     init(viewModel: StopwatchViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -75,6 +78,7 @@ final class StopwatchViewController: UIViewController {
     }
     
     // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -90,6 +94,7 @@ final class StopwatchViewController: UIViewController {
     }
     
     // MARK: - UI Setup
+    
     private func setupUI() {
         view.backgroundColor = .clear
         
@@ -135,6 +140,7 @@ final class StopwatchViewController: UIViewController {
     }
     
     // MARK: - Rx Bindings
+    
     private func setupBindings() {
         // Bind elapsed time
         viewModel.elapsedTimeRelay

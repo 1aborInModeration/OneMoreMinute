@@ -12,9 +12,11 @@ import Then
 final class LapCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Identifier
+    
     static let identifier = "LapCollectionViewCell"
     
     // MARK: - UI Components
+    
     private let lapLabel = UILabel().then {
         $0.font = UIFont.monospacedDigitSystemFont(ofSize: 16, weight: .semibold)
         $0.textColor = UIColor(resource: .fontLabel)
@@ -28,6 +30,7 @@ final class LapCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Initializers
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -38,6 +41,7 @@ final class LapCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Setup UI
+    
     private func setupUI() {
         contentView.addSubview(lapLabel)
         contentView.addSubview(lapTimeLabel)
@@ -63,6 +67,7 @@ final class LapCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Configure
+    
     func configure(with viewModel: LapViewModel) {
         lapLabel.text = viewModel.lapLabel
         lapTimeLabel.text = viewModel.lapTimeLabel
