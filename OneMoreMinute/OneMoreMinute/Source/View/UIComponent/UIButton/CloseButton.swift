@@ -8,7 +8,9 @@
 import UIKit
 import SnapKit
 
+/// 모달 등에서 사용되는 작은 X 모양 버튼
 class CloseButton: UIButton {
+    
     init() {
         super.init(frame: .zero)
         
@@ -22,6 +24,7 @@ class CloseButton: UIButton {
 }
 
 extension CloseButton {
+    
     func setupUIProperties() {
         var config = UIButton.Configuration.plain()
 

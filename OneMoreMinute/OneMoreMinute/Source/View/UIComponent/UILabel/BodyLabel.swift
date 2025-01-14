@@ -10,6 +10,7 @@ import SnapKit
 
 
 class BodyLabel: UILabel {
+    
     // MARK: - Life Cycles
     
     /// 기본 텍스트 라벨
@@ -37,6 +38,7 @@ class BodyLabel: UILabel {
 }
 
 extension BodyLabel {
+    
     func setupUIProperties(isBold: Bool) {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = .clear

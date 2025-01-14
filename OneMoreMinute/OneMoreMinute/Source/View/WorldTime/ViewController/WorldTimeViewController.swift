@@ -12,13 +12,13 @@ import RxCocoa
 
 
 class WorldTimeViewController: UIViewController {
+    
     // MARK: - Properties
     
     let worldTimeViewModel = WorldTimeViewModel()
     let worldTimeView = WorldTimeView()
     
     let disposeBag = DisposeBag()
-    
     
     // MARK: - Life Cycles
     
@@ -39,8 +39,6 @@ class WorldTimeViewController: UIViewController {
         // 해당 뷰가 보여질 때마다 새로 시계 셋업.
         worldTimeViewModel.setupClock()
     }
-    
-    
 }
 
 // MARK: - Bindings

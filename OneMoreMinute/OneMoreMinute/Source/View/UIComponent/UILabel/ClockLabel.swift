@@ -17,6 +17,7 @@ enum ClockLabelType {
 }
 
 class ClockLabel: UILabel {
+    
     // MARK: - Life Cycles
     
     /// 타이틀 라벨
@@ -46,6 +47,7 @@ class ClockLabel: UILabel {
 // MARK: - Setup UI
 
 extension ClockLabel {
+    
     func setupUIProperties(type: ClockLabelType) {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = .clear

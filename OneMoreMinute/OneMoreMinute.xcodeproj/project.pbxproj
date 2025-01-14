@@ -67,7 +67,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E9583B432D311EA700231343 /* Inject in Frameworks */,
 				AA471AD12D35ECB600A71E02 /* RxKeyboard in Frameworks */,
 				71D095312D2D094A005FE9C0 /* RxCocoa in Frameworks */,
 				E9583B402D311E9A00231343 /* RxDataSources in Frameworks */,
@@ -144,7 +143,6 @@
 				71D0952D2D2D093A005FE9C0 /* Then */,
 				71D095302D2D094A005FE9C0 /* RxCocoa */,
 				E9583B3F2D311E9A00231343 /* RxDataSources */,
-				E9583B422D311EA700231343 /* Inject */,
 				AA471AD02D35ECB600A71E02 /* RxKeyboard */,
 			);
 			productName = OneMoreMinute;
@@ -184,7 +182,6 @@
 				71D0952C2D2D093A005FE9C0 /* XCRemoteSwiftPackageReference "Then" */,
 				71D0952F2D2D094A005FE9C0 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				E9583B3E2D311E9A00231343 /* XCRemoteSwiftPackageReference "RxDataSources" */,
-				E9583B412D311EA700231343 /* XCRemoteSwiftPackageReference "Inject" */,
 				AA471ACF2D35ECB600A71E02 /* XCRemoteSwiftPackageReference "RxKeyboard" */,
 			);
 			preferredProjectObjectVersion = 77;

@@ -10,8 +10,8 @@ import RxSwift
 import RxCocoa
 import MapKit
 
-
 class SearchCityViewModel {
+    
     // MARK: - Properties
     
     private let disposeBag = DisposeBag()
@@ -56,7 +56,6 @@ class SearchCityViewModel {
             }
         }
     }
-
     
     func saveCity(cityTimeZone: CityTimeZone) {
         guard worldTimeDataManager.searchByTzId(by: cityTimeZone.timeZone.identifier) == nil else {
@@ -73,10 +72,10 @@ class SearchCityViewModel {
     }
 }
 
-
 // MARK: - 내부 메소드
 
 extension SearchCityViewModel {
+    
     private func getTimeZone(from coordinate: CLLocationCoordinate2D, completion: @escaping (TimeZone?) -> Void) {
         let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         
@@ -93,7 +92,7 @@ extension SearchCityViewModel {
         let currentTimeZone = TimeZone.current
         let differenceInSeconds = timeZone.secondsFromGMT() - currentTimeZone.secondsFromGMT()
         let differenceInHours = differenceInSeconds / 3600
-        let diffGMTText = currentTimeZone.localizedName(for: .shortStandard, locale: Locale.current) ?? ""
+        let diffGMTText = timeZone.localizedName(for: .shortStandard, locale: Locale.current) ?? ""
         
         if differenceInHours == 0 {
             return "(\(diffGMTText)) 현재 시간과 동일"
