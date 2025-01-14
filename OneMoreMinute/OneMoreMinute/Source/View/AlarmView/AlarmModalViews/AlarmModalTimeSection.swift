@@ -40,6 +40,13 @@ final class AlarmModalTimeSection: UIView {
         setupUI()
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            self.timeSet.layer.borderColor = UIColor.wrapperStroke.cgColor
+        }
+    }
+    
 }
 
 // MARK: - AlarmModalTimeSection UI Setting Method

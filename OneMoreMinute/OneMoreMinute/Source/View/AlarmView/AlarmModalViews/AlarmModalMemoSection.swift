@@ -42,6 +42,13 @@ final class AlarmModalMemoSection: UIView {
         setupUI()
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            self.memoSet.layer.borderColor = UIColor.wrapperStroke.cgColor
+        }
+    }
+    
 }
 
 // MARK: - AlarmModalMemoSection UI Setting Method

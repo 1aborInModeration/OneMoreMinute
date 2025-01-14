@@ -77,6 +77,13 @@ final class AlarmModalView: UIView {
         setupUI()
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            self.layer.borderColor = UIColor.wrapperStroke.cgColor
+        }
+    }
+    
     /// 모달뷰의 데이터를 추출하는 메소드
     /// - Returns: 설정된 시간, 메모, 반복 요일에 대한 데이터
     func extractionData() -> (date: Date, memo: String?, week: [Bool]) {
