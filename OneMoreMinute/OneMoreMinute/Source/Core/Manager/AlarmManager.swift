@@ -23,7 +23,7 @@ enum AlarmSound {
     var fileUrl: URL? {
         switch self {
         case .morning:
-            return Bundle.main.url(forResource: "morningAlarm", withExtension: "mp3")
+            return Bundle.main.url(forResource: "morningAlarm", withExtension: "caf")
         }
     }
 }
