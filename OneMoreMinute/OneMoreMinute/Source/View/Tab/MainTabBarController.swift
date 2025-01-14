@@ -118,6 +118,7 @@ extension MainTabBarController {
                 Task {
                     let current = UNUserNotificationCenter.current()
                     let notifications = await current.deliveredNotifications()
+                    if notifications.isEmpty { return }
                     let title = notifications[0].request.content.title
                     let body = notifications[0].request.content.body
                     
