@@ -83,13 +83,17 @@ extension WorldTimeViewController {
     
     func setupSwipeActions() {
         worldTimeView.worldTimeCollectionView.addSwipeAction(
-            trailingActionProvider: { indexPath in
+            trailingActionProvider: { [weak self] indexPath in
                 var actions: [UIContextualAction] = []
+                
+                // 해당 인덱스의 타임존 ID 가져오기
+                let worldTimes = self?.worldTimeViewModel.worldTimesRelay.value
+                let timeZoneId = worldTimes?[indexPath.row].timeZoneId
                 
                 // 삭제 액션 추가
                 let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { _, _, completionHandler in
-                    print(indexPath.row)
-//                    self.deleteWorldTime(timeZoneId: indexPath.row.)
+                    self?.worldTimeViewModel.deleteWorldTime(timeZoneId: timeZoneId ?? "Asia/Seoul")
+                    self?.worldTimeViewModel.setupClock()
                     completionHandler(true)
                 }
                 deleteAction.backgroundColor = .buttonRed
