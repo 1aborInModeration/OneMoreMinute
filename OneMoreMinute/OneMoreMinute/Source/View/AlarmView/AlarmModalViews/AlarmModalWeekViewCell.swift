@@ -16,15 +16,16 @@ final class AlarmModalWeekViewCell: UICollectionViewCell {
     
     private let icon = UILabel().then {
         $0.font = Fonts.title2
-        $0.textColor = Colors.systemLightGray
+        $0.textColor = UIColor.grayButtonLabel
         $0.numberOfLines = 1
         $0.textAlignment = .center
-        $0.backgroundColor = Colors.systemGray(.r50)
+        $0.backgroundColor = UIColor.grayButtonBackground
         $0.layer.cornerRadius = 8
         $0.clipsToBounds = true
     }
     
     // MARK: - AlarmModalWeekViewCell Initializer
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -49,28 +50,29 @@ final class AlarmModalWeekViewCell: UICollectionViewCell {
     ///   - isSelected: 셀이 선택되었는지 확인
     ///   - index: 선택된 셀의 인덱스
     func configCell(_ isSelected: Bool, index: Int) {
-        self.icon.text = index.weekTitle
+        self.icon.text = WeekDaysTitle(rawValue: index)?.title
         switch isSelected {
         case true:
-            self.icon.backgroundColor = Colors.systemColor(.r400)
+            self.icon.backgroundColor = UIColor.plusButtonBackground
             self.icon.textColor = .white
             
         case false:
-            self.icon.backgroundColor = Colors.systemGray(.r100)
-            self.icon.textColor = Colors.systemLightGray
+            self.icon.backgroundColor = UIColor.grayButtonBackground
+            self.icon.textColor = UIColor.grayButtonLabel
         }
     }
 }
 
 // MARK: - AlarmModalWeekViewCell UI Setting Method
+
 private extension AlarmModalWeekViewCell {
     
     func setupUI() {
-        configure()
+        configureSelf()
         setupLayout()
     }
     
-    func configure() {
+    func configureSelf() {
         self.backgroundColor = .clear
         self.addSubview(self.icon)
     }
