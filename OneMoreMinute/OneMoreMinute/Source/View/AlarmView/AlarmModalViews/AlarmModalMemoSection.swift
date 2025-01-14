@@ -26,6 +26,7 @@ final class AlarmModalMemoSection: UIView {
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.textFieldStroke.cgColor
         $0.keyboardType = .default
+        $0.autocapitalizationType = .none
     }
     
     // MARK: - AlarmModalMemoSection Initializer
