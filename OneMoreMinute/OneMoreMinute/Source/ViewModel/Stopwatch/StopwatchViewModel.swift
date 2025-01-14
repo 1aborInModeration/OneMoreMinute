@@ -24,7 +24,6 @@ protocol StopwatchViewModelProtocol {
     func restoreState()
     func startTimer()
     func stopTimer()
-    func forceUIUpdate()
 }
 
 final class StopwatchViewModel: StopwatchViewModelProtocol {
@@ -79,12 +78,6 @@ final class StopwatchViewModel: StopwatchViewModelProtocol {
         lapsRelay.accept(lapViewModels)
     }
     
-    // MARK: - Public Methods
-    func forceUIUpdate() {
-        isRunningRelay.accept(isRunningRelay.value)
-        elapsedTimeRelay.accept(elapsedTimeRelay.value)
-    }
-    
     func toggleTimer() {
         if model.isRunning {
             stopTimer()
@@ -100,31 +93,9 @@ final class StopwatchViewModel: StopwatchViewModelProtocol {
     func resetOrAddLap() {
         if model.isRunning {
             addLap()
-//            // Add a new lap
-//            let currentTime = model.elapsedTime
-//            let lapTime = currentTime - lastLapTime
-//            lastLapTime = currentTime
-//            
-//            let newLap = LapModel(lapNumber: model.laps.count + 1, lapTime: lapTime)
-//            model.laps.insert(newLap, at: 0)
-//            
-//            // Update lapsRelay
-//            updateLapsRelay()
         } else {
             reset()
-//            // Reset timer
-//            stopTimer()
-//            model.elapsedTime = 0
-//            lastLapTime = 0
-//            model.laps.removeAll()
-//            
-//            elapsedTimeRelay.accept(model.elapsedTime)
-//            lapsRelay.accept([])
-//            isRunningRelay.accept(false)
-//            currentLapRelay.accept(nil)
         }
-        
-//        saveLaps()
     }
     
     private func addLap() {
@@ -145,10 +116,8 @@ final class StopwatchViewModel: StopwatchViewModelProtocol {
         lastLapTime = 0
         model.laps.removeAll()
         
-//        elapsedTimeRelay.accept(model.elapsedTime)
         elapsedTimeRelay.accept(0)
         lapsRelay.accept([])
-//        isRunningRelay.accept(false)
         currentLapRelay.accept(nil)
         saveLaps()
     }

@@ -50,7 +50,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if stopwatchViewModel.isRunningRelay.value {
             stopwatchViewModel.startTimer()
         }
-        stopwatchViewModel.forceUIUpdate()
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
