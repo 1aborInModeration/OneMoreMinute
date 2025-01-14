@@ -10,23 +10,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-protocol StopwatchViewModelProtocol {
-    // Outputs
-    var isRunningRelay: BehaviorRelay<Bool> { get }
-    var elapsedTimeRelay: BehaviorRelay<TimeInterval> { get }
-    var lapsRelay: BehaviorRelay<[LapViewModel]> { get }
-    var currentLapRelay: BehaviorRelay<LapViewModel?> { get }
-
-    // Public Methods
-    func toggleTimer()
-    func resetOrAddLap()
-    func saveState()
-    func restoreState()
-    func startTimer()
-    func stopTimer()
-}
-
-final class StopwatchViewModel: StopwatchViewModelProtocol {
+final class StopwatchViewModel {
     
     // MARK: - Properties
     
@@ -49,6 +33,18 @@ final class StopwatchViewModel: StopwatchViewModelProtocol {
     // MARK: - Initializer
     
     init() {
+        SceneLifeCycleObserver.shared.sceneWillEnterForegroundRelay
+            .subscribe(onNext: { [weak self] in
+                self?.handleSceneWillEnterForeground()
+            })
+            .disposed(by: disposeBag)
+        
+        SceneLifeCycleObserver.shared.sceneDidEnterBackgroundRelay
+            .subscribe(onNext: { [weak self] in
+                self?.handleSceneDidEnterBackground()
+            })
+            .disposed(by: disposeBag)
+        
         restoreState()
         if model.isRunning {
             startTimer()
@@ -56,6 +52,18 @@ final class StopwatchViewModel: StopwatchViewModelProtocol {
     }
     
     // MARK: - Private Methods
+    
+    private func handleSceneWillEnterForeground() {
+        restoreState()
+        if isRunningRelay.value {
+            startTimer()
+        }
+    }
+    
+    private func handleSceneDidEnterBackground() {
+        saveState()
+        saveLaps()
+    }
     
     private func updateCurrentLap() {
         let lapNumber = model.laps.count + 1

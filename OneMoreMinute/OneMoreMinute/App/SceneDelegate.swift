@@ -10,21 +10,10 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    private let viewModelProvider: ViewModelProviding
-    
-    override init() {
-        self.viewModelProvider = ViewModelProvider.shared
-        super.init()
-        print("SceneDelegate initialized")
-    }
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
-        
-        viewModelProvider.stopwatchViewModel.restoreLaps()
-        
         let mainTabBarController = MainTabBarController()
-        
         let window = UIWindow(windowScene: scene)
         window.rootViewController = mainTabBarController
         self.window = window
@@ -51,12 +40,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillEnterForeground(_ scene: UIScene) {
         // Called as the scene transitions from the background to the foreground.
         // Use this method to undo the changes made on entering the background.
-        
-        let stopwatchViewModel = ViewModelProvider.shared.stopwatchViewModel
-        stopwatchViewModel.restoreState()
-        if stopwatchViewModel.isRunningRelay.value {
-            stopwatchViewModel.startTimer()
-        }
+        SceneLifeCycleObserver.shared.sceneWillEnterForeground()
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
@@ -65,17 +49,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
 
         // Save changes in the application's managed object context when the application transitions to the background.
-        saveAppState()
+        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
+        SceneLifeCycleObserver.shared.sceneDidEnterBackground()
     }
     
-    private func saveAppState() {
-        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
-        
-        let stopwatchViewModel = ViewModelProvider.shared.stopwatchViewModel
-        stopwatchViewModel.saveState()
-        stopwatchViewModel.saveLaps()
-    }
-
 
 }
 

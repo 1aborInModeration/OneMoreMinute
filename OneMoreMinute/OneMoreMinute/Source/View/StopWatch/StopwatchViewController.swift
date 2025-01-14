@@ -62,13 +62,14 @@ final class StopwatchViewController: UIViewController {
     
     // MARK: - Properties
     
-    private let viewModel = ViewModelProvider.shared.stopwatchViewModel
+    private let viewModel = StopwatchViewModel()
     private let disposeBag = DisposeBag()
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel.restoreLaps()
         setupUI()
         setupBindings()
         updateButtonStates(isRunning: viewModel.isRunningRelay.value)
