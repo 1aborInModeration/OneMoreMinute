@@ -64,6 +64,7 @@ final class AlarmModalViewController: UIViewController {
         
         backgroundTapped.accept(true)
     }
+        
 }
 
 // MARK: - AlarmModalViewController UI Setting Method
@@ -165,29 +166,32 @@ private extension AlarmModalViewController {
     func bindKeyboardIsActive() {
         RxKeyboard.instance.visibleHeight
             .skip(1)
+            .distinctUntilChanged()
             .asSignal(onErrorSignalWith: .empty())
             .withUnretained(self)
             .emit { owner, keyboardHeight in
                 
-                UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear) {
-                    owner.modalView.frame.origin.y -= keyboardHeight / 2
+                if keyboardHeight > 0 {
+                    UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear) {
+                        owner.modalView.snp.removeConstraints()
+                        owner.modalView.snp.makeConstraints { make in
+                            make.horizontalEdges.equalToSuperview().inset(20)
+                            make.height.equalTo(530)
+                            make.bottom.equalToSuperview().inset(keyboardHeight + 10)
+                        }
+                        owner.view.layoutIfNeeded()
+                    }
+                } else {
+                    UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear) {
+                        owner.modalView.snp.removeConstraints()
+                        owner.setupLayout()
+                        owner.view.layoutIfNeeded()
+                    }
                 }
                 
             }.disposed(by: self.disposeBag)
         
-        RxKeyboard.instance.isHidden
-            .asSignal(onErrorSignalWith: .empty())
-            .withUnretained(self)
-            .emit { owner, isHidden in
-                
-                guard isHidden else { return }
-                UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear) {
-                    let centerY = (owner.view.bounds.height / 2)
-                    let modalCenter = (owner.modalView.bounds.height / 2)
-                    owner.modalView.frame.origin.y = centerY - modalCenter
-                }
-                
-            }.disposed(by: self.disposeBag)
+        
     }
     
 }
