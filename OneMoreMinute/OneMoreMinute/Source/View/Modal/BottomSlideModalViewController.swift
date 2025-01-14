@@ -60,7 +60,7 @@ final class BottomSlideModalViewController: UIViewController, ModalCloseDelegate
 extension BottomSlideModalViewController {
     
     private func setupBackground() {
-        view.backgroundColor = .background
+        view.backgroundColor = .white
     }
 
     private func setupTargetView() {

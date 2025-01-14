@@ -6,11 +6,11 @@ import RxSwift
 final class TimeModalViewController: UIViewController {
     let disposeBag = DisposeBag()
     
-    private var initialMinutes: Int
+    private var initialIndex: Int
     
     /// 모달의 컨텐츠를 담는 컨테이너 뷰
     private let containerView = UIView().then {
-        $0.backgroundColor = Colors.appBackground
+        $0.backgroundColor = UIColor(resource: .wrapperBackground)
         $0.layer.cornerRadius = 24
     }
     
@@ -60,7 +60,7 @@ final class TimeModalViewController: UIViewController {
     /// 초기 시간 값을 받아 View Controller를 초기화하는 생성자
     /// - Parameter initialMinutes: 초기 설정할 시간(분), 기본값 5분
     init(initialMinutes: Int = 5) {
-        self.initialMinutes = initialMinutes
+        self.initialIndex = initialMinutes - 1 /// 1-60범위를 다루기 때문에, 1분은 0번째 id로 치환되어야함
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -124,7 +124,7 @@ private extension TimeModalViewController {
     func setupPickerView() {
         pickerView.delegate = self
         pickerView.dataSource = self
-        pickerView.selectRow(initialMinutes, inComponent: 0, animated: false)
+        pickerView.selectRow(initialIndex, inComponent: 0, animated: false)
     }
 }
 

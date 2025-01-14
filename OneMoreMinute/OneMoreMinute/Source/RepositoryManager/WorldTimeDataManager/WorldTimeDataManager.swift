@@ -34,6 +34,9 @@ final class WorldTimeDataManager: CoreDataManaged {
     /// - Returns: Alarm 엔티티의 데이터 목록 배열
     func fetch() -> [Entity] {
         let request: NSFetchRequest<Entity> = Entity.fetchRequest()
+        let sort = NSSortDescriptor(key: "createdAt", ascending: false)
+        request.sortDescriptors = [sort]
+        
         return (try? context.fetch(request)) ?? []
     }
     
@@ -54,6 +57,22 @@ final class WorldTimeDataManager: CoreDataManaged {
         do {
             let data = try context.existingObject(with: id) as? Entity
             return data
+            
+        } catch {
+            print(error)
+            return nil
+        }
+    }
+    
+    /// timeZoneId 로 해당하는 entity 데이터 가져오기
+    /// - Parameter id: 찾고싶은 데이터의 timeZoneId
+    /// - Returns: 특정 엔티티 데이터
+    func searchByTzId(by timeZoneId: String) -> Entity? {
+        do {
+            let fetchRequest: NSFetchRequest<WorldTimeEntity> = WorldTimeEntity.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "timeZoneId == %@", timeZoneId as CVarArg)
+            
+            return try context.fetch(fetchRequest).first
             
         } catch {
             print(error)

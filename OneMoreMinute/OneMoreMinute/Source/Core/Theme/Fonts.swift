@@ -49,4 +49,17 @@ struct Fonts {
     static let bold = UIFont.pretendard(ofSize: 14, weight: .semibold)
     /// 매우 작은 버튼이나 라벨용 폰트. 이보다 작은 크기는 사용하지 않는다. / size : 12 / regular
     static let caption = UIFont.pretendard(ofSize: 12, weight: .regular)
+    
+    
+    /// 스톱워치와 타이머 등 중요 디스플레이용 모노스페이스 폰트 / 50 / bold
+    static let timerClock = UIFont.monospacedDigitSystemFont(ofSize: 50, weight: .bold)
+    /// 알람 중지 팝업 용 모노스페이스 폰트 / 50 / bold
+    static let alertClock = UIFont.monospacedDigitSystemFont(ofSize: 40, weight: .bold)
+    /// 새로운 알람 설정용 모노스페이스 폰트 / 36 / regular
+    static let newAlarmClock = UIFont.monospacedDigitSystemFont(ofSize: 36, weight: .regular)
+    /// 페이지 헤더 시계 표현용 모노스페이스 폰트 / 30 / bold
+    static let headerClock = UIFont.monospacedDigitSystemFont(ofSize: 30, weight: .bold)
+    /// 각 카드 내부 시계 표현용 모노스페이스 폰트 / 20 / bold
+    static let cardClock = UIFont.monospacedDigitSystemFont(ofSize: 20, weight: .bold)
+    
 }

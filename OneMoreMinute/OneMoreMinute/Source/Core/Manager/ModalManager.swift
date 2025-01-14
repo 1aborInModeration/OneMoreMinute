@@ -5,6 +5,8 @@
 //  Created by MaxBook on 1/7/25.
 //
 
+import UIKit
+
 /// 전역으로 모달을 관리하고 보여주는 역할을 수행하는 모달 관리 매니저
 /// ModalManager를 통해 전역에서 원하는 UIView를 원하는 타입의 모달뷰컨트롤러에 추가하여 보여준다.
 struct ModalManager {
@@ -19,9 +21,9 @@ struct ModalManager {
         preventGesture: Bool = true,
         initAction: (() -> Void) = {},
         dismissAction: (() -> Void) = {}
-    ) -> PopupModalViewController? {
+    ){
         guard let topVC = AppHelpers.getTopViewController() else {
-            return nil
+            return
         }
         
         let modalVC = PopupModalViewController(modalContentsView: content)
@@ -35,8 +37,6 @@ struct ModalManager {
         }
         
         topVC.present(modalVC, animated: true)
-        
-        return modalVC
     }
     
     /// 전역에서 사용할 바텀 슬라이드 모달을 생성하고 표시합니다.
