@@ -25,6 +25,7 @@ final class AlarmModalMemoSection: UIView {
         $0.layer.cornerRadius = 12
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.textFieldStroke.cgColor
+        $0.keyboardType = .default
     }
     
     // MARK: - AlarmModalMemoSection Initializer

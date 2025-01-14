@@ -10,6 +10,7 @@
 		71D0952B2D2D092B005FE9C0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 71D0952A2D2D092B005FE9C0 /* SnapKit */; };
 		71D0952E2D2D093A005FE9C0 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 71D0952D2D2D093A005FE9C0 /* Then */; };
 		71D095312D2D094A005FE9C0 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 71D095302D2D094A005FE9C0 /* RxCocoa */; };
+		AA471AD12D35ECB600A71E02 /* RxKeyboard in Frameworks */ = {isa = PBXBuildFile; productRef = AA471AD02D35ECB600A71E02 /* RxKeyboard */; };
 		E9583B402D311E9A00231343 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = E9583B3F2D311E9A00231343 /* RxDataSources */; };
 		E9583B432D311EA700231343 /* Inject in Frameworks */ = {isa = PBXBuildFile; productRef = E9583B422D311EA700231343 /* Inject */; };
 /* End PBXBuildFile section */
@@ -68,6 +69,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E9583B432D311EA700231343 /* Inject in Frameworks */,
+				AA471AD12D35ECB600A71E02 /* RxKeyboard in Frameworks */,
 				71D095312D2D094A005FE9C0 /* RxCocoa in Frameworks */,
 				E9583B402D311E9A00231343 /* RxDataSources in Frameworks */,
 				71D0952B2D2D092B005FE9C0 /* SnapKit in Frameworks */,
@@ -144,6 +146,7 @@
 				71D095302D2D094A005FE9C0 /* RxCocoa */,
 				E9583B3F2D311E9A00231343 /* RxDataSources */,
 				E9583B422D311EA700231343 /* Inject */,
+				AA471AD02D35ECB600A71E02 /* RxKeyboard */,
 			);
 			productName = OneMoreMinute;
 			productReference = 71D094CF2D2D051B005FE9C0 /* OneMoreMinute.app */;
@@ -183,6 +186,7 @@
 				71D0952F2D2D094A005FE9C0 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				E9583B3E2D311E9A00231343 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				E9583B412D311EA700231343 /* XCRemoteSwiftPackageReference "Inject" */,
+				AA471ACF2D35ECB600A71E02 /* XCRemoteSwiftPackageReference "RxKeyboard" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 71D094D02D2D051B005FE9C0 /* Products */;
@@ -520,6 +524,14 @@
 				minimumVersion = 6.8.0;
 			};
 		};
+		AA471ACF2D35ECB600A71E02 /* XCRemoteSwiftPackageReference "RxKeyboard" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxKeyboard";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.1;
+			};
+		};
 		E9583B3E2D311E9A00231343 /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources.git";
@@ -553,6 +565,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 71D0952F2D2D094A005FE9C0 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxCocoa;
+		};
+		AA471AD02D35ECB600A71E02 /* RxKeyboard */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA471ACF2D35ECB600A71E02 /* XCRemoteSwiftPackageReference "RxKeyboard" */;
+			productName = RxKeyboard;
 		};
 		E9583B3F2D311E9A00231343 /* RxDataSources */ = {
 			isa = XCSwiftPackageProductDependency;
