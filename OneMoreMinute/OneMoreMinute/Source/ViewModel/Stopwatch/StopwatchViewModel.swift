@@ -218,6 +218,7 @@ final class StopwatchViewModel: StopwatchViewModelProtocol {
             model.elapsedTime = savedElapsedTime
         }
         
+        model.isRunning = isRunning
         lastLapTime = savedLastLapTime
         updateCurrentLap()
         
