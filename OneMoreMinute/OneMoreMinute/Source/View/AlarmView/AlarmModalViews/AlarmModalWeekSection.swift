@@ -16,7 +16,7 @@ final class AlarmModalWeekSection: UIView {
     
     // MARK: - Rx Properties
     
-    private(set) var isSelecteds = BehaviorRelay(value: [Bool]())
+    private(set) var cellSelectedStates = BehaviorRelay(value: [Bool]())
     private let disposeBag = DisposeBag()
     
     // MARK: - AlarmModalWeekSection UI
@@ -89,7 +89,7 @@ final class AlarmModalWeekSection: UIView {
         
         setupUI()
         let items = [Bool](repeating: false, count: 7)
-        self.isSelecteds.accept(items)
+        self.cellSelectedStates.accept(items)
     }
     
     required init?(coder: NSCoder) {
@@ -97,7 +97,7 @@ final class AlarmModalWeekSection: UIView {
         
         setupUI()
         let items = [Bool](repeating: false, count: 7)
-        self.isSelecteds.accept(items)
+        self.cellSelectedStates.accept(items)
     }
     
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
@@ -141,34 +141,29 @@ private extension AlarmModalWeekSection {
     
     /// 데이터 바인딩 메소드
     func bind() {
-        // 컬렉션뷰의 데이터소스 바인딩
-        self.isSelecteds
-            .asDriver(onErrorDriveWith: .empty())
+        /// Driver를 공유하여 두가지 바인딩에서 재사용
+        let sharedStream = cellSelectedStates.asDriver()
+        
+        sharedStream
             .drive(self.weeks.rx.items(
                 cellIdentifier: AlarmModalWeekViewCell.id,
                 cellType: AlarmModalWeekViewCell.self)
             ) { (row, element, cell) in
-                
                 cell.configCell(element, index: row)
-                
             }.disposed(by: self.disposeBag)
         
         // 셀 선택 액션 바인딩
-        self.weeks.rx.itemSelected
-            .asSignal(onErrorSignalWith: .empty())
-            .withUnretained(self)
-            .emit { owner, indexPath in
+        weeks.rx.itemSelected
+        /// 매번 cellSelectedStates의 최신값을 읽어서 수정하지 않고, withLatestFrom 연산자로 최신값 receive
+            .withLatestFrom(sharedStream) { indexPath, values -> [Bool] in
+                var newValues = values
                 
-                var currentValues = owner.isSelecteds.value
-                
-                guard indexPath.item >= 0 && indexPath.item < currentValues.count else { return }
-                
-                currentValues[indexPath.item].toggle()
-                
-                owner.isSelecteds.accept(currentValues)
-                
-            }.disposed(by: self.disposeBag)
-        
+                newValues[indexPath.item].toggle()
+                return newValues
+            }
+            /// 암시적 약한 참조 처리, emit 대신자동 바인딩을 통해 상태 업데이트
+            .bind(to: cellSelectedStates)
+            .disposed(by: self.disposeBag)
     }
     
 }

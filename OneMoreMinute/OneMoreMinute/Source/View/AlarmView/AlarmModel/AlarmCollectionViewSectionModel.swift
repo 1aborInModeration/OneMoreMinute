@@ -5,8 +5,6 @@
 //  Created by 장상경 on 1/9/25.
 //
 
-import RxSwift
-import RxCocoa
 import RxDataSources
 import Foundation
 

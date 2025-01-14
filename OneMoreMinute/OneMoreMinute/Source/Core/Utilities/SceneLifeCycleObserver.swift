@@ -7,18 +7,18 @@
 
 import RxRelay
 
+enum AppState {
+    case willEnterForeground
+    case didEnterBackground
+}
+
 final class SceneLifeCycleObserver {
     static let shared = SceneLifeCycleObserver()
     private init() {}
     
-    let sceneWillEnterForegroundRelay = PublishRelay<Void>()
-    let sceneDidEnterBackgroundRelay = PublishRelay<Void>()
+    let appStateRelay = PublishRelay<AppState>()
     
-    func sceneWillEnterForeground() {
-        sceneWillEnterForegroundRelay.accept(())
-    }
-    
-    func sceneDidEnterBackground() {
-        sceneDidEnterBackgroundRelay.accept(())
+    func switchAppState(into state: AppState) {
+        appStateRelay.accept(state)
     }
 }
