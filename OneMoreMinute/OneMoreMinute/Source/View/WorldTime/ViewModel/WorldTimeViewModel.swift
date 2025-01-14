@@ -21,18 +21,13 @@ class WorldTimeViewModel {
     
     
     // MARK: - Life Cycles
-    
-    init() {
-        setupClock()
-    }
-
 }
 
 
 // MARK: - View Update
 
 extension WorldTimeViewModel {
-    private func setupClock() {
+    func setupClock() {
         let worldTimes = WorldTimeDataManager.shared.fetch().compactMap { entity -> WorldTime? in
             guard let cityName = entity.cityName,
                   let timeZone = TimeZone(identifier: entity.timeZoneId ?? "Asia/Seoul") else {
@@ -58,5 +53,11 @@ extension WorldTimeViewModel {
         }
         
         worldTimesRelay.accept(worldTimes)
+    }
+    
+    func deleteWorldTime(timeZoneId: String) {
+        if let worldTime = worldTimeDataManager.searchByTzId(by: timeZoneId) {
+            worldTimeDataManager.delete(worldTime)
+        }
     }
 }
