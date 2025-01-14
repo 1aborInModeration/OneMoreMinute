@@ -24,6 +24,7 @@ protocol StopwatchViewModelProtocol {
     func restoreState()
     func startTimer()
     func stopTimer()
+    func forceUIUpdate()
 }
 
 final class StopwatchViewModel: StopwatchViewModelProtocol {
@@ -37,7 +38,7 @@ final class StopwatchViewModel: StopwatchViewModelProtocol {
     
     // Outputs
     let isRunningRelay = BehaviorRelay<Bool>(value: false)
-    let elapsedTimeRelay = BehaviorRelay<TimeInterval>(value: 500000000)
+    let elapsedTimeRelay = BehaviorRelay<TimeInterval>(value: 0)
     let lapsRelay = BehaviorRelay<[LapViewModel]>(value: [])
     let currentLapRelay = BehaviorRelay<LapViewModel?>(value: nil)
     
