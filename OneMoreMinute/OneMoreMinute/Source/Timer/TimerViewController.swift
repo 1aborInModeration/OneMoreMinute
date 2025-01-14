@@ -114,7 +114,6 @@ final class TimerViewController: UIViewController {
         timeSettingButton.snp.makeConstraints { make in
             make.top.equalTo(timeLabel.snp.bottom).offset(24)
             make.centerX.equalToSuperview()
-            make.width.equalTo(160)
             make.width.equalTo(80)
         }
         
