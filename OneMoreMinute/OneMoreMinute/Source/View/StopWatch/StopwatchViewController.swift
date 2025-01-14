@@ -14,6 +14,7 @@ import Then
 final class StopwatchViewController: UIViewController {
     
     // MARK: - UI Components
+    
     private let containerView = UIView().then {
         $0.backgroundColor = UIColor(resource: .wrapperBackground)
         $0.layer.cornerRadius = 12
@@ -32,7 +33,7 @@ final class StopwatchViewController: UIViewController {
         $0.textColor = UIColor(resource: .mainTitle)
     }
     
-    private let playButton = UIButton(type: .system).then {
+    private let startStopButton = UIButton(type: .system).then {
         $0.setImage(UIImage(systemName: "play"), for: .normal)
         $0.tintColor = UIColor(resource: .subTitle)
         $0.backgroundColor = UIColor(resource: .buttonBackground)
@@ -40,7 +41,7 @@ final class StopwatchViewController: UIViewController {
         $0.clipsToBounds = true
     }
     
-    private let resetButton = UIButton(type: .system).then {
+    private let lapResetButton = UIButton(type: .system).then {
         $0.setImage(UIImage(systemName: "arrow.counterclockwise"), for: .normal)
         $0.tintColor = UIColor(resource: .grayButtonLabel)
         $0.backgroundColor = UIColor(resource: .grayButtonBackground)
@@ -60,14 +61,18 @@ final class StopwatchViewController: UIViewController {
     }()
     
     // MARK: - Properties
+    
     private let viewModel = StopwatchViewModel()
     private let disposeBag = DisposeBag()
     
     // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel.restoreLaps()
         setupUI()
         setupBindings()
+        updateButtonStates(isRunning: viewModel.isRunningRelay.value)
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -78,13 +83,14 @@ final class StopwatchViewController: UIViewController {
     }
     
     // MARK: - UI Setup
+    
     private func setupUI() {
         view.backgroundColor = .clear
         
         view.addSubview(containerView)
         containerView.addSubview(timeLabel)
-        containerView.addSubview(playButton)
-        containerView.addSubview(resetButton)
+        containerView.addSubview(startStopButton)
+        containerView.addSubview(lapResetButton)
         view.addSubview(collectionView)
         
         containerView.snp.makeConstraints { make in
@@ -98,14 +104,14 @@ final class StopwatchViewController: UIViewController {
             make.centerX.equalToSuperview()
         }
         
-        playButton.snp.makeConstraints { make in
+        startStopButton.snp.makeConstraints { make in
             make.top.equalTo(timeLabel.snp.bottom).offset(30)
             make.centerX.equalToSuperview().offset(-40)
             make.width.height.equalTo(56)
         }
         
-        resetButton.snp.makeConstraints { make in
-            make.centerY.equalTo(playButton)
+        lapResetButton.snp.makeConstraints { make in
+            make.centerY.equalTo(startStopButton)
             make.centerX.equalToSuperview().offset(40)
             make.width.height.equalTo(56)
         }
@@ -123,6 +129,7 @@ final class StopwatchViewController: UIViewController {
     }
     
     // MARK: - Rx Bindings
+    
     private func setupBindings() {
         // Bind elapsed time
         viewModel.elapsedTimeRelay
@@ -149,14 +156,14 @@ final class StopwatchViewController: UIViewController {
             .disposed(by: disposeBag)
         
         // Play button tap
-        playButton.rx.tap
+        startStopButton.rx.tap
             .subscribe(onNext: { [weak self] in
                 self?.viewModel.toggleTimer()
             })
             .disposed(by: disposeBag)
         
         // Reset button tap
-        resetButton.rx.tap
+        lapResetButton.rx.tap
             .subscribe(onNext: { [weak self] in
                 self?.viewModel.resetOrAddLap()
             })
@@ -172,11 +179,12 @@ final class StopwatchViewController: UIViewController {
     
     private func updateButtonStates(isRunning: Bool) {
         if isRunning {
-            playButton.setImage(UIImage(systemName: "pause"), for: .normal)
-            resetButton.setImage(UIImage(systemName: "flag"), for: .normal)
+            startStopButton.setImage(UIImage(systemName: "pause"), for: .normal)
+            lapResetButton.setImage(UIImage(systemName: "flag"), for: .normal)
         } else {
-            playButton.setImage(UIImage(systemName: "play"), for: .normal)
-            resetButton.setImage(UIImage(systemName: "arrow.counterclockwise"), for: .normal)
+            startStopButton.setImage(UIImage(systemName: "play"), for: .normal)
+            lapResetButton.setImage(UIImage(systemName: "arrow.counterclockwise"), for: .normal)
         }
     }
 }
+

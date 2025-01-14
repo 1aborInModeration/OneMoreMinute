@@ -242,7 +242,7 @@ final class DViewController: UIViewController {
     }
 }
 
-@available(iOS 17.0, *)
-#Preview {
-    MainTabBarController()
-}
+//@available(iOS 17.0, *)
+//#Preview {
+//    MainTabBarController()
+//}
