@@ -10,11 +10,18 @@ import Foundation
 import RxSwift
 import RxCocoa
 
+private enum UserDefaultsKeys {
+    static let laps = "storedLaps"
+    static let elapsedTime = "elapsedTime"
+    static let lastTimestamp = "lastTimestamp"
+    static let lastLapTime = "lastLapTime"
+    static let isRunning = "isRunning"
+}
+
 final class StopwatchViewModel {
     
     // MARK: - Properties
     
-    private let lapsKey = "storedLaps"
     private let disposeBag = DisposeBag()
     private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
     
@@ -140,14 +147,14 @@ final class StopwatchViewModel {
         let encoder = JSONEncoder()
         do {
             let data = try encoder.encode(model.laps)
-            UserDefaults.standard.set(data, forKey: lapsKey)
+            UserDefaults.standard.set(data, forKey: UserDefaultsKeys.laps)
         } catch {
             print("Failed to encode laps: \(error)")
         }
     }
     
     func restoreLaps() {
-        guard let data = UserDefaults.standard.data(forKey: lapsKey) else { return }
+        guard let data = UserDefaults.standard.data(forKey: UserDefaultsKeys.laps) else { return }
         let decoder = JSONDecoder()
         do {
             let laps = try decoder.decode([LapModel].self, from: data)
@@ -182,17 +189,17 @@ final class StopwatchViewModel {
     
     func saveState() {
         let timestamp = Date().timeIntervalSince1970
-        UserDefaults.standard.set(model.elapsedTime, forKey: "elapsedTime")
-        UserDefaults.standard.set(timestamp, forKey: "lastTimestamp")
-        UserDefaults.standard.set(lastLapTime, forKey: "lastLapTime")
-        UserDefaults.standard.set(model.isRunning, forKey: "isRunning")
+        UserDefaults.standard.set(model.elapsedTime, forKey: UserDefaultsKeys.elapsedTime)
+        UserDefaults.standard.set(timestamp, forKey: UserDefaultsKeys.lastTimestamp)
+        UserDefaults.standard.set(lastLapTime, forKey: UserDefaultsKeys.lastLapTime)
+        UserDefaults.standard.set(model.isRunning, forKey: UserDefaultsKeys.isRunning)
     }
     
     func restoreState() {
-        let savedElapsedTime = UserDefaults.standard.double(forKey: "elapsedTime")
-        let savedTimestamp = UserDefaults.standard.double(forKey: "lastTimestamp")
-        let savedLastLapTime = UserDefaults.standard.double(forKey: "lastLapTime")
-        let isRunning = UserDefaults.standard.bool(forKey: "isRunning")
+        let savedElapsedTime = UserDefaults.standard.double(forKey: UserDefaultsKeys.elapsedTime)
+        let savedTimestamp = UserDefaults.standard.double(forKey: UserDefaultsKeys.lastTimestamp)
+        let savedLastLapTime = UserDefaults.standard.double(forKey: UserDefaultsKeys.lastLapTime)
+        let isRunning = UserDefaults.standard.bool(forKey: UserDefaultsKeys.isRunning)
         
         if isRunning {
             let currentTime = Date().timeIntervalSince1970
