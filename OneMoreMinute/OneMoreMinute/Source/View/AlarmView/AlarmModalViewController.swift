@@ -73,6 +73,7 @@ private extension AlarmModalViewController {
         configureSelf()
         setupLayout()
         setupModalView()
+        addKeyboardNotification()
         bind()
     }
     
@@ -98,6 +99,30 @@ private extension AlarmModalViewController {
             let data = self.data
         else { return }
         self.modalView.enterData(data)
+    }
+    
+    func addKeyboardNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func removeKeyboardNotification() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShow(_ noti: NSNotification) {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear) {
+            self.modalView.frame.origin.y -= 150
+        }
+    }
+    
+    @objc func keboardWillHide(_ noti: NSNotification) {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear) {
+            self.modalView.frame.origin.y += 150
+        }
     }
     
     /// 데이터 바인딩 메소드
