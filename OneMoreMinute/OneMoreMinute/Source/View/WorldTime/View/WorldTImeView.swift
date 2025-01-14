@@ -16,7 +16,7 @@ class WorldTimeView: UIView {
     
     let worldTimeCollectionView = VerticalCollectionView()
     let plusButton = ShowModalButton()
-    
+        
     
     // MARK: - Life Cycles
     

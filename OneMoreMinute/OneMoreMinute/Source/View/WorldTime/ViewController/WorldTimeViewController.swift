@@ -14,7 +14,7 @@ import Inject
 
 class WorldTimeViewController: UIViewController {
     // MARK: - Properties
-
+    
     let worldTimeViewModel = WorldTimeViewModel()
     let worldTimeView = Inject.ViewHost(WorldTimeView())
     
@@ -47,7 +47,10 @@ class WorldTimeViewController: UIViewController {
 // MARK: - Bindings
 
 extension WorldTimeViewController {
+    
     func setupBindings() {
+        // 플러스 버튼 바인딩 : 버튼 탭시 모달 화면 띄워주는 기능...
+        // 굳이 Rx로 구현할 필요는 없는 기능. Rx를 일반적인 버튼에 바인딩 해보는 것을 경험하는 용도.
         worldTimeView.plusButton.rx
             .tap
             .subscribe(onNext: { [weak self] in
