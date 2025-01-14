@@ -25,7 +25,7 @@ final class MainTabBarItem: UIControl {
     }
     
     private let titleLabel = UILabel().then {
-        $0.font = UIFont.pretendard(ofSize: 10, weight: .regular)
+        $0.font = Fonts.caption
         $0.textColor = UIColor(resource: .tabBarTint)
     }
     
