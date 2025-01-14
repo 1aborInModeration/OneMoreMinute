@@ -113,32 +113,34 @@ private extension AlarmModalViewController {
         self.modalView.saveButton.rx.tap
             .asSignal(onErrorSignalWith: .empty())
             .withUnretained(self)
-            .emit { owner, _ in
+            .emit { [weak self] owner, _ in
                 
                 switch owner.state {
-                // 현재 뷰 컨트롤러가 create인 경우
-                // 코어 데이터에 새로운 데이터 저장
+                    // 현재 뷰 컨트롤러가 create인 경우
+                    // 코어 데이터에 새로운 데이터 저장
                 case .create:
                     let data = owner.modalView.extractionData()
-                    
-                    owner.alarmDataManager.create(with: .init(
+                    let alarmDTO = AlarmDTO(
                         id: UUID(),
                         isActive: true,
                         note: data.memo,
                         time: data.date,
-                        weekDays: .init(mon: data.week[0],
-                                        tue: data.week[1],
-                                        wed: data.week[2],
-                                        thu: data.week[3],
-                                        fri: data.week[4],
-                                        sat: data.week[5],
-                                        sun: data.week[6]
-                                       )
+                        weekDays: .init(
+                            mon: data.week[0],
+                            tue: data.week[1],
+                            wed: data.week[2],
+                            thu: data.week[3],
+                            fri: data.week[4],
+                            sat: data.week[5],
+                            sun: data.week[6]
                         )
                     )
                     
-                // 현재 뷰 컨트롤러가 edit인 경우
-                // 코어 데이터에 데이터 업데이트
+                    owner.alarmDataManager.create(with: alarmDTO)
+                    self?.setupAlarmNotifications(for: alarmDTO)
+                    
+                    // 현재 뷰 컨트롤러가 edit인 경우
+                    // 코어 데이터에 데이터 업데이트
                 case .edit:
                     guard let data = owner.data else { return }
                     let cellData = owner.modalView.extractionData()
@@ -155,6 +157,8 @@ private extension AlarmModalViewController {
                     data.weekDays?.sun = cellData.week[6]
                     
                     owner.alarmDataManager.update(data.objectID, updateData: data)
+                    self?.removeAlarmNotifications(for: data)
+                    self?.setupAlarmNotifications(for: data)
                 }
                 
             }.disposed(by: self.disposeBag)
@@ -191,5 +195,109 @@ private extension AlarmModalViewController {
             }.disposed(by: self.disposeBag)
     }
     
+    private func setupAlarmNotifications(for data: AlarmDTO) {
+        let uuidString = data.id.uuidString
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: data.time)
+        let minute = calendar.component(.minute, from: data.time)
+        
+        let weekDays = data.weekDays
+        let weekDayMapping: [(day: Bool, suffix: String, weekday: AlarmNotificationWeekDays)] = [
+            (weekDays.mon, ".mon", .monday),
+            (weekDays.tue, ".tue", .tuesday),
+            (weekDays.wed, ".wed", .wednesday),
+            (weekDays.thu, ".thu", .thursday),
+            (weekDays.fri, ".fri", .friday),
+            (weekDays.sat, ".sat", .saturday),
+            (weekDays.sun, ".sun", .sunday)
+        ]
+        
+        var isWeekDayNil = true
+        for (isEnabled, suffix, weekday) in weekDayMapping where isEnabled {
+            AlarmNotificationManager.shared.setRegularNotification(
+                identifier: uuidString + suffix,
+                title: "알림",
+                body: "알림입니다",
+                weekday: weekday,
+                hour: .init(rawValue: hour),
+                minute: .init(rawValue: minute)!
+            )
+            isWeekDayNil = false
+        }
+        
+        if isWeekDayNil {
+            AlarmNotificationManager.shared.setRegularNotification(
+                identifier: uuidString,
+                title: "알림",
+                body: "알림입니다",
+                hour: .init(rawValue: hour),
+                minute: .init(rawValue: minute)!
+            )
+        }
+    }
+    
+    /// 알람 알림을 설정하는 헬퍼 메소드
+    /// - Parameter data: 알람 데이터
+    private func setupAlarmNotifications(for data: Alarm) {
+        guard let time = data.time,
+              let weekDays = data.weekDays,
+              let uuidString = data.id?.uuidString else { return }
+        
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: time)
+        let minute = calendar.component(.minute, from: time)
+        
+        let weekDayMapping: [(day: Bool, suffix: String, weekday: AlarmNotificationWeekDays)] = [
+            (weekDays.mon, ".mon", .monday),
+            (weekDays.tue, ".tue", .tuesday),
+            (weekDays.wed, ".wed", .wednesday),
+            (weekDays.thu, ".thu", .thursday),
+            (weekDays.fri, ".fri", .friday),
+            (weekDays.sat, ".sat", .saturday),
+            (weekDays.sun, ".sun", .sunday)
+        ]
+        
+        var isWeekDayNil = true
+        
+        for (isEnabled, suffix, weekday) in weekDayMapping where isEnabled {
+            AlarmNotificationManager.shared.setRegularNotification(
+                identifier: uuidString + suffix,
+                title: "알림",
+                body: "알림입니다",
+                weekday: weekday,
+                hour: .init(rawValue: hour),
+                minute: .init(rawValue: minute)!
+            )
+            isWeekDayNil = false
+        }
+        
+        if isWeekDayNil {
+            AlarmNotificationManager.shared.setRegularNotification(
+                identifier: uuidString,
+                title: "알림",
+                body: "알림입니다",
+                hour: .init(rawValue: hour),
+                minute: .init(rawValue: minute)!
+            )
+        }
+    }
+    
+    /// 알람 알림을 제거하는 헬퍼 메소드
+    /// - Parameter data: 알람 데이터
+    private func removeAlarmNotifications(for data: Alarm) {
+        guard let uuidString = data.id?.uuidString else { return }
+        let identifiers = [
+            uuidString,
+            uuidString + ".mon",
+            uuidString + ".tue",
+            uuidString + ".wed",
+            uuidString + ".thu",
+            uuidString + ".fri",
+            uuidString + ".sat",
+            uuidString + ".sun"
+        ]
+        AlarmNotificationManager.shared.removePendingNotification(by: identifiers)
+    }
+
 }
 
