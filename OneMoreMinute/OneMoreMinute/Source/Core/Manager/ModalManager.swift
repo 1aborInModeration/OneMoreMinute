@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Inject
 
 /// 전역으로 모달을 관리하고 보여주는 역할을 수행하는 모달 관리 매니저
 /// ModalManager를 통해 전역에서 원하는 UIView를 원하는 타입의 모달뷰컨트롤러에 추가하여 보여준다.
@@ -27,7 +26,7 @@ struct ModalManager {
             return
         }
         
-        let modalVC = Inject.ViewControllerHost(PopupModalViewController(modalContentsView: content))
+        let modalVC = PopupModalViewController(modalContentsView: content)
         modalVC.modalPresentationStyle = .overFullScreen
         modalVC.modalTransitionStyle = .crossDissolve
         

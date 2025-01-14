@@ -9,14 +9,13 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
-import Inject
 
 
 class WorldTimeViewController: UIViewController {
     // MARK: - Properties
     
     let worldTimeViewModel = WorldTimeViewModel()
-    let worldTimeView = Inject.ViewHost(WorldTimeView())
+    let worldTimeView = WorldTimeView()
     
     let disposeBag = DisposeBag()
     
@@ -55,7 +54,7 @@ extension WorldTimeViewController {
             .tap
             .subscribe(onNext: { [weak self] in
                 if let topVC = AppHelpers.getTopViewController() {
-                    let searchModalVC = Inject.ViewControllerHost(SearchCityModalViewController())
+                    let searchModalVC = SearchCityModalViewController()
                     searchModalVC.modalPresentationStyle = .overFullScreen
                     searchModalVC.modalTransitionStyle = .crossDissolve
                     topVC.present(searchModalVC, animated: true) {
