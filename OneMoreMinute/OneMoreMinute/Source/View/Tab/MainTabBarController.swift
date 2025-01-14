@@ -34,12 +34,14 @@ final class MainTabBarController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        UNUserNotificationCenter.current().delegate = self
         gradientLayer.frame = view.bounds
         view.layer.addSublayer(gradientLayer)
         configureHierarchy()
         setupFirstVC()
         bindTabBar()
         bindViewModel()
+        bindSceneLifeCycle()
     }
     
     override func viewWillLayoutSubviews() {
@@ -109,6 +111,22 @@ extension MainTabBarController {
             })
             .disposed(by: disposeBag)
     }
+    
+    private func bindSceneLifeCycle() {
+        NotificationCenter.default.rx.notification(UIScene.willEnterForegroundNotification)
+            .bind { [weak self] _ in
+                Task {
+                    let current = UNUserNotificationCenter.current()
+                    let notifications = await current.deliveredNotifications()
+                    let title = notifications[0].request.content.title
+                    let body = notifications[0].request.content.body
+                    
+                    self?.showSnoozeModal(time: title, title: body)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+    }
 }
 
 // MARK: - Background Gradient Color Configuration
@@ -174,6 +192,7 @@ extension MainTabBarController {
 // MARK: - Modal Presentation
 
 extension MainTabBarController {
+    @MainActor
     private func showSnoozeModal(time: String, title: String) {
         let snoozeVC = AlarmSnoozeHostingViewController(time: time, title: title) {
             self.dismissSnoozeModal()
@@ -184,7 +203,17 @@ extension MainTabBarController {
     }
     
     private func dismissSnoozeModal() {
+        AlarmNotificationManager.shared.removeDeliveredNotifications()
         self.presentedViewController?.dismiss(animated: false)
+    }
+}
+
+extension MainTabBarController: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.banner, .sound])
+        let title = notification.request.content.title
+        let body = notification.request.content.body
+        showSnoozeModal(time: title, title: body)
     }
 }
 

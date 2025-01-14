@@ -133,6 +133,11 @@ final class AlarmNotificationManager: AlarmNotificationManageable {
         AppLogger.debug("AlarmNotification with identifier \(identifier) removed")
     }
     
+    func removeDeliveredNotifications() {
+        center.removeAllDeliveredNotifications()
+        AppLogger.debug("Removed all delivered notifications")
+    }
+    
     private func configureContent(title: String, body: String) -> UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
         content.title = title
