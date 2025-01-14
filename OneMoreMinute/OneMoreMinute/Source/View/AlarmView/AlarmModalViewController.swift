@@ -10,6 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import RxDataSources
+import RxKeyboard
 
 /// 알람뷰의 상태를 나타내는 enum
 ///
@@ -73,7 +74,6 @@ private extension AlarmModalViewController {
         configureSelf()
         setupLayout()
         setupModalView()
-        addKeyboardNotification()
         bind()
     }
     
@@ -101,34 +101,15 @@ private extension AlarmModalViewController {
         self.modalView.enterData(data)
     }
     
-    func addKeyboardNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    func removeKeyboardNotification() {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc func keyboardWillShow(_ noti: NSNotification) {
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear) {
-            self.modalView.frame.origin.y -= 150
-        }
-    }
-    
-    @objc func keboardWillHide(_ noti: NSNotification) {
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear) {
-            self.modalView.frame.origin.y += 150
-        }
+    func bind() {
+        bindSaveButton()
+        bindKeyboardIsActive()
     }
     
     /// 데이터 바인딩 메소드
     ///
     /// 현재 뷰 컨트롤러의 state에 따라 바인딩 변경
-    func bind() {
+    func bindSaveButton() {
         self.modalView.saveButton.rx.tap
             .asSignal(onErrorSignalWith: .empty())
             .withUnretained(self)
@@ -178,6 +159,35 @@ private extension AlarmModalViewController {
             }.disposed(by: self.disposeBag)
         
         
+    }
+    
+    /// 키보드의 활성화 상태를 확인해서 뷰의 위치를 변경하는 바인드 메소드
+    func bindKeyboardIsActive() {
+        RxKeyboard.instance.visibleHeight
+            .skip(1)
+            .asSignal(onErrorSignalWith: .empty())
+            .withUnretained(self)
+            .emit { owner, keyboardHeight in
+                
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear) {
+                    owner.modalView.frame.origin.y -= keyboardHeight / 2
+                }
+                
+            }.disposed(by: self.disposeBag)
+        
+        RxKeyboard.instance.isHidden
+            .asSignal(onErrorSignalWith: .empty())
+            .withUnretained(self)
+            .emit { owner, isHidden in
+                
+                guard isHidden else { return }
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear) {
+                    let centerY = (owner.view.bounds.height / 2)
+                    let modalCenter = (owner.modalView.bounds.height / 2)
+                    owner.modalView.frame.origin.y = centerY - modalCenter
+                }
+                
+            }.disposed(by: self.disposeBag)
     }
     
 }
