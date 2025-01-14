@@ -1,5 +1,5 @@
 {
-  "originHash" : "045bcf8550d2827079cb9c9d48dc02ddb52df6b7001439b89c6a97d026cdee32",
+  "originHash" : "6e9ae00770daff8045d6afd9fad2cb6b6d8bb34117bb39a564b06b6e63ce76bc",
   "pins" : [
     {
       "identity" : "inject",
@@ -13,10 +13,19 @@
     {
       "identity" : "rxdatasources",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/RxSwiftCommunity/RxDataSources.git",
+      "location" : "https://github.com/RxSwiftCommunity/RxDataSources",
       "state" : {
         "revision" : "90c29b48b628479097fe775ed1966d75ac374518",
         "version" : "5.0.2"
+      }
+    },
+    {
+      "identity" : "rxkeyboard",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/RxSwiftCommunity/RxKeyboard",
+      "state" : {
+        "revision" : "63f6377975c962a1d89f012a6f1e5bebb2c502b7",
+        "version" : "2.0.1"
       }
     },
     {

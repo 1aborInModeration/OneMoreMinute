@@ -8,12 +8,13 @@
 import RxSwift
 import RxCocoa
 import RxDataSources
+import Foundation
 
 /// 컬렉션뷰 데이터소스의 아이템 정의
 struct AlarmItem: IdentifiableType, Hashable {
-    typealias Identity = Int
+    typealias Identity = UUID
     var identity: Identity {
-        return self.hashValue
+        return UUID()
     }
     
     let data: Alarm
@@ -24,11 +25,12 @@ struct AlarmSectionModel: AnimatableSectionModelType {
     typealias Identity = String
     typealias Item = AlarmItem
     
-    var identity: String
+    var identity: String {
+        return String(describing: Self.self)
+    }
     var items: [AlarmItem]
     
-    init(identity: String, items: [AlarmItem]) {
-        self.identity = identity
+    init(items: [AlarmItem]) {
         self.items = items
     }
     

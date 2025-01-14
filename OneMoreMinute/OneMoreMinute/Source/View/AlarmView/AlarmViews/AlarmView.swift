@@ -14,6 +14,8 @@ final class AlarmView: UIView {
     
     private(set) lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout).then {
         $0.backgroundColor = .clear
+        $0.showsVerticalScrollIndicator = false
+        $0.showsHorizontalScrollIndicator = false
         $0.register(AlarmCollectionViewCell.self, forCellWithReuseIdentifier: AlarmCollectionViewCell.id)
     }
     
@@ -28,7 +30,7 @@ final class AlarmView: UIView {
         
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(0.95),
-            heightDimension: .fractionalHeight(0.2)
+            heightDimension: .absolute(160)
         )
         
         let group = NSCollectionLayoutGroup.vertical(
@@ -38,7 +40,7 @@ final class AlarmView: UIView {
         
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 20
-        section.contentInsets.leading = 20
+        section.contentInsets = .init(top: 10, leading: 20, bottom: 20, trailing: 0)
         
         let layout = UICollectionViewCompositionalLayout(section: section)
         
@@ -46,6 +48,7 @@ final class AlarmView: UIView {
     }()
     
     // MARK: - AlarmView Initializer
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -60,14 +63,15 @@ final class AlarmView: UIView {
 }
 
 // MARK: - AlarmView UI Setting Method
+
 private extension AlarmView {
     
     func setupUI() {
-        configure()
+        configureSelf()
         setupLayout()
     }
     
-    func configure() {
+    func configureSelf() {
         self.backgroundColor = .clear
         self.addSubview(self.collectionView)
     }

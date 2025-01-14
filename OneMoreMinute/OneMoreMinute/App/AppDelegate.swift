@@ -14,6 +14,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         checkNotificationPermission()
         UNUserNotificationCenter.current().delegate = self
+        
+        sleep(2)
         return true
     }
     
