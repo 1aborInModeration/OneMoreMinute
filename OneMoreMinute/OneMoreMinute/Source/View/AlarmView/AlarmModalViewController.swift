@@ -122,6 +122,7 @@ private extension AlarmModalViewController {
                     let data = owner.modalView.extractionData()
                     
                     owner.alarmDataManager.create(with: .init(
+                        id: UUID(),
                         isActive: true,
                         note: data.memo,
                         time: data.date,
