@@ -89,7 +89,7 @@ final class AlarmModalView: UIView {
     func extractionData() -> (date: Date, memo: String?, week: [Bool]) {
         let date = self.timeSection.timeSet.date
         let memo = self.memoSection.memoSet.text
-        let week = self.weekSection.isSelecteds.value
+        let week = self.weekSection.cellSelectedStates.value
         return (date, memo, week)
     }
     
@@ -109,7 +109,7 @@ final class AlarmModalView: UIView {
                                 weekDays.sun
         ]
         
-        self.weekSection.isSelecteds.accept(weekData)
+        self.weekSection.cellSelectedStates.accept(weekData)
     }
 }
 

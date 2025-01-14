@@ -40,19 +40,21 @@ final class StopwatchViewModel {
     // MARK: - Initializer
     
     init() {
-        SceneLifeCycleObserver.shared.sceneWillEnterForegroundRelay
-            .subscribe(onNext: { [weak self] in
-                self?.handleSceneWillEnterForeground()
-            })
-            .disposed(by: disposeBag)
         
-        SceneLifeCycleObserver.shared.sceneDidEnterBackgroundRelay
-            .subscribe(onNext: { [weak self] in
-                self?.handleSceneDidEnterBackground()
+        /// - Note: 두개의 Relay를 하나의 PublishRelay로 통합한 후, 두개의 앱 상태를 정의한 열거형 타입 중 하나를 번갈아 변경시켜 이벤트를 방출시켰습니다.
+        SceneLifeCycleObserver.shared.appStateRelay
+            .subscribe(onNext: { [weak self] state in
+                switch state {
+                case .willEnterForeground:
+                    self?.handleSceneWillEnterForeground()
+                case .didEnterBackground:
+                    self?.handleSceneDidEnterBackground()
+                }
             })
             .disposed(by: disposeBag)
         
         restoreState()
+        
         if model.isRunning {
             startTimer()
         }

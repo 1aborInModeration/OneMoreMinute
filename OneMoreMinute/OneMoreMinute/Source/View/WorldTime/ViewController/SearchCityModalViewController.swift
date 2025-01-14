@@ -83,34 +83,41 @@ extension SearchCityModalViewController {
 extension SearchCityModalViewController {
     
     func setupBindings() {
-        searchCityView.searchBar.rx.text.orEmpty
-            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
+        // 검색어 입력 스트림
+        let searchStream = searchCityView.searchBar.rx.text.orEmpty
+            .asDriver(onErrorDriveWith: .empty())
+            .debounce(.milliseconds(500))
             .distinctUntilChanged()
-            .filter {
-                return $0.count > 1
-            }
-            .subscribe(
-                onNext: { [weak self] query in
-                    self?.searchCityViewModel.searchCities(with: query)
-                }
-            )
+            .filter { $0.count > 1 }
+        
+        // 검색 결과 스트림
+        let citiesStream = searchCityViewModel.cityListRelay
+            .asDriver(onErrorDriveWith: .empty())
+        
+        // 도시 
+        searchStream
+            .drive(onNext: { [weak self] query in
+                self?.searchCityViewModel.searchCities(with: query)
+            })
             .disposed(by: disposeBag)
         
-        searchCityViewModel.cityListRelay
-            .bind(to: searchCityView.cityListCollectionView.rx.items(
+        // 검색 결과 바인딩
+        citiesStream
+            .drive(searchCityView.cityListCollectionView.rx.items(
                 cellIdentifier: CityListCell.id,
                 cellType: CityListCell.self
-            )) { index, cityTimeZone, cell in
+            )) { _, cityTimeZone, cell in
                 cell.configure(with: cityTimeZone)
             }
             .disposed(by: disposeBag)
         
-        searchCityView.cityListCollectionView.rx
-            .itemSelected
-            .withLatestFrom(searchCityViewModel.cityListRelay) { (indexPath, cityList) in
+        // 도시 선택 처리
+        searchCityView.cityListCollectionView.rx.itemSelected
+            .asDriver()
+            .withLatestFrom(citiesStream) { indexPath, cityList in
                 cityList[indexPath.row]
             }
-            .subscribe(onNext: { [weak self] cityTimeZone in
+            .drive(onNext: { [weak self] cityTimeZone in
                 self?.searchCityViewModel.saveCity(cityTimeZone: cityTimeZone)
                 self?.closeModal()
             })
