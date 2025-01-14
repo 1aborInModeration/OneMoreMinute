@@ -49,6 +49,13 @@ final class AlarmModalMemoSection: UIView {
         }
     }
     
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        guard !self.memoSet.frame.contains(point) else {
+            return super.hitTest(point, with: event)
+        }
+        return nil
+    }
+    
 }
 
 // MARK: - AlarmModalMemoSection UI Setting Method
