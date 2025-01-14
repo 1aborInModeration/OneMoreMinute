@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 
-class SearchCityView: UIView {
+class SearchCityView: WrapperView {
 
     let titleLabel = TitleLabel(size: .title1)
     let closeButton = CloseButton()
@@ -19,8 +19,8 @@ class SearchCityView: UIView {
         
     weak var delegate: ModalCloseDelegate?
 
-    init() {
-        super.init(frame: .zero)
+    override init() {
+        super.init()
         
         setupSubViews()
         setupUIProperties()
@@ -48,6 +48,7 @@ extension SearchCityView {
     
     func setupUIProperties() {
         self.backgroundColor = .wrapperBackground
+        self.layer.borderWidth = Layouts.borderWidthThin
         self.layer.cornerRadius = Layouts.radius
         
         titleLabel.text = "세계시간 추가"

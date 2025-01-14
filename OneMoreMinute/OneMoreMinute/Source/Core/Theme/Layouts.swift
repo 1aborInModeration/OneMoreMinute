@@ -56,4 +56,13 @@ struct Layouts {
     static let buttonHeight: CGFloat = 48
     /// 작은 버튼 등의 비교적 작은 크기의 한줄 컴포넌트의 높이 사이즈 / 32
     static let buttonHeightSmall: CGFloat = 32
+    
+    // MARK: - Border 속성
+    
+    /// 얇은 굵기의 외곽선 // size : 1
+    static let borderWidthThin: CGFloat = 1
+    /// 일반 굵기의 외곽선 // size : 2
+    static let borderWidth: CGFloat = 2
+    /// 굵은 굵기의 외곽선 // size : 4
+    static let borderWidthBold: CGFloat = 4
 }

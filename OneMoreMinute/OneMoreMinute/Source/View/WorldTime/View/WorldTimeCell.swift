@@ -67,16 +67,12 @@ extension WorldTimeCell {
     func setupUIProperties() {
         self.backgroundColor = .clear
         
-        contentWrapperView.backgroundColor = .wrapperBackground
-        contentWrapperView.layer.borderWidth = 1
-        contentWrapperView.layer.borderColor = UIColor.wrapperStroke.cgColor
+        contentWrapperView.backgroundColor = UIColor.wrapperBackground
+        contentWrapperView.layer.borderWidth = Layouts.borderWidthThin
         contentWrapperView.layer.cornerRadius = Layouts.radius
-                
         cityNameLabel.textColor = .fontLabel
         dateLabel.textColor = .fontGray
         cityTimeLabel.textColor = .mainTitle
-        
-        deleteButton.applyButtonAction(action: deleteButtonTapped)
     }
     
     func setupLayouts() {
