@@ -27,6 +27,7 @@ enum ButtonCorner {
 
 
 extension UIButton {
+    
     /// 버튼 색상 변경
     ///
     /// 버튼의 색상을 변경해줍니다.
@@ -50,10 +51,10 @@ extension UIButton {
     }
 }
 
-
 // MARK: - 버튼 액션 할당
 
 extension UIButton {
+    
     /// 부모로부터 액션을 할당받아 버튼의 터치 동작과 연결.
     /// - Parameter action: 동작을 수행하는 클로저
     func applyButtonAction(action: @escaping () -> Void) {

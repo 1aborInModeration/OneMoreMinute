@@ -8,6 +8,7 @@
 import UIKit
 
 struct AppHelpers {
+    
     /// 현재 최상위 뷰컨트롤러를 가져와서 해당 뷰 컨트롤러에 접근할 수 있도록 해주는 함수.
     ///
     /// - **요약** : 현재 보이는 ViewController를 모르는 상황에서, 어디서든 Alert나 Modal을 띄울 수 있는 능력
@@ -62,7 +63,6 @@ struct AppHelpers {
         alert.addAction(confirmAction)
         topVC.present(alert, animated: true, completion: nil)
     }
-    
     
     /// Date 타입의 데이터를 월, 일, 요일의 문자열로 반환하는 메소드
     ///

@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 
 class SeparatorLineView: UIView {
+    
     init(height: CGFloat = 1.0) {
         super.init(frame: .zero)
         
@@ -22,6 +23,7 @@ class SeparatorLineView: UIView {
 }
 
 extension SeparatorLineView {
+    
     func setupUIProperties() {
         self.backgroundColor = UIColor.wrapperStroke
     }

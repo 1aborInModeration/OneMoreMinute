@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 
 class TitleLabel: UILabel {
+    
     // MARK: - Life Cycles
     
     /// 타이틀 라벨
@@ -39,6 +40,7 @@ class TitleLabel: UILabel {
 // MARK: - Setup UI
 
 extension TitleLabel {
+    
     func setupUIProperties(size: TitleSize, isBold: Bool) {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = .clear

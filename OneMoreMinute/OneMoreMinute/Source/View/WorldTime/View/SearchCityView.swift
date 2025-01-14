@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 
-class SearchCityView: UIView, ModalLifecycleNotifiable, ModalCloseable {
+class SearchCityView: WrapperView {
 
     let titleLabel = TitleLabel(size: .title1)
     let closeButton = CloseButton()
@@ -19,8 +19,8 @@ class SearchCityView: UIView, ModalLifecycleNotifiable, ModalCloseable {
         
     weak var delegate: ModalCloseDelegate?
 
-    init() {
-        super.init(frame: .zero)
+    override init() {
+        super.init()
         
         setupSubViews()
         setupUIProperties()
@@ -32,10 +32,10 @@ class SearchCityView: UIView, ModalLifecycleNotifiable, ModalCloseable {
     }
 }
 
-
 // MARK: - SetupUI Layouts
 
 extension SearchCityView {
+    
     func setupSubViews() {
         [
             titleLabel,
@@ -48,6 +48,7 @@ extension SearchCityView {
     
     func setupUIProperties() {
         self.backgroundColor = .wrapperBackground
+        self.layer.borderWidth = Layouts.borderWidthThin
         self.layer.cornerRadius = Layouts.radius
         
         titleLabel.text = "세계시간 추가"
@@ -86,34 +87,9 @@ extension SearchCityView {
     }
 }
 
-
-// MARK: - Update UI
-
-extension SearchCityView {
-
-}
-
-
-// MARK: - Action
-
-extension SearchCityView {
-    func didTapButton() {
-        
-    }
-}
-
-
-
 // MARK: - Modal Porotocol Constraints
 
 extension SearchCityView {
-    func onModalWillAppear() {
-        // 모달이 나타날 때 동작 추가
-    }
-    
-    func onModalWillDisappear() {
-        // 모달이 사라질 때 동작 추가
-    }
     
     func closeModal() {
         delegate?.closeModal()

@@ -36,8 +36,8 @@ enum FontColor: String {
     case background = "FontBackground"
 }
 
-
 struct Colors {
+    
     // MARK: - SystemColor
         
     /// 앱 전체의 시스템 컬러 지정용.
@@ -67,7 +67,6 @@ struct Colors {
         return UIColor(named: "Black-\(ramp.rawValue)")
     }
     
-    
     // MARK: - Basic Color
     
     /// 현재 앱의 백그라운드 색상으로 정한 컬러. 일반적으로 기본적인 흰/다크 색상.
@@ -79,4 +78,9 @@ struct Colors {
     static var systemLightGray: UIColor = .black200
     /// 그냥 진한 회색이 필요할 때 사용하는  그냥 DarkGray
     static var systemDarkGray: UIColor = .black800
+    
+    // MARK: - Dynamic Color
+    
+    static let wrapperStroke: UIColor = .wrapperStroke
+    static let textFieldStroke: UIColor = .textFieldStroke
 }

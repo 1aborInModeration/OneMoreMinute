@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 
 class HeadlineLabel: UILabel {
+    
     // MARK: - Life Cycles
     
     /// 헤드라인 라벨
@@ -37,6 +38,7 @@ class HeadlineLabel: UILabel {
 }
 
 extension HeadlineLabel {
+    
     func setupUIProperties(size: HeadlineSize, isBold: Bool) {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = .clear

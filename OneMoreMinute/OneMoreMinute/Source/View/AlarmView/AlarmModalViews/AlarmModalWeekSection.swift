@@ -100,6 +100,13 @@ final class AlarmModalWeekSection: UIView {
         self.isSelecteds.accept(items)
     }
     
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        guard !self.weeks.frame.contains(point) else {
+            return super.hitTest(point, with: event)
+        }
+        return nil
+    }
+    
 }
 
 // MARK: - AlarmModalWeekSection UI Setting Method

@@ -20,8 +20,6 @@ class VerticalCollectionView: UICollectionView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
 }
 
 // MARK: - Compositional Layout Setup
