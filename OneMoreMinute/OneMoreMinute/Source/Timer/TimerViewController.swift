@@ -38,7 +38,7 @@ final class TimerViewController: UIViewController {
     /// 타이머의 시간을 표시하는 레이블
     private let timeLabel = UILabel().then {
         $0.text = "05:00"
-        $0.font = Fonts.display1Bold
+        $0.font = Fonts.timerClock
         $0.textAlignment = .center
         $0.textColor = UIColor(resource: .mainTitle)
     }

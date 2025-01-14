@@ -62,5 +62,7 @@ struct Fonts {
     static let headerClock = UIFont.monospacedDigitSystemFont(ofSize: 30, weight: .bold)
     /// 각 카드 내부 시계 표현용 모노스페이스 폰트 / 20 / bold
     static let cardClock = UIFont.monospacedDigitSystemFont(ofSize: 20, weight: .bold)
+    /// 각 카드 내부 시계 표현용 모노스페이스 폰트 / 16 / semibold
+    static let cardClock2 = UIFont.monospacedDigitSystemFont(ofSize: 16, weight: .semibold)
     
 }

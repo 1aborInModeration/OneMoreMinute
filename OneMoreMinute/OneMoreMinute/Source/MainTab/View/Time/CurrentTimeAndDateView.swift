@@ -12,14 +12,14 @@ import Then
 /// 메인 화면에서 현재 시각과 날짜를 보여주는 뷰
 final class CurrentTimeAndDateView: UIView {
     private let timeLabel = UILabel().then {
-        $0.font = UIFont.monospacedDigitSystemFont(ofSize: 30, weight: .bold)
+        $0.font = Fonts.headerClock
         $0.numberOfLines = 1
         $0.text = " "
         $0.textColor = UIColor(resource: .timeAndDateLabel)
     }
     
     private let dateLabel = UILabel().then {
-        $0.font = UIFont.monospacedDigitSystemFont(ofSize: 14, weight: .regular)
+        $0.font = Fonts.title2
         $0.numberOfLines = 1
         $0.text = " "
         $0.textColor = UIColor(resource: .timeAndDateLabel)
