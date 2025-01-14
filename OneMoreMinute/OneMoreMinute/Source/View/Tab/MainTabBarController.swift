@@ -14,13 +14,10 @@ import RxSwift
 /// 4개의 탭을 가지고 있으며, 각 탭은 독립적인 뷰 컨트롤러를 관리.
 /// 커스텀 탭바를 사용하여 UI를 구성.
 final class MainTabBarController: UIViewController {
-    // 각 탭에 해당하는 자식 뷰 컨트롤러 리스트
-    private let childVCList = [
-        AlarmViewController(),
-        WorldTimeViewController(),
-        StopwatchViewController(),
-        TimerViewController()
-    ]
+    
+    // MARK: - Properties
+    private let stopwatchViewModel: StopwatchViewModelProtocol
+    private let childVCList: [UIViewController]
     
     private let gradientLayer = CAGradientLayer()
     private let currentTimeAndDate = CurrentTimeAndDateView()
@@ -29,6 +26,25 @@ final class MainTabBarController: UIViewController {
     private var selectedIndex = 0
     private let viewModel = MainTabViewModel()
     private let disposeBag = DisposeBag()
+    
+    // MARK: - Initializer
+    init(stopwatchViewModel: StopwatchViewModelProtocol) {
+        self.stopwatchViewModel = stopwatchViewModel
+        
+        // 각 탭에 해당하는 자식 뷰 컨트롤러 리스트
+        self.childVCList = [
+            AlarmViewController(),
+            WorldTimeViewController(),
+            StopwatchViewController(viewModel: stopwatchViewModel),
+            TimerViewController()
+        ]
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Life Cycle
     
@@ -242,7 +258,7 @@ final class DViewController: UIViewController {
     }
 }
 
-@available(iOS 17.0, *)
-#Preview {
-    MainTabBarController()
-}
+//@available(iOS 17.0, *)
+//#Preview {
+//    MainTabBarController()
+//}

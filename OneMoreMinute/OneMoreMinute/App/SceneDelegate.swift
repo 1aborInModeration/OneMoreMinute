@@ -10,16 +10,19 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    private let stopwatchViewModel = StopwatchViewModel()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
+        
+        stopwatchViewModel.restoreLaps()
+        
+        let mainTabBarController = MainTabBarController(stopwatchViewModel: stopwatchViewModel)
+        
         let window = UIWindow(windowScene: scene)
-        let mainViewController = MainTabBarController()
-        let navigationController = mainViewController
-        window.rootViewController = navigationController
-        window.makeKeyAndVisible()
+        window.rootViewController = mainTabBarController
         self.window = window
+        window.makeKeyAndVisible()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -42,6 +45,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillEnterForeground(_ scene: UIScene) {
         // Called as the scene transitions from the background to the foreground.
         // Use this method to undo the changes made on entering the background.
+        
+        stopwatchViewModel.restoreState()
+        if stopwatchViewModel.isRunningRelay.value {
+            stopwatchViewModel.startTimer()
+        }
+        stopwatchViewModel.forceUIUpdate()
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
@@ -51,6 +60,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Save changes in the application's managed object context when the application transitions to the background.
         (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
+        
+        stopwatchViewModel.saveState()
+        stopwatchViewModel.saveLaps()
     }
 
 
