@@ -19,9 +19,9 @@ class CustomFilledButton: UIButton  {
     
     // MARK: - Life Cycles
     
-    /// 헤드라인 라벨
+    /// 커스텀 filled 버튼
     ///
-    /// 섹션 제목 레벨의 타이틀을 담당하는 라벨
+    /// 기본 형태의 버튼.
     /// 기본 텍스트는 가운데 정렬이며 시스템컬러를 기본 배경색으로 가집니다..
     /// 기본 폰트 색상은 Label 색상입니다.
     ///

@@ -12,7 +12,6 @@
 		71D095312D2D094A005FE9C0 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 71D095302D2D094A005FE9C0 /* RxCocoa */; };
 		AA471AD12D35ECB600A71E02 /* RxKeyboard in Frameworks */ = {isa = PBXBuildFile; productRef = AA471AD02D35ECB600A71E02 /* RxKeyboard */; };
 		E9583B402D311E9A00231343 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = E9583B3F2D311E9A00231343 /* RxDataSources */; };
-		E9583B432D311EA700231343 /* Inject in Frameworks */ = {isa = PBXBuildFile; productRef = E9583B422D311EA700231343 /* Inject */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -542,14 +541,6 @@
 				minimumVersion = 5.0.2;
 			};
 		};
-		E9583B412D311EA700231343 /* XCRemoteSwiftPackageReference "Inject" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/krzysztofzablocki/Inject.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.5.2;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -577,11 +568,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E9583B3E2D311E9A00231343 /* XCRemoteSwiftPackageReference "RxDataSources" */;
 			productName = RxDataSources;
-		};
-		E9583B422D311EA700231343 /* Inject */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E9583B412D311EA700231343 /* XCRemoteSwiftPackageReference "Inject" */;
-			productName = Inject;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

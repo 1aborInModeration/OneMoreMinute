@@ -28,7 +28,7 @@ final class ShowModalButton: UIButton {
 private extension ShowModalButton {
     
     func setupUI() {
-        self.layer.cornerRadius = 25
+        self.layer.cornerRadius = Layouts.buttonHeight / 2
         self.backgroundColor = UIColor.plusButtonBackground
         self.setImage(UIImage(systemName: "plus"), for: .normal)
         self.tintColor = UIColor.white
