@@ -92,7 +92,7 @@ extension SearchCityViewModel {
         let currentTimeZone = TimeZone.current
         let differenceInSeconds = timeZone.secondsFromGMT() - currentTimeZone.secondsFromGMT()
         let differenceInHours = differenceInSeconds / 3600
-        let diffGMTText = currentTimeZone.localizedName(for: .shortStandard, locale: Locale.current) ?? ""
+        let diffGMTText = timeZone.localizedName(for: .shortStandard, locale: Locale.current) ?? ""
         
         if differenceInHours == 0 {
             return "(\(diffGMTText)) 현재 시간과 동일"

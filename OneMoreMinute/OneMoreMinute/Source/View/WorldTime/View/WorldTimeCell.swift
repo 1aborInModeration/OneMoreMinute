@@ -13,15 +13,14 @@ class WorldTimeCell: UICollectionViewCell {
     
     static let id: String = "WorldTimeCell"
     
-    let contentWrapperView = UIView()
+    let contentWrapperView = WrapperView()
     let cityNameLabel = TitleLabel()
     let dateLabel = BodyLabel()
     let cityTimeLabel = ClockLabel(type: .worldCard)
-    let deleteButton = CellGestureButton(type: .delete)
     
     private var isDeleteButtonVisible = false
     private var timer: Timer?
-    private var timeZone: TimeZone?
+    var timeZoneId: String?
     
     // MARK: - Life Cycles
     
@@ -39,9 +38,8 @@ class WorldTimeCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        timer?.invalidate()  // 기존 타이머를 정리합니다.
     }
-    
+
     deinit {
         timer?.invalidate()
     }
@@ -51,10 +49,10 @@ class WorldTimeCell: UICollectionViewCell {
 // MARK: - UI Layouts
 
 extension WorldTimeCell {
+    
     func setupSubViews() {
         [
             contentWrapperView,
-            deleteButton
         ].forEach { self.addSubview($0) }
         
         [
@@ -97,12 +95,6 @@ extension WorldTimeCell {
             make.bottom.equalToSuperview().inset(Layouts.itemSpacing4)
         }
         
-        deleteButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview()
-            make.top.bottom.equalToSuperview()
-            make.centerY.equalToSuperview()
-            make.width.equalTo(Layouts.buttonHeight)
-        }
     }
 }
 
@@ -114,6 +106,7 @@ extension WorldTimeCell {
         self.cityNameLabel.text = worldTime.cityName
         self.dateLabel.text = worldTime.currentDate
         self.cityTimeLabel.text = worldTime.currentTime
+        self.timeZoneId = worldTime.timeZoneId
         
         startClock()
     }
@@ -130,7 +123,7 @@ extension WorldTimeCell {
     }
 
     private func updateClock() {
-        guard let timeZone = timeZone else { return }
+        guard let timeZone = TimeZone(identifier: timeZoneId ?? "Asia/Seoul") else { return }
 
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
@@ -139,30 +132,5 @@ extension WorldTimeCell {
 
         let currentTime = formatter.string(from: Date())
         cityTimeLabel.text = currentTime
-    }
-}
-
-
-// MARK: - Gesture Recognizers
-
-extension WorldTimeCell {
-    /// 컨텐츠 에어리어가 터치되었을 때마다 삭제 버튼 토글
-    func contentsAreaTapped() {
-        isDeleteButtonVisible = !isDeleteButtonVisible
-        deleteButton.isHidden = !isDeleteButtonVisible
-        
-        self.contentWrapperView.snp.makeConstraints { make in
-            if isDeleteButtonVisible {
-                make.trailing.equalToSuperview().inset(Layouts.buttonHeight + Layouts.itemSpacing1)
-            } else {
-                make.trailing.equalToSuperview()
-            }
-        }
-    }
-
-    
-    // MARK: - Button Action
-    func deleteButtonTapped() {
-        print("삭제 버튼 클릭!")
     }
 }
