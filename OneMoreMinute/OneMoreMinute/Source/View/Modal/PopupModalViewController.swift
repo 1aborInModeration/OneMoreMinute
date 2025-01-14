@@ -17,7 +17,7 @@ final class PopupModalViewController: UIViewController, ModalCloseDelegate {
     
     // MARK: - init & Life cyclesas
 
-    init(modalContentsView: ModalCloseable ) {
+    init(modalContentsView: ModalCloseable) {
         self.modalContentsView = modalContentsView as! UIView
         super.init(nibName: nil, bundle: nil)
         
