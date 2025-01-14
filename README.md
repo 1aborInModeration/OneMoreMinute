@@ -40,12 +40,12 @@
 
 ## 👥 The Team
 | Name     | GitHub   | Roles    | Main Developments |
-|:--------:| -------- | -------- | ----------------- |
-| 권승용 | [@ericKwon95](https://github.com/ericKwon95) | ARC Optimization Reviewer | Main, Tab |
-| 김형석 | [@NeoSelf1](https://github.com/NeoSelf1) | RxSwift Flow Manager | Timer |
-| 임성수 | [@seongto](https://github.com/seongto) | Theme and Common UI Components Manager | World Time |
-| 장상경 | [@Crois0509](https://github.com/Crois0509) | CoreData Manager | Alarm |
-| 황도일 | [@DoyleHWorks](https://github.com/DoyleHWorks) | MVVM Architecture Designer | Stopwatch |
+|:--------:| -------- | -------- |:-----------------:|
+| 권승용 <br> Seung-Yong Kwon | [@ericKwon95](https://github.com/ericKwon95) | MVVM Architecture Designer | MainTabBarViewController <br> Alarm and Core Services |
+| 김형석 <br> Hyeong-Seok Kim | [@NeoSelf1](https://github.com/NeoSelf1) | RxSwift Flow Manager | TimerViewController <br> Code Convention Review |
+| 임성수 <br> Seong-Su Lim | [@seongto](https://github.com/seongto) | UI Components Manager | WorldTimeViewController <br> Utility and Helper Services |
+| 장상경 <br> Sang-Kyeong Jang | [@Crois0509](https://github.com/Crois0509) | CoreData Manager | AlarmViewController <br> App UI and Icon Designs |
+| 황도일 <br> Doyle Hwang | [@DoyleHWorks](https://github.com/DoyleHWorks) | GitHub/Docs Manager | StopwatchViewController <br> Project Initialization |
 
 ## ⏰ Project Scope
 - **시작일**: 2025/01/07 (화)
