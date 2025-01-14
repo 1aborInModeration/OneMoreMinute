@@ -11,8 +11,6 @@ import Then
 
 final class LapCollectionViewCell: UICollectionViewCell {
     
-    // MARK: - Identifier
-    
     static let identifier = "LapCollectionViewCell"
     
     // MARK: - UI Components

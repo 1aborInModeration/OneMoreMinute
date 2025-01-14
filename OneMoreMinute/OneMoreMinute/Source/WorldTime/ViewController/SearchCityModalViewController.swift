@@ -22,7 +22,7 @@ class SearchCityModalViewController: UIViewController, ModalCloseDelegate {
     
     let disposeBag = DisposeBag()
 
-    // MARK: - init & Life cyclesas
+    // MARK: - Initializer
 
     init( ) {
         super.init(nibName: nil, bundle: nil)
@@ -33,6 +33,8 @@ class SearchCityModalViewController: UIViewController, ModalCloseDelegate {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()

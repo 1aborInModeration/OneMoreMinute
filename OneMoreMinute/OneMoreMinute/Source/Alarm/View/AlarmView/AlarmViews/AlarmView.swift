@@ -47,7 +47,7 @@ final class AlarmView: UIView {
         return layout
     }()
     
-    // MARK: - AlarmView Initializer
+    // MARK: - Initializer
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -62,7 +62,7 @@ final class AlarmView: UIView {
     }
 }
 
-// MARK: - AlarmView UI Setting Method
+// MARK: - UI Setting Method
 
 private extension AlarmView {
     

@@ -17,7 +17,7 @@ class CustomFilledButton: UIButton  {
     let isSmall: Bool
     let cornerRound: ButtonCorner
     
-    // MARK: - Life Cycles
+    // MARK: - Lifecycle
     
     /// 커스텀 filled 버튼
     ///

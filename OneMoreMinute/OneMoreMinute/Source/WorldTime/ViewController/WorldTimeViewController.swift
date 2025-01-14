@@ -20,7 +20,7 @@ class WorldTimeViewController: UIViewController {
     
     let disposeBag = DisposeBag()
     
-    // MARK: - Life Cycles
+    // MARK: - Lifecycle
     
     override func loadView() {
         super.loadView()

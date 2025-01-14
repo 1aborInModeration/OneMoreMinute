@@ -24,7 +24,7 @@ final class AlarmModalWeekViewCell: UICollectionViewCell {
         $0.clipsToBounds = true
     }
     
-    // MARK: - AlarmModalWeekViewCell Initializer
+    // MARK: - Initializer
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -63,7 +63,7 @@ final class AlarmModalWeekViewCell: UICollectionViewCell {
     }
 }
 
-// MARK: - AlarmModalWeekViewCell UI Setting Method
+// MARK: - UI Setting Method
 
 private extension AlarmModalWeekViewCell {
     

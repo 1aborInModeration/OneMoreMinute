@@ -17,7 +17,7 @@ final class MainTabBarItem: UIControl {
     /// 탭이 선택되었을 때 해당 인덱스를 방출하는 PublishRelay
     let tappedIndexRelay = PublishRelay<Int>()
     
-    // MARK: - View Property
+    // MARK: - UI Components
     
     private let imageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
@@ -51,7 +51,7 @@ final class MainTabBarItem: UIControl {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Public Mehtod
+    // MARK: - Public Methods
     
     /// 런치 시 첫 탭바 아이템을 선택하는 메소드
     /// layoutIfNeeded가 제외되어 오토레이아웃 충돌을 방지

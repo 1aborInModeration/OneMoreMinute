@@ -29,7 +29,7 @@ final class AlarmModalMemoSection: UIView {
         $0.autocapitalizationType = .none
     }
     
-    // MARK: - AlarmModalMemoSection Initializer
+    // MARK: - Initializer
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -59,7 +59,7 @@ final class AlarmModalMemoSection: UIView {
     
 }
 
-// MARK: - AlarmModalMemoSection UI Setting Method
+// MARK: - UI Setting Method
 
 private extension AlarmModalMemoSection {
     

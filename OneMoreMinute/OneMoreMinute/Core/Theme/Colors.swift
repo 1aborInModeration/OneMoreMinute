@@ -38,7 +38,7 @@ enum FontColor: String {
 
 struct Colors {
     
-    // MARK: - SystemColor
+    // MARK: - System Color
         
     /// 앱 전체의 시스템 컬러 지정용.
     /// 해당값을 변경하면 전체 테마 컬러를 변경할 수 있습니다.

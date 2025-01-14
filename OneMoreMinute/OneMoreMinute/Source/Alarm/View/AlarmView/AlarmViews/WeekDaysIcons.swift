@@ -24,7 +24,7 @@ final class WeekDaysIcons: UIView {
         $0.isHidden = true
     }
     
-    // MARK: - WeekDaysIcons Initializer
+    // MARK: - Initializer
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -51,7 +51,7 @@ final class WeekDaysIcons: UIView {
     }
 }
 
-// MARK: - WeekDaysIcons UI Setting Method
+// MARK: - UI Setting Method
 
 private extension WeekDaysIcons {
     
