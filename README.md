@@ -11,7 +11,6 @@
   <a href="https://swift.org/" target="_blank">
     <img src="https://img.shields.io/badge/Swift_5-F05138?style=for-the-badge&logo=swift&logoColor=white" alt="Swift">
   </a>
-  <br>
   <a href="https://developer.apple.com/documentation/uikit" target="_blank">
     <img src="https://img.shields.io/badge/UIKit-2396F3?style=for-the-badge&logo=uikit&logoColor=white" alt="UIKit">
   </a>
@@ -21,12 +20,15 @@
   <a href="https://github.com/devxoul/Then" target="_blank">
     <img src="https://img.shields.io/badge/Then-00aeb9?style=for-the-badge&logoColor=white" alt="Then">
   </a>
-  <br>
+  <br> 
   <a href="https://github.com/ReactiveX/RxSwift" target="_blank">
     <img src="https://img.shields.io/badge/reactivex-B7178C?style=for-the-badge&logoColor=white" alt="reactivex">
   </a>
   <a href="https://github.com/RxSwiftCommunity/RxDataSources" target="_blank">
     <img src="https://img.shields.io/badge/rxdatasources-B7178C?style=for-the-badge&logoColor=white" alt="rxdatasources">
+  </a>
+    <a href="https://github.com/RxSwiftCommunity/RxKeyboard" target="_blank">
+    <img src="https://img.shields.io/badge/rxkeyboard-B7178C?style=for-the-badge&logoColor=white" alt="rxkeyboard">
   </a>
   <br>
   <a href="https://www.gitkraken.com/" target="_blank">
