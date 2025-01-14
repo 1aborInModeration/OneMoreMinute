@@ -64,8 +64,8 @@ private extension AlarmViewController {
     
     func setupLayout() {
         self.showModalButton.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().inset(20)
-            make.trailing.equalToSuperview().inset(20)
+            make.bottom.equalToSuperview().inset(Layouts.padding)
+            make.trailing.equalToSuperview().inset(Layouts.padding)
             make.width.height.equalTo(Layouts.buttonHeight)
         }
     }
