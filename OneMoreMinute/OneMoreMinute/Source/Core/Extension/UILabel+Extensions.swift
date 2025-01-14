@@ -9,6 +9,7 @@ import UIKit
 
 
 extension UILabel {
+    
     /// 라벨의 텍스트 색상을 기본 폰트 색상중 하나로 선택하여 변경하는 메소드
     /// - Parameter color: 지정된 기본 폰트 컬러 중 선택
     func setTextColor(_ color: FontColor) {
@@ -25,6 +26,7 @@ extension UILabel {
 // MARK: - UILabel Utilities
 
 extension UILabel {
+    
     /// UILabel 에 줄간격을 쉽게 적용시켜 사용하기 위한 메소드
     /// 기본값을 설정하였으므로 아래 둘 중 하나를 선택하여 사용.
     /// - Parameters:

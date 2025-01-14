@@ -11,22 +11,20 @@ import RxSwift
 import RxCocoa
 import MapKit
 
-
 class WorldTimeViewModel {
+    
     // MARK: - Properties
     
     let worldTimesRelay = BehaviorRelay<[WorldTime]>(value: [])
     private let disposeBag = DisposeBag()
     private let worldTimeDataManager = WorldTimeDataManager.shared
     
-    
-    // MARK: - Life Cycles
 }
-
 
 // MARK: - View Update
 
 extension WorldTimeViewModel {
+    
     func setupClock() {
         let worldTimes = WorldTimeDataManager.shared.fetch().compactMap { entity -> WorldTime? in
             guard let cityName = entity.cityName,

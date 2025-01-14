@@ -13,6 +13,7 @@ import RxCocoa
 
 
 class SearchCityModalViewController: UIViewController, ModalCloseDelegate {
+    
     // MARK: - Properties
 
     var dismissCompletion: (() -> Void)?
@@ -21,7 +22,6 @@ class SearchCityModalViewController: UIViewController, ModalCloseDelegate {
     
     let disposeBag = DisposeBag()
 
-    
     // MARK: - init & Life cyclesas
 
     init( ) {
@@ -58,7 +58,6 @@ class SearchCityModalViewController: UIViewController, ModalCloseDelegate {
     }
 }
 
-
 // MARK: - Setup UI Layouts
 
 extension SearchCityModalViewController {
@@ -79,10 +78,10 @@ extension SearchCityModalViewController {
     }
 }
 
-
 // MARK: - Binding
 
 extension SearchCityModalViewController {
+    
     func setupBindings() {
         searchCityView.searchBar.rx.text.orEmpty
             .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
@@ -119,10 +118,10 @@ extension SearchCityModalViewController {
     }
 }
 
-
 // MARK: - Action Management & Mapping
 
 extension SearchCityModalViewController {
+    
     func closeModal() {
         self.dismiss(animated: true, completion: nil)
     }

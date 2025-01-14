@@ -10,12 +10,12 @@ import SnapKit
 
 
 class CustomFilledButton: UIButton  {
+    
     // MARK: - Properties
     
     let title: String
     let isSmall: Bool
     let cornerRound: ButtonCorner
-    
     
     // MARK: - Life Cycles
     
@@ -52,14 +52,12 @@ class CustomFilledButton: UIButton  {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
 }
-
 
 // MARK: - Setup UI
 
 extension CustomFilledButton {
+    
     func setupProperties(_ color: ButtonColor) {
         let buttonColor = self.getButtonColor(color)
         var config = UIButton.Configuration.filled()
@@ -96,7 +94,6 @@ extension CustomFilledButton {
         }
         
         self.configuration = config
-        
     }
     
     func setupLayouts() {

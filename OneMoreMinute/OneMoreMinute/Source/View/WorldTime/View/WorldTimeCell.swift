@@ -126,6 +126,7 @@ extension WorldTimeCell {
 // MARK: - Timer Setup
 
 extension WorldTimeCell {
+    
     private func startClock() {
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             self?.updateClock()

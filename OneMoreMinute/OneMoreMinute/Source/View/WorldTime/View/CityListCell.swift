@@ -10,6 +10,7 @@ import SnapKit
 import MapKit
 
 class CityListCell: UICollectionViewCell {
+    
     // MARK: - Properties
     
     static let id: String = "CityListCell"
@@ -38,6 +39,7 @@ class CityListCell: UICollectionViewCell {
 // MARK: - UI Layouts
 
 extension CityListCell {
+    
     func setupSubViews() {
         [
             cityNameLabel,
@@ -68,6 +70,7 @@ extension CityListCell {
 // MARK: - Cell Configure
 
 extension CityListCell {
+    
     func configure(with cityTimeZone: CityTimeZone) {
         self.cityNameLabel.text = cityTimeZone.cityName
         self.timeZoneLabel.text = cityTimeZone.timeDifference

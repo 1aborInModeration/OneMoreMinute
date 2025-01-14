@@ -16,7 +16,6 @@ class WorldTimeView: UIView {
     
     let worldTimeCollectionView = VerticalCollectionView()
     let plusButton = ShowModalButton()
-        
     
     // MARK: - Life Cycles
     
@@ -32,7 +31,6 @@ class WorldTimeView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
 
 // MARK: - UI Layouts
 
@@ -62,7 +60,6 @@ extension WorldTimeView {
         }
     }
 }
-
 
 // MARK: - Actions
 

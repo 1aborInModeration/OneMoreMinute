@@ -12,6 +12,7 @@ import SnapKit
 final class CityListCollectionView: UICollectionView {
     
     // MARK: - Life Cycles
+    
     init() {
         super.init(frame: .zero, collectionViewLayout: CityListCollectionView.createCompositionalLayout())
         setupCollectionView()
@@ -22,16 +23,15 @@ final class CityListCollectionView: UICollectionView {
     }
 }
 
-
 // MARK: - Compositional Layout Setup
 
 extension CityListCollectionView {
+    
     private static func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
         return UICollectionViewCompositionalLayout(section: CityListCollectionView.createCityListSection())
     }
     
     private static func createCityListSection() -> NSCollectionLayoutSection {
-        
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(50)

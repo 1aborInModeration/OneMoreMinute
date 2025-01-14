@@ -16,6 +16,13 @@ enum FontName: String {
 }
 
 extension UIFont {
+    
+    /// pretendard 폰트 설정
+    ///
+    /// - Parameters:
+    ///   - fontSize: 원하는 폰트 사이즈 지정
+    ///   - weight: 폰트 굵기 지정
+    /// - Returns: UIFont 타입으로 반환.
     static func pretendard(ofSize fontSize: CGFloat, weight: UIFont.Weight) -> UIFont {
         let familyName = "Pretendard"
         var weightString: String

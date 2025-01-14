@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 
 class CustomSearchBar: UISearchBar {
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -22,6 +23,7 @@ class CustomSearchBar: UISearchBar {
 }
 
 extension CustomSearchBar {
+    
     func setupUIProperties() {
         self.searchBarStyle = .minimal
 

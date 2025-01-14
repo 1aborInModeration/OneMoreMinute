@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 
-class SearchCityView: UIView, ModalLifecycleNotifiable, ModalCloseable {
+class SearchCityView: UIView {
 
     let titleLabel = TitleLabel(size: .title1)
     let closeButton = CloseButton()
@@ -32,10 +32,10 @@ class SearchCityView: UIView, ModalLifecycleNotifiable, ModalCloseable {
     }
 }
 
-
 // MARK: - SetupUI Layouts
 
 extension SearchCityView {
+    
     func setupSubViews() {
         [
             titleLabel,
@@ -86,34 +86,9 @@ extension SearchCityView {
     }
 }
 
-
-// MARK: - Update UI
-
-extension SearchCityView {
-
-}
-
-
-// MARK: - Action
-
-extension SearchCityView {
-    func didTapButton() {
-        
-    }
-}
-
-
-
 // MARK: - Modal Porotocol Constraints
 
 extension SearchCityView {
-    func onModalWillAppear() {
-        // 모달이 나타날 때 동작 추가
-    }
-    
-    func onModalWillDisappear() {
-        // 모달이 사라질 때 동작 추가
-    }
     
     func closeModal() {
         delegate?.closeModal()
