@@ -1,5 +1,5 @@
 //
-//  ViewModel.swift
+//  ViewModelType.swift
 //  OneMoreMinute
 //
 //  Created by 권승용 on 1/9/25.
