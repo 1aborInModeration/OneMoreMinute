@@ -47,6 +47,13 @@ final class AlarmModalTimeSection: UIView {
         }
     }
     
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        guard !self.timeSet.frame.contains(point) else {
+            return super.hitTest(point, with: event)
+        }
+        return nil
+    }
+    
 }
 
 // MARK: - AlarmModalTimeSection UI Setting Method

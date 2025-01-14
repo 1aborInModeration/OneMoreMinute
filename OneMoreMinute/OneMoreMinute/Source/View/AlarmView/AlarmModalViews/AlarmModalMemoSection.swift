@@ -26,6 +26,7 @@ final class AlarmModalMemoSection: UIView {
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.textFieldStroke.cgColor
         $0.keyboardType = .default
+        $0.autocapitalizationType = .none
     }
     
     // MARK: - AlarmModalMemoSection Initializer
@@ -47,6 +48,13 @@ final class AlarmModalMemoSection: UIView {
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             self.memoSet.layer.borderColor = UIColor.wrapperStroke.cgColor
         }
+    }
+    
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        guard !self.memoSet.frame.contains(point) else {
+            return super.hitTest(point, with: event)
+        }
+        return nil
     }
     
 }
