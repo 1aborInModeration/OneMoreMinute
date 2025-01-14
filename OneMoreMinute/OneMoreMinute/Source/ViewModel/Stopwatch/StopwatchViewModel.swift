@@ -215,12 +215,15 @@ final class StopwatchViewModel {
         updateCurrentLap()
         
         isRunningRelay.accept(isRunning)
-        elapsedTimeRelay.accept(model.elapsedTime)
+        if elapsedTimeRelay.value != model.elapsedTime {
+            elapsedTimeRelay.accept(model.elapsedTime)
+        }
     }
     
     // MARK: - Background Task Handling
     
     func startBackgroundTask() {
+        guard backgroundTask == .invalid else { return }
         backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "StopwatchBackgroundTask") {
             UIApplication.shared.endBackgroundTask(self.backgroundTask)
             self.backgroundTask = .invalid
