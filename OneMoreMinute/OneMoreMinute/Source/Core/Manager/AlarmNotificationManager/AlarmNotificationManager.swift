@@ -24,7 +24,7 @@ protocol AlarmNotificationManageable {
         body: String,
         timeInterval: TimeInterval
     )
-    func removePendingNotification(by identifier: String)
+    func removePendingNotification(by identifier: [String])
 }
 
 final class AlarmNotificationManager: AlarmNotificationManageable {
@@ -89,6 +89,7 @@ final class AlarmNotificationManager: AlarmNotificationManageable {
         // 시스템에 알림 추가
         Task {
             do {
+                AppLogger.debug("푸시 알람 추가 : \(String(describing: weekday)), \(String(describing: hour)), \(minute)")
                 try await center.add(request)
             } catch {
                 AppLogger.error("AlarmNotificationManager: \(error.localizedDescription)")
@@ -117,7 +118,7 @@ final class AlarmNotificationManager: AlarmNotificationManageable {
         // 시스템에 알림 추가
         Task {
             do {
-                AppLogger.info("TimerNotification Added")
+                AppLogger.debug("TimerNotification Added")
                 try await center.add(request)
             } catch {
                 AppLogger.error("AlarmNotificationManager: \(error.localizedDescription)")
@@ -127,9 +128,14 @@ final class AlarmNotificationManager: AlarmNotificationManageable {
     
     /// 대기 중인 알림 삭제
     /// - Parameter identifier: 알림 식별자
-    func removePendingNotification(by identifier: String) {
-        center.removePendingNotificationRequests(withIdentifiers: [identifier])
-        AppLogger.info("AlarmNotification with identifier \(identifier) removed")
+    func removePendingNotification(by identifier: [String]) {
+        center.removePendingNotificationRequests(withIdentifiers: identifier)
+        AppLogger.debug("AlarmNotification with identifier \(identifier) removed")
+    }
+    
+    func removeDeliveredNotifications() {
+        center.removeAllDeliveredNotifications()
+        AppLogger.debug("Removed all delivered notifications")
     }
     
     private func configureContent(title: String, body: String) -> UNMutableNotificationContent {

@@ -34,12 +34,14 @@ final class MainTabBarController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        UNUserNotificationCenter.current().delegate = self
         gradientLayer.frame = view.bounds
         view.layer.addSublayer(gradientLayer)
         configureHierarchy()
         setupFirstVC()
         bindTabBar()
         bindViewModel()
+        bindSceneLifeCycle()
     }
     
     override func viewWillLayoutSubviews() {
@@ -109,6 +111,23 @@ extension MainTabBarController {
             })
             .disposed(by: disposeBag)
     }
+    
+    private func bindSceneLifeCycle() {
+        NotificationCenter.default.rx.notification(UIScene.willEnterForegroundNotification)
+            .bind { [weak self] _ in
+                Task {
+                    let current = UNUserNotificationCenter.current()
+                    let notifications = await current.deliveredNotifications()
+                    if notifications.isEmpty { return }
+                    let title = notifications[0].request.content.title
+                    let body = notifications[0].request.content.body
+                    
+                    self?.showSnoozeModal(time: title, title: body)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+    }
 }
 
 // MARK: - Background Gradient Color Configuration
@@ -171,75 +190,35 @@ extension MainTabBarController {
     }
 }
 
-// TODO: 각 임시 뷰컨 실제 뷰컨으로 변경하기
+// MARK: - Modal Presentation
 
-/// 임시 뷰 컨트롤러 A - 카운터 기능을 가진 테스트용 뷰 컨트롤러
-final class AViewController: UIViewController {
-    private let alarmManager = AlarmManager()
-    private lazy var playButton = UIButton().then {
-        $0.setTitle("play", for: .normal)
-        $0.addAction(
-            UIAction { _ in
-                do {
-                    try self.alarmManager.playAlarm(sound: .morning, numberOfLoops: 0)
-                } catch {
-                    print(error)
-                }
-            },
-            for: .touchUpInside
-        )
+extension MainTabBarController {
+    @MainActor
+    private func showSnoozeModal(time: String, title: String) {
+        let snoozeVC = AlarmSnoozeHostingViewController(time: time, title: title) {
+            self.dismissSnoozeModal()
+        }
+        snoozeVC.modalPresentationStyle = .overFullScreen
+        snoozeVC.modalTransitionStyle = .crossDissolve
+        present(snoozeVC, animated: false)
     }
     
-    private lazy var stopButton = UIButton().then {
-        $0.setTitle("stop", for: .normal)
-        $0.addAction(
-            UIAction { _ in
-                do {
-                    try self.alarmManager.stopAlarm()
-                } catch {
-                    print(error)
-                }
-            },
-            for: .touchUpInside
-        )
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        [
-            playButton,
-            stopButton
-        ].forEach { view.addSubview($0) }
-        
-        playButton.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-        }
-        
-        stopButton.snp.makeConstraints { make in
-            make.top.equalTo(playButton.snp.bottom).offset(16)
-            make.centerX.equalToSuperview()
-        }
+    private func dismissSnoozeModal() {
+        AlarmNotificationManager.shared.removeDeliveredNotifications()
+        self.presentedViewController?.dismiss(animated: false)
     }
 }
 
-final class DViewController: UIViewController {
-    private let label = UILabel().then {
-        $0.text = "D"
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        [
-            label,
-        ].forEach { view.addSubview($0) }
-        
-        label.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-        }
+extension MainTabBarController: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.banner, .sound])
+        let title = notification.request.content.title
+        let body = notification.request.content.body
+        showSnoozeModal(time: title, title: body)
     }
 }
 
-//@available(iOS 17.0, *)
-//#Preview {
-//    MainTabBarController()
-//}
+@available(iOS 17.0, *)
+#Preview {
+    MainTabBarController()
+}

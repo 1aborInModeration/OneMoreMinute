@@ -10,6 +10,7 @@ import CoreData
 
 /// Alarm 엔티티의 데이터 파일
 struct AlarmDTO: EntityTransformAble {
+    let id: UUID
     let isActive: Bool
     let note: String?
     let time: Date
@@ -23,6 +24,7 @@ struct AlarmDTO: EntityTransformAble {
         alarm.isActive = self.isActive
         alarm.note = self.note
         alarm.time = self.time
+        alarm.id = self.id
         
         let weekDaysEntity = self.weekDays.toEntity(context: context)
         alarm.weekDays = weekDaysEntity

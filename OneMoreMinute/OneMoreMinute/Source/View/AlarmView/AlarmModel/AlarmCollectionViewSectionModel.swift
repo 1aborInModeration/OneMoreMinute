@@ -14,7 +14,7 @@ import Foundation
 struct AlarmItem: IdentifiableType, Hashable {
     typealias Identity = UUID
     var identity: Identity {
-        return UUID()
+        data.id ?? UUID()
     }
     
     let data: Alarm

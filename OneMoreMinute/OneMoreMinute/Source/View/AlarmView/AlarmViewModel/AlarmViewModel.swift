@@ -70,7 +70,7 @@ final class AlarmViewModel: ViewModelType {
     private let reloadIndex = PublishRelay<IndexPath>()
     private let deleteIndex = PublishRelay<IndexPath>()
     private let scrollIndex = PublishRelay<CGPoint>()
- 
+    
     // MARK: - AlarmViewModel Initializer
     
     init() {
@@ -92,8 +92,14 @@ final class AlarmViewModel: ViewModelType {
         let id = data.objectID
         data.isActive.toggle()
         
-        alarmDataManager.update(id, updateData: data)
+        // 알람 on/off에 따라 푸시 알림 설정 / 미설정
+        if data.isActive {
+            setupAlarmNotifications(for: data)
+        } else {
+            removeAlarmNotifications(for: data)
+        }
         
+        alarmDataManager.update(id, updateData: data)
         self.reloadIndex.accept(indexPath)
     }
     
@@ -102,6 +108,7 @@ final class AlarmViewModel: ViewModelType {
     private func deleteAlarm(_ indexPath: IndexPath) {
         let data = self.dataRelay.value[indexPath.section].items[indexPath.item].data
         
+        removeAlarmNotifications(for: data)
         alarmDataManager.delete(data)
         
         self.dataFetch()
@@ -116,4 +123,68 @@ final class AlarmViewModel: ViewModelType {
         
         self.scrollIndex.accept(location)
     }
+    
+    /// 알람 알림을 설정하는 헬퍼 메소드
+    /// - Parameter data: 알람 데이터
+    private func setupAlarmNotifications(for data: Alarm) {
+        guard let time = data.time,
+              let weekDays = data.weekDays,
+              let uuidString = data.id?.uuidString else { return }
+        
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: time)
+        let minute = calendar.component(.minute, from: time)
+        
+        let weekDayMapping: [(day: Bool, suffix: String, weekday: AlarmNotificationWeekDays)] = [
+            (weekDays.mon, ".mon", .monday),
+            (weekDays.tue, ".tue", .tuesday),
+            (weekDays.wed, ".wed", .wednesday),
+            (weekDays.thu, ".thu", .thursday),
+            (weekDays.fri, ".fri", .friday),
+            (weekDays.sat, ".sat", .saturday),
+            (weekDays.sun, ".sun", .sunday)
+        ]
+        
+        var isWeekDayNil = true
+        
+        for (isEnabled, suffix, weekday) in weekDayMapping where isEnabled {
+            AlarmNotificationManager.shared.setRegularNotification(
+                identifier: uuidString + suffix,
+                title: time.getTimeString(),
+                body: data.note ?? "",
+                weekday: weekday,
+                hour: .init(rawValue: hour),
+                minute: .init(rawValue: minute)!
+            )
+            isWeekDayNil = false
+        }
+        
+        if isWeekDayNil {
+            AlarmNotificationManager.shared.setRegularNotification(
+                identifier: uuidString,
+                title: time.getTimeString(),
+                body: data.note ?? "",
+                hour: .init(rawValue: hour),
+                minute: .init(rawValue: minute)!
+            )
+        }
+    }
+    
+    /// 알람 알림을 제거하는 헬퍼 메소드
+    /// - Parameter data: 알람 데이터
+    private func removeAlarmNotifications(for data: Alarm) {
+        guard let uuidString = data.id?.uuidString else { return }
+        let identifiers = [
+            uuidString,
+            uuidString + ".mon",
+            uuidString + ".tue",
+            uuidString + ".wed",
+            uuidString + ".thu",
+            uuidString + ".fri",
+            uuidString + ".sat",
+            uuidString + ".sun"
+        ]
+        AlarmNotificationManager.shared.removePendingNotification(by: identifiers)
+    }
+    
 }
