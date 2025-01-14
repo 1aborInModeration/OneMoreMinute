@@ -10,7 +10,7 @@ import AVFoundation
 
 protocol AlarmManageable {
     func playAlarm(sound: AlarmSound, numberOfLoops: Int) throws
-    func stopAlarm() throws
+    func stopAlarm()
 }
 
 /// 알람 재생 중 발생하는 에러 열거형
@@ -25,9 +25,21 @@ enum AlarmSound {
     var fileUrl: URL? {
         switch self {
         case .morning:
-            return Bundle.main.url(forResource: "morningAlarm", withExtension: "caf")
+            return Bundle.main.url(forResource: "morningAlarm", withExtension: "mp3")
         }
     }
+}
+
+func some() {
+    let manager = AlarmManager()
+    
+    do {
+        try manager.playAlarm(sound: .morning, numberOfLoops: 1)
+    } catch {
+        print(error)
+    }
+    
+    manager.stopAlarm()
 }
 
 /// 앱에서 알람 소리를 재생하는 기능을 가지는 객체
@@ -54,7 +66,7 @@ final class AlarmManager: AlarmManageable {
     }
     
     /// 알람 소리 재생 멈춤 함수
-    func stopAlarm() throws {
+    func stopAlarm() {
         player?.stop()
     }
 }
