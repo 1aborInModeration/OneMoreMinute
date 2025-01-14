@@ -62,20 +62,8 @@ final class StopwatchViewController: UIViewController {
     
     // MARK: - Properties
     
-//    private let viewModel = StopwatchViewModel()
-    var viewModel: StopwatchViewModelProtocol
+    private let viewModel = ViewModelProvider.shared.stopwatchViewModel
     private let disposeBag = DisposeBag()
-    
-    // MARK: - Initializer
-    
-    init(viewModel: StopwatchViewModelProtocol) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     // MARK: - Lifecycle
     
