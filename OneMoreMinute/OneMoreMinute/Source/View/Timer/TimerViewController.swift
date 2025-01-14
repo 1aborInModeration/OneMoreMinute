@@ -19,25 +19,28 @@ final class TimerViewController: UIViewController {
     /// 타이머 동작을 제어하는 Disposable 객체
     private var timerDisposable: Disposable?
     
+    let pickerRange = Array(1...60)
     // MARK: - UI Components
     
     /// 타이머 컨텐츠를 담는 컨테이너 뷰
     private let containerView = UIView().then {
-        $0.backgroundColor = Colors.appBackground
+        $0.backgroundColor = UIColor(resource: .wrapperBackground)
         $0.layer.cornerRadius = 12
         
-        $0.layer.shadowColor = Colors.systemDarkGray.cgColor
-        $0.layer.shadowOpacity = 0.25
-        $0.layer.shadowOffset = .init(width: 0, height: 10)
-        $0.layer.shadowRadius = 10
+        $0.layer.shadowColor = UIColor.black.cgColor
+        $0.layer.shadowOpacity = 0.1
+        $0.layer.shadowOffset = CGSize(width: 0, height: 4)
+        $0.layer.shadowRadius = 8
+        $0.layer.borderColor = UIColor(resource: .wrapperStroke).cgColor
+        $0.layer.borderWidth = 1
     }
     
     /// 타이머의 시간을 표시하는 레이블
     private let timeLabel = UILabel().then {
         $0.text = "05:00"
-        $0.textAlignment = .center
         $0.font = Fonts.display1Bold
-        $0.textColor = Colors.systemColor(.r900)
+        $0.textAlignment = .center
+        $0.textColor = UIColor(resource: .mainTitle)
     }
     
     /// 타이머 시간 설정 버튼
@@ -52,8 +55,8 @@ final class TimerViewController: UIViewController {
     /// 타이머 실행  / 일시정지 버튼
     private let playButton = UIButton(type: .system).then {
         $0.setImage(UIImage(systemName: "play"), for: .normal)
-        $0.tintColor = Colors.systemColor(.r700)
-        $0.backgroundColor = Colors.systemColor(.r50)
+        $0.tintColor = UIColor(resource: .subTitle)
+        $0.backgroundColor = UIColor(resource: .buttonBackground)
         $0.layer.cornerRadius = 28
         $0.clipsToBounds = true
     }
@@ -61,9 +64,10 @@ final class TimerViewController: UIViewController {
     /// 타이머 리셋 버튼
     private let resetButton = UIButton(type: .system).then {
         $0.setImage(UIImage(systemName: "arrow.counterclockwise"), for: .normal)
-        $0.tintColor = Colors.systemGray(.r700)
-        $0.backgroundColor = Colors.systemGray(.r50)
+        $0.tintColor = UIColor(resource: .grayButtonLabel)
+        $0.backgroundColor = UIColor(resource: .grayButtonBackground)
         $0.layer.cornerRadius = 28
+        $0.clipsToBounds = true
     }
     
     /// 배경 그라데이션 레이어
@@ -74,19 +78,24 @@ final class TimerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        configureGradient()
         setupBindings()
     }
     
-    /// 뷰 레이아웃 변경 시 그라데이션 프레임 업데이트
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews() /// UIViewController 상속하였기에, override
-        gradientLayer.frame = view.bounds
+    /// 시스템의 외관 모드(다크/라이트) 변경을 감지하고 처리하는 메서드
+    /// - Parameter previousTraitCollection: 이전 특성 모음(trait collection)
+    /// 다크 모드와 라이트 모드 간의 전환이 발생할 때 컨테이너 색상 업데이트
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            updateContainerLayerColors()
+        }
     }
 
     // MARK: - UI Setup
 
     private func setupUI() {
+        view.backgroundColor = .clear
+        
         [timeLabel, timeSettingButton, playButton, resetButton,resetButton].forEach { containerView.addSubview($0) }
         
         view.addSubview(containerView)
@@ -122,18 +131,13 @@ final class TimerViewController: UIViewController {
         }
     }
     
-    /// 배경 그라데이션 설정
-    private func configureGradient() {
-        view.layer.insertSublayer(gradientLayer, at: 0)
-        gradientLayer.colors = [
-            UIColor(resource: .appBackgroundStart).cgColor,
-            UIColor(resource: .appBackgroundEnd).cgColor
-        ]
-        
-        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
-        gradientLayer.endPoint = CGPoint(x: 0.0, y: 1.0)
+    /// 컨테이너 뷰 스타일 업데이트
+    ///- containerView의 그림자 색상을 검정색으로 설정합니다.
+    ///- containerView의 테두리 색상을 정의된 래퍼 스트로크 색상으로 설정합니다.
+    private func updateContainerLayerColors() {
+        containerView.layer.shadowColor = UIColor.black.cgColor
+        containerView.layer.borderColor = UIColor(resource: .wrapperStroke).cgColor
     }
-    
     
     /// RxSwift를 사용한 UI 컴포넌트들의 이벤트 바인딩 설정
     private func setupBindings() {
@@ -251,7 +255,8 @@ final class TimerViewController: UIViewController {
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
                 // 선택된 행에 1을 더해 1분부터 시작하도록 설정
-                let currentSeconds = (modalVC.pickerView.selectedRow(inComponent: 0)+1) * 60
+                let pickerIndex = modalVC.pickerView.selectedRow(inComponent: 0)
+                let currentSeconds = pickerRange[pickerIndex] * 60 /// 초단위로 변환
                 selectedTime.accept(TimeInterval(currentSeconds))
                 remainingTime.accept(TimeInterval(currentSeconds))
                 
@@ -265,5 +270,5 @@ final class TimerViewController: UIViewController {
 
 @available(iOS 17.0, *)
 #Preview {
-    return TimerViewController()
+    TimerViewController()
 }
