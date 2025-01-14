@@ -5,13 +5,25 @@
 //  Created by t0000-m0112 on 2025-01-12.
 //
 
+import UIKit
 import Foundation
 import RxSwift
 import RxCocoa
 
+private enum UserDefaultsKeys {
+    static let laps = "storedLaps"
+    static let elapsedTime = "elapsedTime"
+    static let lastTimestamp = "lastTimestamp"
+    static let lastLapTime = "lastLapTime"
+    static let isRunning = "isRunning"
+}
+
 final class StopwatchViewModel {
+    
     // MARK: - Properties
+    
     private let disposeBag = DisposeBag()
+    private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
     
     // Model
     private var model: StopwatchModel = StopwatchModel(isRunning: false, elapsedTime: 0, laps: [])
@@ -25,72 +37,55 @@ final class StopwatchViewModel {
     private var timerDisposable: Disposable?
     private var lastLapTime: TimeInterval = 0
     
-    // MARK: - Public Methods
-    func toggleTimer() {
+    // MARK: - Initializer
+    
+    init() {
+        SceneLifeCycleObserver.shared.sceneWillEnterForegroundRelay
+            .subscribe(onNext: { [weak self] in
+                self?.handleSceneWillEnterForeground()
+            })
+            .disposed(by: disposeBag)
+        
+        SceneLifeCycleObserver.shared.sceneDidEnterBackgroundRelay
+            .subscribe(onNext: { [weak self] in
+                self?.handleSceneDidEnterBackground()
+            })
+            .disposed(by: disposeBag)
+        
+        restoreState()
         if model.isRunning {
-            stopTimer()
-        } else {
             startTimer()
         }
-        model.isRunning.toggle()
-        isRunningRelay.accept(model.isRunning)
     }
     
-    func resetOrAddLap() {
-        if model.isRunning {
-            // Add a new lap
-            let currentTime = model.elapsedTime
-            let lapTime = currentTime - lastLapTime // 현재 시간에서 마지막 랩 시간을 뺌
-            lastLapTime = currentTime // 마지막 랩 시간을 현재 시간으로 업데이트
-            
-            let lapModel = LapModel(lapNumber: model.laps.count + 1, lapTime: lapTime)
-            model.laps.insert(lapModel, at: 0)
-            
-            // Update lapsRelay
-            updateLapsRelay()
-        } else {
-            // Reset timer
-            stopTimer()
-            model.elapsedTime = 0
-            lastLapTime = 0 // 마지막 랩 시간 초기화
-            model.laps.removeAll()
-            
-            elapsedTimeRelay.accept(model.elapsedTime)
-            lapsRelay.accept([])
-            isRunningRelay.accept(false)
-            currentLapRelay.accept(nil)
+    // MARK: - Private Methods
+    
+    private func handleSceneWillEnterForeground() {
+        restoreState()
+        if isRunningRelay.value {
+            startTimer()
         }
     }
     
-    // MARK: - Timer Logic
-    private func startTimer() {
-        timerDisposable = Observable<Int>
-            .interval(.milliseconds(10), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.model.elapsedTime += 0.01
-                self.elapsedTimeRelay.accept(self.model.elapsedTime)
-                self.updateCurrentLap() // 임시 랩 업데이트
-            })
-    }
-    
-    private func stopTimer() {
-        timerDisposable?.dispose()
-        timerDisposable = nil
+    private func handleSceneDidEnterBackground() {
+        saveState()
+        saveLaps()
     }
     
     private func updateCurrentLap() {
         let lapNumber = model.laps.count + 1
-        let lapTime = model.elapsedTime - lastLapTime // 현재 시간에서 마지막 랩 시간을 뺌
-        let currentLap = LapViewModel(model: LapModel(lapNumber: lapNumber, lapTime: lapTime), isFastest: false, isSlowest: false)
+        let lapTime = model.elapsedTime - lastLapTime
+        let currentLap = LapViewModel(
+            model: LapModel(lapNumber: lapNumber, lapTime: lapTime),
+            isFastest: false,
+            isSlowest: false
+        )
         currentLapRelay.accept(currentLap)
     }
     
     private func updateLapsRelay() {
         let laps = model.laps.map { $0.lapTime }
-        guard let fastestLap = laps.min(), let slowestLap = laps.max() else {
-            return
-        }
+        guard let fastestLap = laps.min(), let slowestLap = laps.max() else { return }
         
         let lapViewModels = model.laps.map { lapModel in
             LapViewModel(
@@ -100,5 +95,145 @@ final class StopwatchViewModel {
             )
         }
         lapsRelay.accept(lapViewModels)
+    }
+    
+    private func addLap() {
+        let currentTime = model.elapsedTime
+        let lapTime = currentTime - lastLapTime
+        lastLapTime = currentTime
+        
+        let newLap = LapModel(lapNumber: model.laps.count + 1, lapTime: lapTime)
+        model.laps.insert(newLap, at: 0)
+        
+        updateLapsRelay()
+        saveLaps()
+    }
+    
+    private func reset() {
+        stopTimer()
+        model.elapsedTime = 0
+        lastLapTime = 0
+        model.laps.removeAll()
+        
+        elapsedTimeRelay.accept(0)
+        lapsRelay.accept([])
+        currentLapRelay.accept(nil)
+        saveLaps()
+    }
+    
+    func toggleTimer() {
+        if model.isRunning {
+            stopTimer()
+            isRunningRelay.accept(false)
+        } else {
+            startTimer()
+            isRunningRelay.accept(true)
+        }
+        model.isRunning.toggle()
+        isRunningRelay.accept(model.isRunning)
+    }
+    
+    func resetOrAddLap() {
+        if model.isRunning {
+            addLap()
+        } else {
+            reset()
+        }
+    }
+    
+    // MARK: - Public Methods
+    
+    func saveLaps() {
+        let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(model.laps)
+            UserDefaults.standard.set(data, forKey: UserDefaultsKeys.laps)
+        } catch {
+            print("Failed to encode laps: \(error)")
+        }
+    }
+    
+    func restoreLaps() {
+        guard let data = UserDefaults.standard.data(forKey: UserDefaultsKeys.laps) else { return }
+        let decoder = JSONDecoder()
+        do {
+            let laps = try decoder.decode([LapModel].self, from: data)
+            model.laps = laps
+            updateLapsRelay()
+        } catch {
+            print("Failed to decode laps: \(error)")
+        }
+    }
+    
+    // MARK: - Timer Logic
+    
+    func startTimer() {
+        stopTimer()
+        timerDisposable = Observable<Int>
+            .interval(.milliseconds(10), scheduler: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.model.elapsedTime += 0.01
+                self.elapsedTimeRelay.accept(self.model.elapsedTime)
+                self.updateCurrentLap()
+            })
+    }
+    
+    func stopTimer() {
+        timerDisposable?.dispose()
+        timerDisposable = nil
+        stopBackgroundTask()
+    }
+    
+    // MARK: - State Management
+    
+    func saveState() {
+        let timestamp = Date().timeIntervalSince1970
+        UserDefaults.standard.set(model.elapsedTime, forKey: UserDefaultsKeys.elapsedTime)
+        UserDefaults.standard.set(timestamp, forKey: UserDefaultsKeys.lastTimestamp)
+        UserDefaults.standard.set(lastLapTime, forKey: UserDefaultsKeys.lastLapTime)
+        UserDefaults.standard.set(model.isRunning, forKey: UserDefaultsKeys.isRunning)
+    }
+    
+    func restoreState() {
+        let savedElapsedTime = UserDefaults.standard.double(forKey: UserDefaultsKeys.elapsedTime)
+        let savedTimestamp = UserDefaults.standard.double(forKey: UserDefaultsKeys.lastTimestamp)
+        let savedLastLapTime = UserDefaults.standard.double(forKey: UserDefaultsKeys.lastLapTime)
+        let isRunning = UserDefaults.standard.bool(forKey: UserDefaultsKeys.isRunning)
+        
+        if isRunning {
+            let currentTime = Date().timeIntervalSince1970
+            let additionalTime = currentTime - savedTimestamp
+            model.elapsedTime = savedElapsedTime + additionalTime
+            startTimer()
+        } else {
+            model.elapsedTime = savedElapsedTime
+        }
+        
+        model.isRunning = isRunning
+        lastLapTime = savedLastLapTime
+        updateCurrentLap()
+        
+        isRunningRelay.accept(isRunning)
+        if elapsedTimeRelay.value != model.elapsedTime {
+            elapsedTimeRelay.accept(model.elapsedTime)
+        }
+    }
+    
+    // MARK: - Background Task Handling
+    
+    func startBackgroundTask() {
+        guard backgroundTask == .invalid else { return }
+        backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "StopwatchBackgroundTask") {
+            UIApplication.shared.endBackgroundTask(self.backgroundTask)
+            self.backgroundTask = .invalid
+        }
+    }
+    
+    private func stopBackgroundTask() {
+        if backgroundTask != .invalid {
+            UIApplication.shared.endBackgroundTask(backgroundTask)
+            backgroundTask = .invalid
+        }
     }
 }

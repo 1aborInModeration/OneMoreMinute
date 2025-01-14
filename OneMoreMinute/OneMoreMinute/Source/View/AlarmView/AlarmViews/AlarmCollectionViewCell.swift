@@ -83,6 +83,13 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         bind()
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            self.layer.borderColor = UIColor.wrapperStroke.cgColor
+        }
+    }
+    
     /// 셀을 설정하는 메소드
     /// - Parameter data: 셀 설정에 사용할 데이터
     func configCell(_ data: Alarm) {

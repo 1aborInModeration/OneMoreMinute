@@ -13,7 +13,7 @@ struct StopwatchModel {
     var laps: [LapModel]
 }
 
-struct LapModel {
+struct LapModel: Codable {
     let lapNumber: Int
     let lapTime: TimeInterval
 }

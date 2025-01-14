@@ -23,8 +23,21 @@ final class TimeManager {
     /// 현재 날짜를 전달하는 PublishRelay
     let dateRelay = BehaviorRelay<String>(value: "")
     
-    private let timeFormatter = DateFormatter()
-    private let dateFormatter = DateFormatter()
+    private let timeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.timeZone = TimeZone.current
+        formatter.dateFormat = TimeFormat.time
+        return formatter
+    }()
+    
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: TimeFormat.localeIdentifier)
+        formatter.timeZone = TimeZone.current
+        formatter.dateFormat = TimeFormat.date
+        return formatter
+    }()
+    
     private var timer: Timer?
     
     /// 초기화 및 날짜 변경 옵저버 등록
@@ -77,28 +90,17 @@ final class TimeManager {
     /// 현재 시간을 업데이트하고 timeRelay를 통해 전달
     private func updateTime() {
         let now = Date()
-        configureDateFormatter(format: TimeFormat.time)
-        
-        let timeString = dateFormatter.string(from: now)
+        let timeString = timeFormatter.string(from: now)
         timeRelay.accept(timeString)
     }
     
     /// 현재 날짜를 업데이트하고 dateRelay를 통해 전달
     private func updateDate() {
         let now = Date()
-        configureDateFormatter(format: TimeFormat.date)
-        
-        dateFormatter.locale = Locale(identifier: TimeFormat.localeIdentifier)
         let dateString = dateFormatter.string(from: now)
         dateRelay.accept(dateString)
     }
-    
-    /// DateFormatter 설정 구성
-    private func configureDateFormatter(format: String) {
-        dateFormatter.timeZone = TimeZone.current
-        dateFormatter.dateFormat = format
-    }
-    
+
     /// 날짜 변경 시 날짜 업데이트
     @objc
     private func handleDayChange() {
