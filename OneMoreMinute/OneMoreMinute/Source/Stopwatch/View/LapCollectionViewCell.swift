@@ -2,7 +2,7 @@
 //  LapCollectionViewCell.swift
 //  OneMoreMinute
 //
-//  Created by t0000-m0112 on 2025-01-09.
+//  Created by DoyleHWorks on 2025-01-09.
 //
 
 import UIKit

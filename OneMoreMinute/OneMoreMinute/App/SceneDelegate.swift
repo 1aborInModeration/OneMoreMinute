@@ -2,7 +2,7 @@
 //  SceneDelegate.swift
 //  OneMoreMinute
 //
-//  Created by t0000-m0112 on 2025-01-07.
+//  Created by DoyleHWorks on 2025-01-07.
 //
 
 import UIKit
