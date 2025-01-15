@@ -217,8 +217,14 @@ final class TimerViewController: UIViewController {
         timerDisposable = Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                let newTime = self.remainingTime.value - 1
+                let newTime = max(0, self.remainingTime.value - 1)
                 remainingTime.accept(newTime)
+                
+                if newTime == 0 {
+                    stopTimer()
+                    remainingTime.accept(self.selectedTime.value)
+                    isRunning.accept(false)
+                }
             })
     }
     
