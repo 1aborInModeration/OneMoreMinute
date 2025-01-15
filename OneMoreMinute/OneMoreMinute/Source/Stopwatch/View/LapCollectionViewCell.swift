@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
+/// LapCollectionViewCell 클래스는 각 랩 데이터를 표시하는, UICollectionViewCell을 커스터마이즈한 클래스입니다.
 final class LapCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "LapCollectionViewCell"
@@ -70,6 +71,7 @@ final class LapCollectionViewCell: UICollectionViewCell {
         lapLabel.text = viewModel.lapLabel
         lapTimeLabel.text = viewModel.lapTimeLabel
         
+        /// 특정 조건에 따라 텍스트 색상을 변경
         if viewModel.isFastest {
             lapLabel.textColor = .systemGreen
         } else if viewModel.isSlowest {
