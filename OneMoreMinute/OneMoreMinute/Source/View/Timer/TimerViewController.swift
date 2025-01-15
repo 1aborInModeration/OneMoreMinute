@@ -20,6 +20,7 @@ final class TimerViewController: UIViewController {
     private var timerDisposable: Disposable?
     
     let pickerRange = Array(1...60)
+    
     // MARK: - UI Components
     
     /// 타이머 컨텐츠를 담는 컨테이너 뷰
@@ -160,9 +161,10 @@ final class TimerViewController: UIViewController {
                 if running {
                     stopTimer()
                 } else {
-                    if self.remainingTime.value == 0 {
+                    if self.remainingTime.value <= 0 {
                         self.remainingTime.accept(self.selectedTime.value)
                     }
+                    
                     startTimer()
                 }
                 self.isRunning.accept(!running)
@@ -217,8 +219,14 @@ final class TimerViewController: UIViewController {
         timerDisposable = Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                let newTime = self.remainingTime.value - 1
+                let newTime = max(0, self.remainingTime.value - 1)
                 remainingTime.accept(newTime)
+                
+                if newTime == 0 {
+                    stopTimer()
+                    remainingTime.accept(self.selectedTime.value)
+                    isRunning.accept(false)
+                }
             })
     }
     
@@ -240,7 +248,7 @@ final class TimerViewController: UIViewController {
         present(modalVC, animated: true)
         
         /// 취소 버튼 탭 이벤트에 대한 바인딩
-       /// - Note: 모달을 닫고 백그라운드 뷰를 숨김 처리
+        /// - Note: 모달을 닫고 백그라운드 뷰를 숨김 처리
         modalVC.cancelButton.rx.tap
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
