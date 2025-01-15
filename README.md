@@ -82,9 +82,8 @@ OneMoreMinuteTests/       # 단위 테스트 및 테스트 코드 (TimeManagerTe
 ```
 
 ## 🖼️ Preview
-[![Preview Video](https://img.youtube.com/vi/Aia7Aa_c07o/0.jpg)](https://www.youtube.com/watch?v=Aia7Aa_c07o)
-<br>
-( https://youtu.be/Aia7Aa_c07o )
+|![Simulator Screen Recording - iPhone 16 Pro - 2025-01-15 at 14 09 41](https://github.com/user-attachments/assets/fdfdc3d8-030e-474a-90c2-35b314699a3b)|![Simulator Screen Recording - iPhone 16 Pro - 2025-01-15 at 14 10 45](https://github.com/user-attachments/assets/6c4052be-7521-479d-a952-4d44152c039a)|![Simulator Screen Recording - iPhone 16 Pro - 2025-01-15 at 14 11 10](https://github.com/user-attachments/assets/61a0469f-3774-45e5-8e26-9cf9c6c18491)|![Simulator Screen Recording - iPhone 16 Pro - 2025-01-15 at 14 12 31](https://github.com/user-attachments/assets/463cd64d-af21-421c-8c3d-171a7bd887af)|
+|-|-|-|-|
 
 ## 🏷 Main Features
 #### 알람 기능
