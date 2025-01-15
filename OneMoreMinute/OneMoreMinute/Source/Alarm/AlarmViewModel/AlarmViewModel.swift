@@ -71,11 +71,13 @@ final class AlarmViewModel: ViewModelType {
     private let deleteIndex = PublishRelay<IndexPath>()
     private let scrollIndex = PublishRelay<CGPoint>()
     
-    // MARK: - AlarmViewModel Initializer
+    // MARK: - Initializer
     
     init() {
         dataFetch()
     }
+    
+    // MARK: - Methods
     
     /// 코어 데이터의 데이터를 불러와 이벤트를 전달하는 메소드
     func dataFetch() {

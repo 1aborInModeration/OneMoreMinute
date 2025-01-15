@@ -20,6 +20,7 @@ final class TimerViewController: UIViewController {
     private var timerDisposable: Disposable?
     
     let pickerRange = Array(1...60)
+    
     // MARK: - UI Components
     
     /// 타이머 컨텐츠를 담는 컨테이너 뷰

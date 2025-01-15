@@ -72,7 +72,7 @@ class SearchCityViewModel {
     }
 }
 
-// MARK: - 내부 메소드
+// MARK: - Private Methods
 
 extension SearchCityViewModel {
     

@@ -14,7 +14,7 @@ import RxCocoa
 /// 알람뷰의 커스텀 셀
 final class AlarmCollectionViewCell: UICollectionViewCell {
     
-    // MARK: - AlarmCollectionViewCell Rx Properties
+    // MARK: - Rx Properties
     
     private(set) var disposeBag = DisposeBag()
     private let weekdaysStatus = PublishRelay<[Bool]>()
@@ -22,7 +22,7 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
     
     static let id: String = "AlarmCollectionViewCell"
         
-    // MARK: - AlarmCollectionViewCell UI
+    // MARK: - UI Components
     
     private let timeLabel = UILabel().then {
         $0.font = Fonts.headline2
@@ -60,7 +60,7 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         $0.backgroundColor = .clear
     }
     
-    // MARK: - AlarmCollectionViewCell Initializer
+    // MARK: - Initializer
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -90,6 +90,8 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    // MARK: - Methods
+    
     /// 셀을 설정하는 메소드
     /// - Parameter data: 셀 설정에 사용할 데이터
     func configCell(_ data: Alarm) {
@@ -114,7 +116,7 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
     }
 }
 
-// MARK: - AlarmCollectionViewCell UI Setting Method
+// MARK: - UI Setting Method
 
 private extension AlarmCollectionViewCell {
     

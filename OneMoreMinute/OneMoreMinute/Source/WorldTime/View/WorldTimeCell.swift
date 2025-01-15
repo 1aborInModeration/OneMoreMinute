@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 
 class WorldTimeCell: UICollectionViewCell {
+    
     // MARK: - Properties
     
     static let id: String = "WorldTimeCell"
@@ -22,7 +23,7 @@ class WorldTimeCell: UICollectionViewCell {
     private var timer: Timer?
     var timeZoneId: String?
     
-    // MARK: - Life Cycles
+    // MARK: - Initializer
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -44,7 +45,6 @@ class WorldTimeCell: UICollectionViewCell {
         timer?.invalidate()
     }
 }
-
 
 // MARK: - UI Layouts
 
@@ -97,7 +97,6 @@ extension WorldTimeCell {
         
     }
 }
-
 
 // MARK: - Cell Configure
 

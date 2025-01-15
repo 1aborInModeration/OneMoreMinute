@@ -51,7 +51,7 @@ extension UIButton {
     }
 }
 
-// MARK: - 버튼 액션 할당
+// MARK: - Button Action Assignment
 
 extension UIButton {
     

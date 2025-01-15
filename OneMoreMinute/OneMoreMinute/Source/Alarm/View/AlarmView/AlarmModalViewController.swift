@@ -35,7 +35,7 @@ final class AlarmModalViewController: UIViewController {
     
     private(set) lazy var modalView = AlarmModalView(state: self.state)
     
-    // MARK: - AlarmModalViewController Initializer
+    // MARK: - Initializer
     
     init(state: AlarmModalState, data: Alarm?) {
         self.state = state
@@ -47,7 +47,7 @@ final class AlarmModalViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - AlarmModalViewController LifeCycle
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,7 +67,7 @@ final class AlarmModalViewController: UIViewController {
         
 }
 
-// MARK: - AlarmModalViewController UI Setting Method
+// MARK: - UI Setting Method
 
 private extension AlarmModalViewController {
     

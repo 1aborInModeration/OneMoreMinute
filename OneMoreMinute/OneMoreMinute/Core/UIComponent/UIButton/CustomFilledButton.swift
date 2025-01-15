@@ -8,7 +8,6 @@
 import UIKit
 import SnapKit
 
-
 class CustomFilledButton: UIButton  {
     
     // MARK: - Properties
@@ -17,7 +16,7 @@ class CustomFilledButton: UIButton  {
     let isSmall: Bool
     let cornerRound: ButtonCorner
     
-    // MARK: - Life Cycles
+    // MARK: - Initializer
     
     /// 커스텀 filled 버튼
     ///
