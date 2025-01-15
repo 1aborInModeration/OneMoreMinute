@@ -82,6 +82,9 @@ OneMoreMinuteTests/       # 단위 테스트 및 테스트 코드 (TimeManagerTe
 ```
 
 ## 🖼️ Preview
+[![Preview Video](https://img.youtube.com/vi/Aia7Aa_c07o/0.jpg)](https://www.youtube.com/watch?v=Aia7Aa_c07o)
+<br>
+( https://youtu.be/Aia7Aa_c07o )
 
 ## 🏷 Main Features
 #### 알람 기능
