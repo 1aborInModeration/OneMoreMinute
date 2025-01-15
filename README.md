@@ -54,6 +54,32 @@
 - **종료일**: 2025/01/15 (수)
 
 ## 📂 Folder Organization
+```bash
+OneMoreMinute/
+├── App/                  # 애플리케이션 설정 및 메타 데이터
+│   ├── AppDelegate       # 앱의 생명주기 및 초기화 관리
+│   ├── Info.plist        # 앱의 설정 정보
+│   ├── LaunchScreen      # 앱 실행 시 로딩 화면
+│   ├── OneMoreMinute.entitlements  # 앱 권한 및 특정 기능 활성화 설정
+│   ├── OneMoreMinute.xcdatamodeld  # Core Data 모델
+│   └── SceneDelegate     # Scene 생명주기 관리
+├── Resource/             # 앱의 Asset 파일들
+└── Source/               # 기능별 애플리케이션 로직
+    ├── Core/             # 공통 로직 및 서비스
+    │   ├── Extension/    # 시스템 클래스 확장
+    │   ├── Manager/      # 공통 기능 관리 (AlarmManager, TimeManager, RepositoryManager 등)
+    │   ├── Protocol/     # 공통 프로토콜 (CoreDataProtocol, ModalProtocol, ViewModelType)
+    │   ├── Theme/        # 앱의 테마 정의 (Colors, Fonts, Layouts)
+    │   └── Utility/      # 공통 유틸리티 (AppHelpers, HapticService, SceneLifeCycleObserver 등)
+    ├── Feature/          # 기능별 화면 및 로직
+    │   ├── Alarm/        # 알람 기능
+    │   ├── MainTab/      # 메인 탭바 기능
+    │   ├── Stopwatch/    # 스톱워치 기능
+    │   ├── Timer/        # 타이머 기능
+    │   └── WorldTime/    # 세계시간 기능
+    └── UIComponent/      # 공통 UI 컴포넌트들
+OneMoreMinuteTests/       # 단위 테스트 및 테스트 코드 (TimeManagerTests)
+```
 
 ## 🖼️ Preview
 
@@ -79,17 +105,17 @@
 - MVVM 아키텍처를 채택하여 코드의 모듈화와 유지 보수성을 향상시켰습니다.
 - RxSwift를 활용하여 비동기 데이터 흐름과 바인딩을 구현하였습니다.
 
-#### 공용 테마 및 UI 컴포넌트 분리
-- 앱 전반에 걸쳐 일관된 디자인을 유지하기 위해 공용 테마를 정의하였습니다.
-- 재사용 가능한 UI 컴포넌트를 분리하여 개발 효율성을 높였습니다.
+#### 재사용성 높은 개발 
+- 앱 전반에 걸쳐 일관된 디자인을 유지하기 위해 공용 테마를 정의하고, 재사용 가능한 UI 컴포넌트를 분리하였습니다.
+- 유틸리티, 매니저 등을 코어 서비스로 분리하여 구현하였습니다.
 
 #### CoreData & UserDefaults 관리
 - 사용자 데이터와 설정을 효율적으로 저장하고 관리하기 위해 CoreData와 UserDefaults를 활용하였습니다.
-- 알람앱 특성에 맞게 앱이 백그라운드에 있거나 종료된 상태에도 정상적으로 작동하도록 설계하였습니다.
+- 알람과 세계시간 기능은 CoreData를 사용하고 스톱워치 기능은 UserDefaults를 사용하였습니다.
 
-#### 배너 알림 기능 구현
-- 앱 내에서 중요한 정보르르 사용자에게 전달하기 위해 배너 알림 기능을 구현하였습니다.
-- 사용자 경험을 고려하여 알림의 디자인과 동작을 최적화하였습니다.
+#### 배너 알림 기능 및 백그라운드 플로우 구현
+- 앱 내에서 중요한 정보를 사용자에게 전달하기 위해 배너 알림 기능을 구현하였습니다.
+- SceneDelegate의 Lifecycle을 통해 스톱워치 등의 백그라운드 플로우를 구현하였습니다.
 
 #### 디바이스 리소스 효율
 - 세계시간 기능을 외부 API를 이용하지 않고 내부 로직으로 구현하여 네트워크 사용을 최소화하였습니다.
