@@ -35,7 +35,6 @@ class CityListCell: UICollectionViewCell {
     
 }
 
-
 // MARK: - UI Layouts
 
 extension CityListCell {
@@ -65,7 +64,6 @@ extension CityListCell {
         }
     }
 }
-
 
 // MARK: - Cell Configure
 

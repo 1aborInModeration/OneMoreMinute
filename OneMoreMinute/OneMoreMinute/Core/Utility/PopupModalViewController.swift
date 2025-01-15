@@ -8,7 +8,6 @@
 import UIKit
 import SnapKit
 
-
 final class PopupModalViewController: UIViewController, ModalCloseDelegate {
     
     // MARK: - Properties
@@ -57,7 +56,6 @@ final class PopupModalViewController: UIViewController, ModalCloseDelegate {
     }
 }
 
-
 // MARK: - Setup UI Layouts
 
 extension PopupModalViewController {
@@ -76,7 +74,6 @@ extension PopupModalViewController {
         }
     }
 }
-
 
 // MARK: - Action Management & Mapping
 

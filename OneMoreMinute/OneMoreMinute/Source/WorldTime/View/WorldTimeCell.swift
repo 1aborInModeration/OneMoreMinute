@@ -46,7 +46,6 @@ class WorldTimeCell: UICollectionViewCell {
     }
 }
 
-
 // MARK: - UI Layouts
 
 extension WorldTimeCell {
@@ -98,7 +97,6 @@ extension WorldTimeCell {
         
     }
 }
-
 
 // MARK: - Cell Configure
 
