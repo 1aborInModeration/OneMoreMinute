@@ -19,7 +19,7 @@ enum HeadlineSize {
 
 struct Fonts {
     
-    // MARK: - default font style
+    // MARK: - Default Font Styles
     
     /// 커버나 주요 메시지 용 폰트 / size : 48 / regular
     static let display1 = UIFont.pretendard(ofSize: 48, weight: .regular)

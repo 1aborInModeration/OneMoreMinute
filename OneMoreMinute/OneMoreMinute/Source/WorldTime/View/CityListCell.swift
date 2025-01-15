@@ -19,7 +19,7 @@ class CityListCell: UICollectionViewCell {
     let timeZoneLabel = BodyLabel()
 
     
-    // MARK: - Life Cycles
+    // MARK: - Initializer
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,7 +34,6 @@ class CityListCell: UICollectionViewCell {
     }
     
 }
-
 
 // MARK: - UI Layouts
 
@@ -65,7 +64,6 @@ extension CityListCell {
         }
     }
 }
-
 
 // MARK: - Cell Configure
 

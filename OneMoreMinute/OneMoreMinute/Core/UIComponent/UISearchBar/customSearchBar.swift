@@ -1,5 +1,5 @@
 //
-//  customSearchBar.swift
+//  CustomSearchBar.swift
 //  OneMoreMinute
 //
 //  Created by MaxBook on 1/10/25.

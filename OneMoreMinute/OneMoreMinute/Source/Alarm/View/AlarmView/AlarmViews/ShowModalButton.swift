@@ -23,7 +23,7 @@ final class ShowModalButton: UIButton {
     }
 }
 
-// MARK: - ShowModalButton UI Setting Method
+// MARK: - UI Setting Method
 
 private extension ShowModalButton {
     

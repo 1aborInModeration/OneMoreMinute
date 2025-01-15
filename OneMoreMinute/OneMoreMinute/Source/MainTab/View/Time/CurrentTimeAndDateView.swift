@@ -1,5 +1,5 @@
 //
-//  CurrentTimeView.swift
+//  CurrentTimeAndDateView.swift
 //  OneMoreMinute
 //
 //  Created by 권승용 on 1/8/25.

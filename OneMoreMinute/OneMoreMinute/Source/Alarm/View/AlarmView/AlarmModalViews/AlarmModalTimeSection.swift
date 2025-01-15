@@ -19,7 +19,7 @@ final class AlarmModalTimeSection: UIView {
     
     private(set) var timeSet = CustomDatePicker()
     
-    // MARK: - AlarmModalTimeSection Initializer
+    // MARK: - Initializer
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,7 +49,7 @@ final class AlarmModalTimeSection: UIView {
     
 }
 
-// MARK: - AlarmModalTimeSection UI Setting Method
+// MARK: - UI Setting Method
 
 private extension AlarmModalTimeSection {
     

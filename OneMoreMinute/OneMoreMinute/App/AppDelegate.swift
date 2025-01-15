@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  OneMoreMinute
 //
-//  Created by t0000-m0112 on 2025-01-07.
+//  Created by DoyleHWorks on 2025-01-07.
 //
 
 import UIKit
@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return true
     }
     
-    // MARK: UISceneSession Lifecycle
+    // MARK: - UISceneSession Lifecycle
     
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Called when a new scene session is being created.

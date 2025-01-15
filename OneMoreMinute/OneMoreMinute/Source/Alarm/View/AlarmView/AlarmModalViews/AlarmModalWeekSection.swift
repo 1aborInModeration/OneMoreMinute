@@ -19,7 +19,7 @@ final class AlarmModalWeekSection: UIView {
     private(set) var cellSelectedStates = BehaviorRelay(value: [Bool]())
     private let disposeBag = DisposeBag()
     
-    // MARK: - AlarmModalWeekSection UI
+    // MARK: - UI Components
     
     private let title = BodyLabel().then {
         $0.text = "반복 요일"
@@ -85,7 +85,7 @@ final class AlarmModalWeekSection: UIView {
         return layout
     }()
     
-    // MARK: - AlarmModalWeekSection Initializer
+    // MARK: - Initializer
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -112,7 +112,7 @@ final class AlarmModalWeekSection: UIView {
     
 }
 
-// MARK: - AlarmModalWeekSection UI Setting Method
+// MARK: - UI Setting Method
 
 private extension AlarmModalWeekSection {
     

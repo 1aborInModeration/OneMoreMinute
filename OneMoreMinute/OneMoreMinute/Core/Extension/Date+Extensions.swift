@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// - `getTimeString()`: 날짜의 시간을 "HH:mm" 형식의 문자열로 반환합니다.
 extension Date {
     func getTimeString() -> String {
         let formatter = DateFormatter()

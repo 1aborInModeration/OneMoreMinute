@@ -10,7 +10,7 @@ import SnapKit
 
 class TitleLabel: UILabel {
     
-    // MARK: - Life Cycles
+    // MARK: - Initializer
     
     /// 타이틀 라벨
     ///

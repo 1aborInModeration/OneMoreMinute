@@ -19,7 +19,7 @@ final class AlarmModalMemoSection: UIView {
     
     private(set) var memoSet = CustomTextField(placeholder: "알람 메모를 입력하세요")
     
-    // MARK: - AlarmModalMemoSection Initializer
+    // MARK: - Initializer
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,7 +49,7 @@ final class AlarmModalMemoSection: UIView {
     
 }
 
-// MARK: - AlarmModalMemoSection UI Setting Method
+// MARK: - UI Setting Method
 
 private extension AlarmModalMemoSection {
     

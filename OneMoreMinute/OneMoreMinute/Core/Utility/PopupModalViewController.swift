@@ -8,14 +8,14 @@
 import UIKit
 import SnapKit
 
-
 final class PopupModalViewController: UIViewController, ModalCloseDelegate {
+    
     // MARK: - Properties
 
     private let modalContentsView: UIView
 
     
-    // MARK: - init & Life cyclesas
+    // MARK: - Initializer
 
     init(modalContentsView: ModalCloseable) {
         self.modalContentsView = modalContentsView as! UIView
@@ -28,6 +28,8 @@ final class PopupModalViewController: UIViewController, ModalCloseDelegate {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -54,7 +56,6 @@ final class PopupModalViewController: UIViewController, ModalCloseDelegate {
     }
 }
 
-
 // MARK: - Setup UI Layouts
 
 extension PopupModalViewController {
@@ -73,7 +74,6 @@ extension PopupModalViewController {
         }
     }
 }
-
 
 // MARK: - Action Management & Mapping
 

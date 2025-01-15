@@ -18,7 +18,7 @@ enum ClockLabelType {
 
 class ClockLabel: UILabel {
     
-    // MARK: - Life Cycles
+    // MARK: - Initializer
     
     /// 타이틀 라벨
     ///

@@ -17,7 +17,7 @@ final class MainTabBar: UIView {
     let tappedIndexRelay = PublishRelay<Int>()
     private let disposeBag = DisposeBag()
     
-    // MARK: - View Property
+    // MARK: - UI Components
     
     private lazy var stackView = UIStackView(
         arrangedSubviews: makeArrangedSubviews()

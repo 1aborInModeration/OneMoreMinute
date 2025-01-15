@@ -12,7 +12,7 @@ import Then
 /// 알람 탭의 모달 뷰
 final class AlarmModalView: UIView {
     
-    // MARK: - AlarmModalView UI
+    // MARK: - UI Components
     
     private let title = TitleLabel(size: .title1).then {
         $0.text = "새 알람 추가"
@@ -40,7 +40,7 @@ final class AlarmModalView: UIView {
     private let weekSection = AlarmModalWeekSection()
     private let memoSection = AlarmModalMemoSection()
         
-    // MARK: - AlarmModalView Initializer
+    // MARK: - Initializer
     
     init(state: AlarmModalState) {
         super.init(frame: .zero)
@@ -61,6 +61,8 @@ final class AlarmModalView: UIView {
             self.layer.borderColor = UIColor.wrapperStroke.cgColor
         }
     }
+    
+    // MARK: - Methods
     
     /// 모달뷰의 데이터를 추출하는 메소드
     /// - Returns: 설정된 시간, 메모, 반복 요일에 대한 데이터
@@ -91,7 +93,7 @@ final class AlarmModalView: UIView {
     }
 }
 
-// MARK: - AlarmModalView UI Setting Method
+// MARK: - UI Setting Method
 
 private extension AlarmModalView {
     

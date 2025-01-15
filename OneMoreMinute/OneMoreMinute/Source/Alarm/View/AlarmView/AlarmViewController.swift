@@ -19,14 +19,14 @@ final class AlarmViewController: UIViewController {
     
     private let viewModel = AlarmViewModel()
     
-    // MARK: - AlarmViewController Rx Properties
+    // MARK: - Rx Properties
     
     private let disposeBag = DisposeBag()
     private let alarmToggleButtonTapped = PublishRelay<IndexPath>()
     private let deleteButtonTapped = PublishRelay<IndexPath>()
     private let saveButtonTapped = PublishRelay<CGPoint>()
         
-    // MARK: - AlarmViewController UI
+    // MARK: - UI Components
     
     private let alarmView = AlarmView()
         
@@ -38,7 +38,7 @@ final class AlarmViewController: UIViewController {
         $0.alpha = 0
     }
     
-    // MARK: - AlarmViewController LifeCycle
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +47,7 @@ final class AlarmViewController: UIViewController {
     }
 }
 
-// MARK: - AlarmViewController UI Setting Method
+// MARK: - UI Setting Method
 
 private extension AlarmViewController {
     

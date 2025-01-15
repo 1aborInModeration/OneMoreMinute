@@ -8,7 +8,6 @@
 import UIKit
 import SnapKit
 
-
 class SearchCityView: WrapperView {
 
     let titleLabel = TitleLabel(size: .title1)

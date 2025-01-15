@@ -9,6 +9,7 @@ import OSLog
 
 /// 앱 전반에서 사용할 수 있는 로거
 enum AppLogger {
+    
     // MARK: - Private Properties
     
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "OneMoreMinute", category: "default")

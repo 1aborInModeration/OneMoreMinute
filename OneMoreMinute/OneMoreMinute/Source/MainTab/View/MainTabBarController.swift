@@ -30,7 +30,7 @@ final class MainTabBarController: UIViewController {
     private let viewModel = MainTabViewModel()
     private let disposeBag = DisposeBag()
     
-    // MARK: - Life Cycle
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -153,7 +153,7 @@ extension MainTabBarController {
     }
 }
 
-// MARK: - Child VC 관리
+// MARK: - Child VC Management
 
 extension MainTabBarController {
     /// 지정된 인덱스의 자식 뷰 컨트롤러를 추가

@@ -10,7 +10,7 @@ import SnapKit
 
 class HeadlineLabel: UILabel {
     
-    // MARK: - Life Cycles
+    // MARK: - Initializer
     
     /// 헤드라인 라벨
     ///

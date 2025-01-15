@@ -8,10 +8,9 @@
 import UIKit
 import SnapKit
 
-
 final class CityListCollectionView: UICollectionView {
     
-    // MARK: - Life Cycles
+    // MARK: - Initializer
     
     init() {
         super.init(frame: .zero, collectionViewLayout: CityListCollectionView.createCompositionalLayout())

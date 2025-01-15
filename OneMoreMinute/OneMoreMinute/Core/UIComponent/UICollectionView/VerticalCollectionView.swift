@@ -10,7 +10,7 @@ import SnapKit
 
 class VerticalCollectionView: UICollectionView {
     
-    // MARK: - Life Cycles
+    // MARK: - Initializer
     
     init() {
         super.init(frame: .zero, collectionViewLayout: VerticalCollectionView.createCompositionalLayout())
@@ -72,7 +72,7 @@ extension VerticalCollectionView {
     }
 }
 
-// MARK: - 스와이프 버튼 추가
+// MARK: - Swipe Button
 
 extension VerticalCollectionView {
     

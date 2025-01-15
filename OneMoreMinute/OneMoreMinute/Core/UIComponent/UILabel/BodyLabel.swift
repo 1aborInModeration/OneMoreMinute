@@ -11,7 +11,7 @@ import SnapKit
 
 class BodyLabel: UILabel {
     
-    // MARK: - Life Cycles
+    // MARK: - Initializer
     
     /// 기본 텍스트 라벨
     ///
