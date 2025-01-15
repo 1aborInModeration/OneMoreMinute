@@ -40,7 +40,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillEnterForeground(_ scene: UIScene) {
         // Called as the scene transitions from the background to the foreground.
         // Use this method to undo the changes made on entering the background.
-        SceneLifeCycleObserver.shared.switchAppState(into:.willEnterForeground)
+        SceneLifeCycleObserver.shared.switchAppState(into: .willEnterForeground)
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
@@ -50,7 +50,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Save changes in the application's managed object context when the application transitions to the background.
         (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
-        SceneLifeCycleObserver.shared.switchAppState(into:.didEnterBackground)
+        SceneLifeCycleObserver.shared.switchAppState(into: .didEnterBackground)
     }
     
 
