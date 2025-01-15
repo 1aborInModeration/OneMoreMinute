@@ -16,6 +16,8 @@ enum ButtonColor {
     case primary
     case secondary
     case disalbled
+    case plusButton
+    case grayButton
 }
 
 /// 버튼의 코너 라운딩을 다음과 같이 제한합니다.
@@ -47,6 +49,10 @@ extension UIButton {
             return Colors.systemColor(.r500) ?? .black500
         case .disalbled:
             return Colors.systemColor(.r100) ?? .black100
+        case .plusButton:
+            return .plusButtonBackground
+        case .grayButton:
+            return .grayButtonBackground
         }
     }
 }

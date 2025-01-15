@@ -21,7 +21,10 @@ final class AlarmModalWeekSection: UIView {
     
     // MARK: - AlarmModalWeekSection UI
     
-    private let title = AlarmModalSectionTitle(title: "반복 요일")
+    private let title = BodyLabel().then {
+        $0.text = "반복 요일"
+        $0.textColor = .fontGray
+    }
     
     private lazy var weeks = UICollectionView(frame: .zero, collectionViewLayout: self.layout).then {
         $0.isScrollEnabled = false
@@ -32,7 +35,7 @@ final class AlarmModalWeekSection: UIView {
     private lazy var layout: UICollectionViewLayout = {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1/5),
-            heightDimension: .fractionalHeight(1.0)
+            heightDimension: .absolute(Layouts.buttonHeight)
         )
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -40,7 +43,7 @@ final class AlarmModalWeekSection: UIView {
         
         let firstGroupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(40)
+            heightDimension: .absolute(Layouts.buttonHeight)
         )
         
         let firstGroup = NSCollectionLayoutGroup.horizontal(
@@ -48,11 +51,11 @@ final class AlarmModalWeekSection: UIView {
             repeatingSubitem: item,
             count: 5
         )
-        firstGroup.interItemSpacing = .fixed(10)
+        firstGroup.interItemSpacing = .fixed(Layouts.itemSpacing1)
         
         let secondGroupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(40)
+            heightDimension: .absolute(Layouts.buttonHeight)
         )
         
         let secondGroup = NSCollectionLayoutGroup.horizontal(
@@ -60,22 +63,22 @@ final class AlarmModalWeekSection: UIView {
             repeatingSubitem: item,
             count: 5
         )
-        secondGroup.interItemSpacing = .fixed(10)
+        secondGroup.interItemSpacing = .fixed(Layouts.itemSpacing1)
         
         let containerGroupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(90)
+            heightDimension: .estimated(100)
         )
         
         let containerGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: containerGroupSize,
             subitems: [firstGroup, secondGroup]
         )
-        containerGroup.interItemSpacing = .fixed(10)
+        containerGroup.interItemSpacing = .fixed(Layouts.itemSpacing1)
         
         
         let section = NSCollectionLayoutSection(group: containerGroup)
-        section.interGroupSpacing = 10
+        section.interGroupSpacing = Layouts.itemSpacing2
         
         let layout = UICollectionViewCompositionalLayout(section: section)
         
@@ -129,13 +132,12 @@ private extension AlarmModalWeekSection {
         self.title.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.equalToSuperview()
-            make.height.equalTo(15)
         }
         
         self.weeks.snp.makeConstraints { make in
-            make.top.equalTo(self.title.snp.bottom).offset(5)
+            make.top.equalTo(self.title.snp.bottom).offset(Layouts.itemSpacing1)
             make.horizontalEdges.equalToSuperview()
-            make.height.equalTo(90)
+            make.height.equalTo(110)
         }
     }
     

@@ -45,7 +45,7 @@ extension BodyLabel {
         self.textColor = .fontLabel
         self.textAlignment = .left
         self.numberOfLines = 0
-        self.font = isBold ? Fonts.body : Fonts.bold
+        self.font = isBold ? Fonts.bold : Fonts.body
         self.setLineSpacing(lineSpacing: font.pointSize * 1.5)
     }
 }
