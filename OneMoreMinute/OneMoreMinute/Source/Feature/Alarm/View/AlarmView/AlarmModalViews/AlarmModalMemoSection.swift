@@ -12,22 +12,12 @@ import Then
 /// 모달뷰 메모 섹션 뷰
 final class AlarmModalMemoSection: UIView {
     
-    private let title = AlarmModalSectionTitle(title: "메모")
-    
-    private(set) var memoSet = UITextField().then {
-        $0.placeholder = "알람 메모를 입력하세요"
-        $0.textColor = UIColor.textFieldFont
-        $0.font = Fonts.title2
-        $0.borderStyle = .none
-        $0.leftView = UIView(frame: .init(x: 0, y: 0, width: 10, height: 10))
-        $0.leftViewMode = .always
-        $0.backgroundColor = UIColor.textFieldBackground
-        $0.layer.cornerRadius = 12
-        $0.layer.borderWidth = 1
-        $0.layer.borderColor = UIColor.textFieldStroke.cgColor
-        $0.keyboardType = .default
-        $0.autocapitalizationType = .none
+    private let title = BodyLabel().then {
+        $0.text = "메모"
+        $0.textColor = .fontGray
     }
+    
+    private(set) var memoSet = CustomTextField(placeholder: "알람 메모를 입력하세요")
     
     // MARK: - Initializer
     
@@ -46,7 +36,7 @@ final class AlarmModalMemoSection: UIView {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            self.memoSet.layer.borderColor = UIColor.wrapperStroke.cgColor
+            self.memoSet.layer.borderColor = UIColor.textFieldStroke.cgColor
         }
     }
     
@@ -78,13 +68,12 @@ private extension AlarmModalMemoSection {
         self.title.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.equalToSuperview()
-            make.height.equalTo(15)
         }
         
         self.memoSet.snp.makeConstraints { make in
-            make.top.equalTo(self.title.snp.bottom).offset(5)
+            make.top.equalTo(self.title.snp.bottom).offset(Layouts.itemSpacing1)
             make.horizontalEdges.equalToSuperview()
-            make.height.equalTo(100)
+            make.height.equalTo(70)
         }
     }
     

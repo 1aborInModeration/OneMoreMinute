@@ -14,36 +14,14 @@ final class AlarmModalView: UIView {
     
     // MARK: - UI Components
     
-    private let title = UILabel().then {
+    private let title = TitleLabel(size: .title1).then {
         $0.text = "새 알람 추가"
-        $0.font = Fonts.title1Bold
-        $0.numberOfLines = 1
-        $0.textColor = UIColor.mainTitle
-        $0.textAlignment = .left
-        $0.backgroundColor = .clear
+        $0.textColor = .fontLabel
     }
     
-    private(set) var closeButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "xmark"), for: .normal)
-        $0.tintColor = Colors.systemLightGray
-        $0.backgroundColor = .clear
-    }
-    
-    private(set) var cancelButton = UIButton().then {
-        $0.setTitle("취소", for: .normal)
-        $0.setTitleColor(Colors.systemGray(.r800), for: .normal)
-        $0.titleLabel?.font = Fonts.title2
-        $0.backgroundColor = UIColor.textFieldBackground
-        $0.layer.cornerRadius = 12
-    }
-    
-    private(set) var saveButton = UIButton().then {
-        $0.setTitle("저장", for: .normal)
-        $0.setTitleColor(UIColor.white, for: .normal)
-        $0.titleLabel?.font = Fonts.title2Bold
-        $0.backgroundColor = UIColor.plusButtonBackground
-        $0.layer.cornerRadius = 12
-    }
+    private(set) var closeButton = CloseButton()
+    private(set) var cancelButton = CustomFilledButton(color: .grayButton ,title: "취소", cornerRound: .rounded, isGray: true)
+    private(set) var saveButton = CustomFilledButton(color: .plusButton ,title: "저장", cornerRound: .rounded)
     
     private lazy var buttonStack = UIStackView().then { stack in
         stack.axis = .horizontal
@@ -139,38 +117,38 @@ private extension AlarmModalView {
     
     func setupLayout() {
         self.title.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(20)
-            make.leading.equalToSuperview().inset(20)
-            make.height.equalTo(25)
+            make.top.equalToSuperview().inset(Layouts.itemSpacing4)
+            make.leading.equalToSuperview().inset(Layouts.paddingSmall)
+            make.height.equalTo(Layouts.buttonHeightSmall)
         }
         
         self.closeButton.snp.makeConstraints { make in
-            make.centerY.equalTo(self.title)
-            make.trailing.equalToSuperview().inset(20)
-            make.width.height.equalTo(25)
+            make.top.equalToSuperview().inset(Layouts.itemSpacing4)
+            make.trailing.equalToSuperview().inset(Layouts.paddingSmall)
+            make.height.equalTo(title.snp.height)
         }
         
         self.timeSection.snp.makeConstraints { make in
-            make.top.equalTo(self.title.snp.bottom).offset(20)
-            make.horizontalEdges.equalToSuperview().inset(20)
+            make.top.equalTo(self.title.snp.bottom).offset(Layouts.itemSpacing4)
+            make.horizontalEdges.equalToSuperview().inset(Layouts.paddingSmall)
             make.height.equalTo(100)
         }
         
         self.weekSection.snp.makeConstraints { make in
-            make.top.equalTo(self.timeSection.snp.bottom).offset(20)
-            make.horizontalEdges.equalToSuperview().inset(20)
-            make.height.equalTo(110)
+            make.top.equalTo(self.timeSection.snp.bottom).offset(Layouts.itemSpacing4)
+            make.horizontalEdges.equalToSuperview().inset(Layouts.paddingSmall)
+            make.height.equalTo(130)
         }
         
         self.memoSection.snp.makeConstraints { make in
-            make.top.equalTo(self.weekSection.snp.bottom).offset(20)
-            make.horizontalEdges.equalToSuperview().inset(20)
-            make.height.equalTo(100)
+            make.top.equalTo(self.weekSection.snp.bottom).offset(Layouts.itemSpacing4)
+            make.horizontalEdges.equalToSuperview().inset(Layouts.paddingSmall)
+            make.height.equalTo(90)
         }
         
         self.buttonStack.snp.makeConstraints { make in
-            make.horizontalEdges.equalToSuperview().inset(20)
-            make.bottom.equalToSuperview().inset(20)
+            make.horizontalEdges.equalToSuperview().inset(Layouts.paddingSmall)
+            make.bottom.equalToSuperview().inset(Layouts.itemSpacing4)
             make.height.equalTo(50)
         }
     }

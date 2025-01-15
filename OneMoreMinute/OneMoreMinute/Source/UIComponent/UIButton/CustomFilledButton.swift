@@ -15,6 +15,7 @@ class CustomFilledButton: UIButton  {
     let title: String
     let isSmall: Bool
     let cornerRound: ButtonCorner
+    let isGray: Bool
     
     // MARK: - Initializer
     
@@ -32,15 +33,18 @@ class CustomFilledButton: UIButton  {
     ///   - title: 버튼에 들어갈 텍스트입니다. 기본은 **확인**입니다.
     ///   - isSmall: 버튼 높이 사이즈입니다. 기본은 48, 작은 사이즈는 32입니다.
     ///   - cornerRound: 버튼의 코너 라운드입니다.
+    ///   - isGray: 버튼 텍스트 색상이 그레이인지 여부 확인. 기본은 화이트.
     init(
         color: ButtonColor = .primary,
         title: String = "확인",
         isSmall: Bool = false,
-        cornerRound: ButtonCorner = .none
+        cornerRound: ButtonCorner = .none,
+        isGray: Bool = false
     ){
         self.title = title
         self.isSmall = isSmall
         self.cornerRound = cornerRound
+        self.isGray = isGray
         
         super.init(frame: .zero)
         
@@ -76,7 +80,8 @@ extension CustomFilledButton {
             config.background.cornerRadius = isSmall ? Layouts.buttonHeightSmall / 2 : Layouts.buttonHeight / 2
         }
         
-        config.baseForegroundColor = .fontLabel
+        config.baseForegroundColor = isGray ? .grayButtonLabel : .white
+        config.baseBackgroundColor = buttonColor
         config.contentInsets = NSDirectionalEdgeInsets(top: Layouts.itemSpacing1, leading: Layouts.paddingSmall, bottom: Layouts.itemSpacing1, trailing: Layouts.paddingSmall)
         
         self.configurationUpdateHandler = { _ in
