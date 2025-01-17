@@ -30,7 +30,7 @@ final class AlarmView: UIView {
         
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(0.95),
-            heightDimension: .absolute(160)
+            heightDimension: .estimated(162)
         )
         
         let group = NSCollectionLayoutGroup.vertical(
@@ -39,8 +39,8 @@ final class AlarmView: UIView {
         )
         
         let section = NSCollectionLayoutSection(group: group)
-        section.interGroupSpacing = 20
-        section.contentInsets = .init(top: 10, leading: 20, bottom: 20, trailing: 0)
+        section.interGroupSpacing = Layouts.itemSpacing4
+        section.contentInsets = .init(top: Layouts.itemSpacing2, leading: Layouts.itemSpacing4, bottom: Layouts.itemSpacing4, trailing: Layouts.itemSpacing2)
         
         let layout = UICollectionViewCompositionalLayout(section: section)
         

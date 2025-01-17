@@ -28,6 +28,8 @@ extension CustomTextField {
         self.borderStyle = .none
         self.leftView = UIView(frame: .init(x: 0, y: 0, width: 10, height: 10))
         self.leftViewMode = .always
+        self.rightView = UIView(frame: .init(x: 0, y: 0, width: 10, height: 10))
+        self.rightViewMode = .always
         self.backgroundColor = UIColor.textFieldBackground
         self.layer.cornerRadius = Layouts.radiusSmall
         self.layer.borderWidth = Layouts.borderWidthThin

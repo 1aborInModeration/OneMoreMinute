@@ -24,41 +24,18 @@ final class AlarmCollectionViewCell: UICollectionViewCell {
         
     // MARK: - UI Components
     
-    private let timeLabel = UILabel().then {
-        $0.font = Fonts.headline2
-        $0.textColor = UIColor.label
-        $0.numberOfLines = 1
-        $0.textAlignment = .left
-        $0.backgroundColor = .clear
+    private let timeLabel = TitleLabel(size: .title1).then {
+        $0.textColor = .fontLabel
     }
     
     private let weekDaysIcons = WeekDaysIcons()
     
-    private let note = UITextField().then {
-        $0.textColor = UIColor.textFieldFont
-        $0.borderStyle = .none
-        $0.layer.cornerRadius = 8
-        $0.backgroundColor = UIColor.textFieldBackground
-        $0.leftView = UIView(frame: .init(x: 0, y: 0, width: 10, height: 10))
-        $0.leftViewMode = .always
-        $0.rightView = UIView(frame: .init(x: 0, y: 0, width: 10, height: 10))
-        $0.rightViewMode = .always
+    private let note = CustomTextField(placeholder: "").then {
         $0.isUserInteractionEnabled = false
     }
     
-    private(set) var alarmButton = UIButton().then {
-        $0.layer.cornerRadius = 20
-        $0.setImage(UIImage(systemName: "bell"), for: .normal)
-        $0.tintColor = UIColor.mainTitle
-        $0.backgroundColor = UIColor.buttonBackground
-    }
-    
-    private(set) var deleteButton = UIButton().then {
-        $0.layer.cornerRadius = 20
-        $0.setImage(UIImage(systemName: "trash"), for: .normal)
-        $0.tintColor = UIColor.iconRed
-        $0.backgroundColor = .clear
-    }
+    private(set) var alarmButton = IconButton(imageId: "bell", buttonColor: .buttonBackground, iconColor: .blue)
+    private(set) var deleteButton = IconButton(imageId: "trash", buttonColor: .clear, iconColor: .iconRed)
     
     // MARK: - Initializer
     
@@ -134,13 +111,13 @@ private extension AlarmCollectionViewCell {
     
     func configureSelf() {
         self.backgroundColor = UIColor.wrapperBackground
-        self.layer.cornerRadius = 12
+        self.layer.cornerRadius = Layouts.radius
         self.layer.shadowColor = UIColor.black.cgColor
         self.layer.shadowOpacity = 0.25
         self.layer.shadowOffset = .init(width: 0, height: 10)
         self.layer.shadowRadius = 10
         self.layer.shadowPath = .init(rect: self.bounds, transform: nil)
-        self.layer.borderWidth = 1
+        self.layer.borderWidth = Layouts.borderWidthThin
         self.layer.borderColor = UIColor.wrapperStroke.cgColor
         [self.timeLabel,
          self.note,
@@ -153,34 +130,34 @@ private extension AlarmCollectionViewCell {
     func setupLayout() {
         
         self.timeLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(20)
-            make.leading.equalToSuperview().offset(20)
-        }
-        
-        self.note.snp.makeConstraints { make in
-            make.top.equalTo(self.timeLabel.snp.bottom).offset(10)
-            make.leading.equalTo(self.timeLabel.snp.leading)
-            make.height.equalTo(40)
-            make.width.equalTo(240)
-        }
-        
-        self.weekDaysIcons.snp.makeConstraints { make in
-            make.top.equalTo(self.note.snp.bottom).offset(10)
-            make.leading.equalTo(self.timeLabel)
-            make.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(30)
-        }
-        
-        self.alarmButton.snp.makeConstraints { make in
-            make.centerY.equalTo(self.note)
-            make.leading.equalTo(self.note.snp.trailing).offset(10)
-            make.width.height.equalTo(40)
+            make.top.equalToSuperview().inset(Layouts.itemSpacing2)
+            make.leading.trailing.equalToSuperview().offset(Layouts.paddingSmall)
+            make.height.equalTo(Layouts.buttonHeightSmall)
         }
         
         self.deleteButton.snp.makeConstraints { make in
-            make.centerY.equalTo(self.alarmButton)
-            make.leading.equalTo(self.alarmButton.snp.trailing).offset(10)
-            make.width.height.equalTo(40)
+            make.top.equalTo(self.timeLabel.snp.bottom).offset(Layouts.itemSpacing3)
+            make.trailing.equalToSuperview().inset(Layouts.paddingSmall)
+        }
+        
+        self.alarmButton.snp.makeConstraints { make in
+            make.centerY.equalTo(self.deleteButton.snp.centerY)
+            make.width.height.equalTo(Layouts.buttonHeight)
+            make.trailing.equalToSuperview().inset(Layouts.paddingSmall + Layouts.itemSpacing2 + Layouts.buttonHeightSmall)
+        }
+        
+        self.note.snp.makeConstraints { make in
+            make.centerY.equalTo(self.deleteButton)
+            make.leading.equalToSuperview().inset(Layouts.paddingSmall)
+            make.trailing.equalTo(self.alarmButton.snp.leading).offset(-(Layouts.itemSpacing5))
+            make.height.equalTo(Layouts.buttonHeightSmall)
+        }
+
+        self.weekDaysIcons.snp.makeConstraints { make in
+            make.top.equalTo(self.note.snp.bottom).offset(Layouts.itemSpacing3)
+            make.leading.equalTo(self.timeLabel)
+            make.trailing.equalToSuperview().inset(Layouts.itemSpacing4)
+            make.bottom.equalToSuperview().inset(Layouts.itemSpacing2)
         }
     }
     
@@ -214,11 +191,11 @@ private extension AlarmCollectionViewCell {
         switch isSelected {
         case true:
             self.alarmButton.backgroundColor = UIColor.buttonBackground
-            self.alarmButton.tintColor = UIColor.mainTitle
+            self.alarmButton.imageView?.tintColor = UIColor.subTitle
             self.alarmButton.isSelected = true
         case false:
             self.alarmButton.backgroundColor = UIColor.grayButtonBackground
-            self.alarmButton.tintColor = UIColor.grayButtonLabel
+            self.alarmButton.imageView?.tintColor = UIColor.grayButtonLabel
             self.alarmButton.isSelected = false
         }
     }
